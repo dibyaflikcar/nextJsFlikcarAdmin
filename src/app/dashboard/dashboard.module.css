@@ -1,0 +1,172 @@
+
+.tm_dashboard_siderbar_main{
+    background-color: #405189;
+    padding: 30px 20px;
+    height: 100vh;
+    position: fixed;
+    width: 17%;
+}
+.tm_dashboard_siderbar_logo{
+    text-align: center;
+}
+.tm_dashboard_siderbar_logo img{
+    width: 80px !important;
+}
+.tm_dashboard_siderbar_title{
+    margin: 20px 0;
+}
+.tm_dashboard_siderbar_title h4{
+    color: #ececec;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+/* .tm_dashboard_siderbar_menu_icon_text{
+    
+} */
+.tm_dashboard_siderbar_menu_icon_text a{
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+.tm_dashboard_siderbar_menu_icon_text a:hover{
+    color: #45c08d;
+}
+.tm_dashboard_siderbar_menu_icon_text svg{
+    margin-right: 5px;
+}
+.tm_dashboard_siderbar_menu_odd{
+    margin: 15px 0;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text a{  
+    display: flex;
+    align-items: center;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text svg{  
+    margin-right: 5px;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text a{
+    color: #fff;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text svg{
+    color: #fff;
+}
+.tm_dashboard_siderbar_menu_details a{
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+}
+.tm_dashboard_siderbar_menu_details a svg{
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.tm_dashboard_rightbar_main{    
+    height: 100%;    
+}
+/* dashboard_header */
+.tm_dashboard_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 50px;
+    background-color: #fff;
+}
+.tm_dashboard_header_right button{
+    color: #45c08d;
+    font-weight: 700;
+    padding: 0;
+}
+.tm_dashboard_header_right_bd_tlt{
+    display: contents;
+    align-items: center;
+}
+.tm_dashboard_header_left svg{
+    font-size: 40px;
+}
+.tm_dashboard_header_right_bd_tlt_icon img{
+    width: 60px !important;
+    margin-right: 10px;
+}
+.tm_dashboard_header_right_bd_tlt_text{
+    text-align: left;
+}
+.tm_dashboard_header_right_bd_tlt_text h5{
+    color: #212529;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+.tm_dashboard_header_right_bd_tlt_text h6{
+    color: #212529;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+.tm_dashboard_rightbar_panel_main{
+    padding: 50px;
+}
+.tm_dashboard_rightbar_panel{
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20px;
+}
+.tm_dashboard_rightbar_panel_text h5{
+    color: #797979;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.tm_dashboard_rightbar_panel_text h3{
+    color: #212529;
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.tm_dashboard_rightbar_panel_text a{
+    color: #45c08d;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;   
+}
+.tm_dashboard_rightbar_panel_icon{
+    width: 60px;
+    height: 60px;
+    background-color: #45c08d;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+.tm_dashboard_rightbar_panel_icon svg{
+    color: #fff;
+    font-size: 30px;
+}
+/* auctionvehicle */
+.tm_auctionvehicle_table_main{
+    padding: 30px 50px;
+}
+.tm_auctionvehicle_table_main_top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.tm_auctionvehicle_table_main_top_title h4{
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.tm_auctionvehicle_table_main_top_btn button{
+    background-color: #45c08d;    
+    font-size: 16px;
+    font-weight: 700;   
+    border: 2px solid #45c08d;
+    padding: 8px 26px;
+}
