@@ -59,7 +59,7 @@ const Sidebar = () => {
                 </AccordionSummary>
               </Box>
               <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
-                <Link href="/dashboard/auctionvehicle">-<FactoryIcon/> auction Vehicle</Link>
+                <Link href="/dashboard/auctionvehicle">-<FactoryIcon/> Auction Vehicle</Link>
               </AccordionDetails>
             </Accordion>                
           </Box>

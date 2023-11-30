@@ -1,21 +1,18 @@
 import axios from "axios";
 
-const API = axios.create({
-    // baseURL: process.env.apiUrl,
-    baseURL: "https://fakestoreapi.com",
-  });
-
 const AUTHAPI = axios.create({
-    // baseURL: process.env.apiUrl,
-    baseURL: "http://localhost:8000/api",
+    baseURL: process.env.apiUrl,
+    // baseURL: "http://localhost:8000/api",
   });
   
-//   API.interceptors.request.use(function (config) {
-//     // Do something before request is sent
-//     let token = localStorage.getItem("token");
-//     config.headers["Authorization"] = "Bearer " + token;
-//     return config;
-//   });
+  AUTHAPI.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    let token = localStorage.getItem("token");
+    config.headers["Authorization"] = "Bearer " + token;
+    return config;
+  });
+
+  
   
   const authapi = {};
 

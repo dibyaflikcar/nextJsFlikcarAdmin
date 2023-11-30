@@ -1,0 +1,124 @@
+import axios from "axios";
+
+
+const API = axios.create({
+    baseURL: process.env.apiUrl,
+    // baseURL: "http://localhost:8000/api",
+    // headers: {
+    //   'Content-Type': 'application/json',
+    // },
+  });
+  
+  API.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    let token = localStorage.getItem("token");
+    config.headers["Authorization"] = "Bearer " + token;
+    return config;
+  });
+  
+  
+  const vehicleApi = {};
+
+  vehicleApi.getAuction = async () => {
+    try {
+      const tokenStr = localStorage.getItem('token');
+      const headers = {
+        'Authorization': 'Bearer '+tokenStr
+      }
+      const res = API.get('/vehicle/auction',{headers});
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getMakeModel = async () => {
+    try {
+      const res = API.get('/vehicle/makeAndModel');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getBodytype = async () => {
+    try {
+      const res = API.get('/vehicle/bodytype');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getFueltype = async () => {
+    try {
+      const res = API.get('/vehicle/fueltype');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getOwnertype = async () => {
+    try {
+      const res = API.get('/vehicle/ownerType');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getColor = async () => {
+    try {
+      const res = API.get('/vehicle/color');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getRto = async () => {
+    try {
+      const res = API.get('/global/city');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getSeat = async () => {
+    try {
+      const res = API.get('/vehicle/seat');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  
+
+  
+  
+  
+  
+
+  
+
+
+  // vehicleApi.getModel = async (brandId) => {
+  //   try {
+  //     const res = API.get('/vehicle/getModel',{ params: { brandId } });
+  //     return res;
+  //   } catch (error) {
+  //     return error.response;
+  //   }
+  // };
+
+
+  
+
+  
+
+
+
+  export { vehicleApi };

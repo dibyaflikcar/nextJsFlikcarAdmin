@@ -15,6 +15,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import './globals.css';
 import {authapi} from '../app/service/auth';
 import { useRouter } from 'next/navigation';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
   const [password,setPassword] = useState("");
   const [error,setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoader,setLoader]=useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -51,6 +53,7 @@ export default function Home() {
         else
         {
             setError("");
+            setLoader(true);
             // console.log("success :"+email+" "+password);
             const response = await authapi.loginUser(data);
             // console.log(response.data.data.access_token);
@@ -64,6 +67,7 @@ export default function Home() {
             else
             {
                 setError("Invalid Credentials!");
+                setLoader(false);
             }
         }
     }
@@ -115,7 +119,7 @@ export default function Home() {
                         <FormControlLabel required control={<Checkbox />} label="Remember me" />
                       </Box> */}
                       <Box className={`${styles.tm_amin_main_btn} ${"tm_amin_main_btn_gb"}`}>
-                        <Button variant="contained" onClick={onInputSubmit}>Sign In</Button>
+                        <Button variant="contained" onClick={onInputSubmit}>Sign In {isLoader?(<CircularProgress />):(<></>)}</Button>
                       </Box>                  
                   </Box>
               </Grid>
