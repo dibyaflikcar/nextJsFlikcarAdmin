@@ -95,6 +95,26 @@ const API = axios.create({
     }
   };
 
+  vehicleApi.getCarFeature = async () => {
+    try {
+      const res = API.get('/vehicle/carFeature');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.addAuctionVehicle = async (data) => {
+    try {
+      const res = API.post('/vehicle/addAuctionVehicle',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  
+
   
 
   

@@ -17,6 +17,8 @@ import { Margin } from '@mui/icons-material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import {vehicleApi} from '../../../../app/service/vehicle';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 
 
@@ -49,10 +51,35 @@ function Create() {
   const [rtoList, setrtoList]=useState([]);
   const [rto, setRto]=useState("");
   const [kmsDriven, setkmsDriven]=useState("");
-  const [carPrice, setcarPrice]=useState("");
+  const [carPrice, setcarPrice]=useState();
   const [description, setDescription]=useState("");
   const [seatList, setseatList]=useState([]);
   const [seat, setSeat]=useState("");
+
+  const [mileage, setMileage]=useState("");
+  const [engine, setEngine]=useState("");
+  const [maxPower, setmaxPower]=useState("");
+  const [maxTorque, setMaxTorque]=useState("");
+  const [noc, setNoc]=useState("");
+  const [mfgYear, setmfgYear]=useState("");
+  const [inspectionReport, setInspectionReport]=useState("");
+  const [insuranceValidity, setInsuranceValidity]=useState(new Date());
+  const [roadTaxValidity, setRoadTaxValidity]=useState(new Date());
+  const [inspectionScore, setInspectionScore]=useState("");
+
+  const [comforts, setComforts] = useState([]);
+  const [safety, setSafety] = useState([]);
+  const [interior, setInterior] = useState([]);
+  const [exterior, setExterior] = useState([]);
+  const [entertainment, setEntertainment] = useState([]);
+
+  const [comfortList, setComfortList] = useState([]);
+  const [safetyList, setSafetyList] = useState([]);
+  const [interiorList, setInteriorList] = useState([]);
+  const [exteriorList, setExteriorList] = useState([]);
+  const [entertainmentList, setEntertainmentList] = useState([]);
+
+  
   
   useEffect(() => {
     getMakeModel();
@@ -62,6 +89,14 @@ function Create() {
     getColor();
     getRto();
     getSeat();
+    // setComforts([]);
+    // setSafety([]);
+    // setInterior([]);
+    // setExterior([]);
+    // setEntertainment([]);
+
+    getCarFeatureList([]);
+  
     const currentYear = new Date().getFullYear();
     const startYear = 2000;
     const yearsArray = [];
@@ -78,7 +113,7 @@ function Create() {
             // console.log(response.data.data);
       if (response.data.status === 200) {
         setBrandlist(response.data.data);
-        // console.log(response.data);
+        // console.log(response.data.data);
       } 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -163,14 +198,32 @@ function Create() {
     }
   };
 
+  const getCarFeatureList = async () => {
+    try {
+      const response = await vehicleApi.getCarFeature();
+            // console.log(response.data.data);
+      if (response.data.status === 200) {
+        setComfortList(response.data.data[0].labels);
+        setSafetyList(response.data.data[1].labels);
+        setInteriorList(response.data.data[2].labels);
+        setExteriorList(response.data.data[3].labels);
+        setEntertainmentList(response.data.data[4].labels);
+        // console.log(response.data.data[0].labels);
+      } 
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   
 
   const handleInput= async(e)=>{
+    
     if (e.target.name === 'brand') {
       setBrand(e.target.value);
     
       const filteredResult = brandlist.filter((item) => item.id == e.target.value);
-      // console.log(filteredResult[0].data.models);
+      // console.log(filteredResult[0].models);
       setModelList(filteredResult[0].data.models);
     }
     if (e.target.name === 'model') {
@@ -221,10 +274,128 @@ function Create() {
     if (e.target.name === 'seat') {
       setSeat(e.target.value);
     }
-  
-    
+    if (e.target.name === 'mileage') {
+      setMileage(e.target.value);
+    }
+    if (e.target.name === 'engine') {
+      setEngine(e.target.value);
+    }
+    if (e.target.name === 'maxPower') {
+      setmaxPower(e.target.value);
+    }
+    if (e.target.name === 'maxTorque') {
+      setMaxTorque(e.target.value);
+    }
+    if (e.target.name === 'noc') {
+      setNoc(e.target.value);
+    }
+    if (e.target.name === 'mfgYear') {
+      setmfgYear(e.target.value);
+    }
+    if (e.target.name === 'inspectionReport') {
+      setInspectionReport(e.target.value);
+    }
+    // if (e.target.name === 'insuranceValidity') {
+    //   setInsuranceValidity(e.target.value);
+    // }
+    // if (e.target.name === 'roadTaxValidity') {
+    //   setRoadTaxValidity(e.target.value);
+    // }
+    if (e.target.name === 'inspectionScore') {
+      setInspectionScore(e.target.value);
+    }
+    if (e.target.name === 'comforts') {
+      if (e.target.checked) {
+        setComforts([...comforts, e.target.value]);
+      } else {
+        setComforts(comforts.filter((element) => Number(element) !== Number(e.target.value)));
+      }
+    }
+
+    if (e.target.name === 'safety') {
+      if (e.target.checked) {
+        setSafety([...safety, e.target.value]);
+      } else {
+        setSafety(safety.filter((element) => Number(element) !== Number(e.target.value)));
+      }
+    }
+
+    if (e.target.name === 'interior') {
+      if (e.target.checked) {
+        setInterior([...interior, e.target.value]);
+      } else {
+        setInterior(interior.filter((element) => Number(element) !== Number(e.target.value)));
+      }
+    }
+
+    if (e.target.name === 'exterior') {
+      if (e.target.checked) {
+        setExterior([...exterior, e.target.value]);
+      } else {
+        setExterior(exterior.filter((element) => Number(element) !== Number(e.target.value)));
+      }
+    }
+
+    if (e.target.name === 'entertainment') {
+      if (e.target.checked) {
+        setEntertainment([...entertainment, e.target.value]);
+      } else {
+        setEntertainment(entertainment.filter((element) => Number(element) !== Number(e.target.value)));
+      }
+    }
   }
 
+  const handleInsuranceDate = (newDate) => {
+    setInsuranceValidity(newDate);
+  };
+  const handleRoadTaxValidityDate = (newDate) => {
+    setRoadTaxValidity(newDate);
+  };
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    
+    const formData = new FormData();
+    formData.append('brand', brand);
+    formData.append('model', model);
+    formData.append('variant', variant);
+    formData.append('regYear', regYear);
+    formData.append('bodyType', bodyType);
+    formData.append('fuelType', fuelType);
+    formData.append('transmission', transmission);
+    formData.append('ownerType', ownerType);
+    formData.append('color', color);
+    formData.append('rto', rto);
+    formData.append('kmsDriven', kmsDriven);
+    formData.append('carPrice', carPrice);
+    formData.append('description', description);
+    formData.append('seat', seat);
+    formData.append('mileage', mileage);
+    formData.append('engine', engine);
+    formData.append('maxPower', maxPower);
+    formData.append('maxTorque', maxTorque);
+    formData.append('noc', noc);
+    formData.append('mfgYear', mfgYear);
+    formData.append('inspectionReport', inspectionReport);
+    formData.append('insuranceValidity', insuranceValidity);
+    formData.append('roadTaxValidity', roadTaxValidity);
+    formData.append('inspectionScore', inspectionScore);
+    formData.append('comforts', comforts);
+    formData.append('safety', safety);
+    formData.append('interior', interior);
+    formData.append('exterior', exterior);
+    formData.append('entertainment', entertainment);
+    console.log("success");
+    // images.map((element, index) => {
+    //   formData.append(`images`, element);
+    // });
+    const response = await vehicleApi.addAuctionVehicle(formData);
+    if (response.status === 200 && response.data.status === 201 && response.data.success === true) {
+      // router.push('/dealer/car/');
+      console.log(response);
+    }
+  };
     
 
   // const getModelList = async (brandId) => {
@@ -348,6 +519,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                 <Box className={dashboardStyles.tm_dashboard_rightbar_form_title}>
                   <Typography variant='h3'>List your car!</Typography>
                 </Box>
+                <form onSubmit={handleSubmit}>
                 <Grid container spacing={4}>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
@@ -360,6 +532,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                           label="Select brand *"
                           onChange={handleInput}
                           name='brand'
+                          required
                         >
                           {brandlist.length > 0 && brandlist.map((data,key) => (
                             <MenuItem key={key} value={data.id}>{data.id}</MenuItem>
@@ -380,6 +553,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                           label="Select model"
                           onChange={handleInput}
                           name='model'
+                          required
                         >
                           {modellist.length > 0 && modellist.map((data,key) => (
                             <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
@@ -399,6 +573,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                           label="Select variant"
                           onChange={handleInput}
                           name='variant'
+                          required
                         >
                           
                           {variantList.length > 0 && variantList.map((data,key) => (
@@ -419,6 +594,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                           label="Registration Year"
                           onChange={handleInput}
                           name='regYear'
+                          required
                         >
                           {years.map((year) => (
                               <MenuItem key={year} value={year}>{year}</MenuItem>
@@ -544,17 +720,17 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Kilometers Driven*" onChange={handleInput} name='kmsDriven' value={kmsDriven} variant="outlined" fullWidth/>
+                    <TextField id="outlined-basic" label="Kilometers Driven*" onChange={handleInput} name='kmsDriven' value={kmsDriven} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Your Selling Price*" onChange={handleInput} name='carPrice' value={carPrice} variant="outlined" fullWidth/>
+                    <TextField id="outlined-basic" label="Your Selling Price*" onChange={handleInput} name='carPrice' value={carPrice} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={12}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Description*" onChange={handleInput} name='description' value={description} variant="outlined" fullWidth/>
+                    <TextField id="outlined-basic" label="Description*" onChange={handleInput} name='description' value={description} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
@@ -575,56 +751,95 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                           </Select>
                         </FormControl>
                       </Box>
-                    </Grid>                  
+                    </Grid>   
+                    
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Mileage in kmpl*" variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Mileage in kmpl*" onChange={handleInput} name='mileage' value={mileage} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>                 
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Engine*" variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Engine (CC)*" onChange={handleInput} name='engine' value={engine} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Power*" variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Max Power*" onChange={handleInput} name='maxPower' value={maxPower} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Torque*" variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Max Torque*" onChange={handleInput} name='maxTorque' value={maxTorque} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="NOC*" variant="outlined" fullWidth/>
+                      
+                      <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Noc</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={noc}
+                            label="Noc"
+                            onChange={handleInput}
+                            name='noc'
+                          >
+                            
+                            <MenuItem value='true'>True</MenuItem>
+                            <MenuItem value='false'>False</MenuItem>
+                          </Select>
+                        </FormControl>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="MFG Year*" variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="MFG Year*" name='mfgYear' onChange={handleInput} value={mfgYear} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Inspection Report*" variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Inspection Report*" onChange={handleInput} name='inspectionReport' value={inspectionReport} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Insurance Validity*" variant="outlined" fullWidth/>
+                      {/* <TextField id="outlined-basic" label="Insurance Validity*" onChange={handleInput} name='insuranceValidity' value={insuranceValidity} variant="outlined" fullWidth/> */}
+                      <InputLabel id="demo-simple-select-label">Insurance Validity</InputLabel>
+                      <Calendar onChange={handleInsuranceDate} value={insuranceValidity} />
+                      </Box>
+                  </Grid>
+        
+                  <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      {/* <TextField id="outlined-basic" label="Road Tax Validity*" onChange={handleInput} name='roadTaxValidity' value={roadTaxValidity} variant="outlined" fullWidth/> */}
+                      <InputLabel id="demo-simple-select-label">Road Tax Validity</InputLabel>
+                      <Calendar onChange={handleRoadTaxValidityDate} value={roadTaxValidity} />
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Road Tax Validity*" variant="outlined" fullWidth/>
+                      <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Inspection Score</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={inspectionScore}
+                            label="Seating Capacity*"
+                            onChange={handleInput}
+                            name='inspectionScore'
+                          >
+                            
+                            <MenuItem value='1'>1</MenuItem>
+                            <MenuItem value='2'>2</MenuItem>
+                            <MenuItem value='3'>3</MenuItem>
+                            <MenuItem value='4'>4</MenuItem>
+                            <MenuItem value='5'>5</MenuItem>
+                          </Select>
+                        </FormControl>
                       </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Inspection Score*" variant="outlined" fullWidth/>
-                      </Box>
+                      
                   </Grid>
                   
                 </Grid>
@@ -1058,17 +1273,29 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                       <Typography variant='h4'>Comfort</Typography>
                     </Box>
                     <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}>
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />                     
+
+                      <Grid container spacing={0}>
+                        {comfortList.length > 0 &&
+                          comfortList.map((element, index) => {
+                            return (
+                              <Grid item md={6} key={index}>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      value={element}
+                                      key={index}
+                                      name='comforts'
+                                      onChange={handleInput}
+                                      checked={ Object.values(comforts).includes(element.toString())? true : false }
+                                    />
+                                  }
+                                  label={element}
+                                />
+                              </Grid>
+                            );
+                          })}
+                      </Grid>
+
                     </Box>                    
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
@@ -1076,17 +1303,29 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                       <Typography variant='h4'>Safety</Typography>
                     </Box>
                     <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}>
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />                     
+                          <Grid container spacing={0}>
+                                    {safetyList.length > 0 &&
+                                      safetyList.map((element, index) => {
+                                        return (
+                                          <Grid item md={6} key={index}>
+                                            <FormControlLabel
+                                              control={
+                                                <Checkbox
+                                                  value={element}
+                                                  name='safety'
+                                                  key={index}
+                                                  onChange={handleInput}
+                                                  checked={
+                                                    Object.values(safety).includes(element.toString()) ? true : false
+                                                  }
+                                                />
+                                              }
+                                              label={element}
+                                            />
+                                          </Grid>
+                                        );
+                                      })}
+                          </Grid>                     
                     </Box>                    
                   </Box>                 
                   
@@ -1095,17 +1334,31 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                       <Typography variant='h4'>Interior</Typography>
                     </Box>
                     <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}>
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />                     
+                          <Grid container spacing={0}>
+                                    {interiorList.length > 0 &&
+                                      interiorList.map((element, index) => {
+                                        return (
+                                          <Grid item md={6} key={index}>
+                                            <FormControlLabel
+                                              control={
+                                                <Checkbox
+                                                  key={index}
+                                                  name='interior'
+                                                  value={element}
+                                                  onChange={handleInput}
+                                                  checked={
+                                                    Object.values(interior).includes(element.toString())
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                              }
+                                              label={element}
+                                            />
+                                          </Grid>
+                                        );
+                                      })}
+                          </Grid>                    
                     </Box>                    
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
@@ -1113,17 +1366,31 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                       <Typography variant='h4'>Exterior</Typography>
                     </Box>
                     <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}>
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />                     
+                            <Grid container spacing={0}>
+                                    {exteriorList.length > 0 &&
+                                      exteriorList.map((element, index) => {
+                                        return (
+                                          <Grid item md={6} key={index}>
+                                            <FormControlLabel
+                                              control={
+                                                <Checkbox
+                                                  key={index}
+                                                  value={element}
+                                                  name='exterior'
+                                                  onChange={handleInput}
+                                                  checked={
+                                                    Object.values(exterior).includes(element.toString())
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                              }
+                                              label={element}
+                                            />
+                                          </Grid>
+                                        );
+                                      })}
+                              </Grid>                    
                     </Box>                    
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
@@ -1131,23 +1398,38 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                       <Typography variant='h4'>Entertainment and Communication</Typography>
                     </Box>
                     <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}>
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />
-                      <FormControlLabel required control={<Checkbox />} label="Required" />                     
+                              <Grid container spacing={0}>
+                                    {entertainmentList.length > 0 &&
+                                      entertainmentList.map((element, index) => {
+                                        return (
+                                          <Grid item md={6} key={index}>
+                                            <FormControlLabel
+                                              control={
+                                                <Checkbox
+                                                  key={index}
+                                                  value={element}
+                                                  name='entertainment'
+                                                  onChange={handleInput}
+                                                  checked={
+                                                    Object.values(entertainment).includes(element.toString())
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                              }
+                                              label={element}
+                                            />
+                                          </Grid>
+                                        );
+                                      })}
+                                  </Grid>                     
                     </Box>                    
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn}>
-                    <Button variant="contained">submit</Button>           
+                    <Button variant="contained" type='submit'>submit</Button>           
                   </Box>
                 </Box>
+                </form>
               </Box>
             </Box>
           </Grid>
