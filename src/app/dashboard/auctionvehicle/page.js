@@ -21,7 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Link from 'next/link';
 
-function auctionvehicle() {  
+function Auctionvehicle() {  
   const [auctionData,setAuctionData]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -121,4 +121,4 @@ function auctionvehicle() {
   )
 }
 
-export default auctionvehicle
+export default Auctionvehicle

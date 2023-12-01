@@ -11,8 +11,8 @@ import Header from '../../../components/Header';
 import { useRouter } from 'next/navigation';
 
 
-function dashboard() {  
-  const router = useRouter()
+function Dashboard() {  
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -22,7 +22,7 @@ function dashboard() {
         router.push("/");
     }
       // getUserData();
-  }, []);
+  }, [router]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -126,4 +126,4 @@ function dashboard() {
   )
 }
 
-export default dashboard
+export default Dashboard

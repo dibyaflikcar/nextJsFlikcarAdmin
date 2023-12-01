@@ -1,5 +1,5 @@
 "use client"
-import React, { useState,useEffect  } from 'react';
+import React, { useState ,useEffect  } from 'react';
 import ImageUploading from 'react-images-uploading';
 
 import Image from 'next/image';
@@ -21,17 +21,19 @@ import {vehicleApi} from '../../../../app/service/vehicle';
 
 
 
-function create() {  
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [brandlist, setBrandlist]=useState([]);
-  const [brand, setBrand]=useState("");
-  const [modellist, setModelList]=useState([]);
-  const [model, setModel]=useState("");
-  const [variantList, setVariantList]=useState([]);
-  const [variant, setVariant]=useState("");
+function Create() {  
+  // const [open, setOpen] = React.useState(false);
+  // const anchorRef = React.useRef(null);
+  // const [page, setPage] = React.useState(0);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  
+
+  const [brandlist, setBrandlist] = useState([]);
+  const [brand, setBrand] = useState("");
+  const [modellist, setModelList] = useState([]);
+  const [model, setModel] = useState("");
+  const [variantList, setVariantList] = useState([]);
+  const [variant, setVariant] = useState("");
   
   const [years, setYears] = useState([]);
   const [regYear, setregYear] = useState("");
@@ -238,13 +240,13 @@ function create() {
   
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-    prevOpen.current = open;
-  }, [open]);
+  // const prevOpen = React.useRef(open);
+  // React.useEffect(() => {
+  //   if (prevOpen.current === true && open === false) {
+  //     anchorRef.current.focus();
+  //   }
+  //   prevOpen.current = open;
+  // }, [open]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -670,7 +672,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                               <Box className="tm_image_item_main">
                                 {imageList.map((image, index) => (                          
                                   <Box key={index} className="image-item">
-                                      <img src={image['data_url']} alt="" width="100" />
+                                      <Image src={image['data_url']} alt="" width="100" />
                                       <Box className="image-item__btn-wrapper">
                                         <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
                                         <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
@@ -726,7 +728,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                               <Box className="tm_image_item_main">
                                 {imageList.map((image, index) => (                          
                                   <Box key={index} className="image-item">
-                                      <img src={image['data_url']} alt="" width="100" />
+                                      <Image src={image['data_url']} alt="" width="100" />
                                       <Box className="image-item__btn-wrapper">
                                         <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
                                         <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
@@ -782,7 +784,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                               <Box className="tm_image_item_main">
                                 {imageList.map((image, index) => (                          
                                   <Box key={index} className="image-item">
-                                      <img src={image['data_url']} alt="" width="100" />
+                                      <Image src={image['data_url']} alt="" width="100" />
                                       <Box className="image-item__btn-wrapper">
                                         <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
                                         <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
@@ -838,7 +840,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                               <Box className="tm_image_item_main">
                                 {imageList.map((image, index) => (                          
                                   <Box key={index} className="image-item">
-                                      <img src={image['data_url']} alt="" width="100" />
+                                      <Image src={image['data_url']} alt="" width="100" />
                                       <Box className="image-item__btn-wrapper">
                                         <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
                                         <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
@@ -894,7 +896,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                               <Box className="tm_image_item_main">
                                 {imageList.map((image, index) => (                          
                                   <Box key={index} className="image-item">
-                                      <img src={image['data_url']} alt="" width="100" />
+                                      <Image src={image['data_url']} alt="" width="100" />
                                       <Box className="image-item__btn-wrapper">
                                         <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
                                         <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
@@ -950,7 +952,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                               <Box className="tm_image_item_main">
                                 {imageList.map((image, index) => (                          
                                   <Box key={index} className="image-item">
-                                      <img src={image['data_url']} alt="" width="100" />
+                                      <Image src={image['data_url']} alt="" width="100" />
                                       <Box className="image-item__btn-wrapper">
                                         <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
                                         <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
@@ -1155,4 +1157,4 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
   )
 }
 
-export default create
+export default Create
