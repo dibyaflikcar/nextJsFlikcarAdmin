@@ -19,6 +19,17 @@ import Checkbox from '@mui/material/Checkbox';
 import {vehicleApi} from '../../../../app/service/vehicle';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 
@@ -63,8 +74,8 @@ function Create() {
   const [noc, setNoc]=useState("");
   const [mfgYear, setmfgYear]=useState("");
   const [inspectionReport, setInspectionReport]=useState("");
-  const [insuranceValidity, setInsuranceValidity]=useState(new Date());
-  const [roadTaxValidity, setRoadTaxValidity]=useState(new Date());
+  const [insuranceValidity, setInsuranceValidity]=useState(null);
+  const [roadTaxValidity, setRoadTaxValidity]=useState(null);
   const [inspectionScore, setInspectionScore]=useState("");
 
   const [comforts, setComforts] = useState([]);
@@ -79,6 +90,9 @@ function Create() {
   const [exteriorList, setExteriorList] = useState([]);
   const [entertainmentList, setEntertainmentList] = useState([]);
 
+  const [popupOpen, setPopupopen] = useState(false);
+  const [ThumbnailPhotos, setThumbnailPhotos] = useState([]);
+  const [ExteriorPhotos , setExteriorPhotos] = useState([]);
   
   
   useEffect(() => {
@@ -343,7 +357,24 @@ function Create() {
         setEntertainment(entertainment.filter((element) => Number(element) !== Number(e.target.value)));
       }
     }
+
+    if (e.target.name === 'ThumbnailPhotos' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
+    }
+
+    if (e.target.name === 'ExteriorPhotos' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
+    }
+
+
   }
+
+  const handleRemoveImage = async (id) => {
+    setThumbnailPhotos(ThumbnailPhotos.filter((element) => element.name !== id.name));
+    setExteriorPhotos(ExteriorPhotos.filter((element) => element.name !== id.name));
+  };
 
   const handleInsuranceDate = (newDate) => {
     setInsuranceValidity(newDate);
@@ -386,14 +417,24 @@ function Create() {
     formData.append('interior', interior);
     formData.append('exterior', exterior);
     formData.append('entertainment', entertainment);
-    console.log("success");
-    // images.map((element, index) => {
-    //   formData.append(`images`, element);
-    // });
+    // console.log(ThumbnailPhotos);
+    ThumbnailPhotos.map((element, index) => {
+      formData.append(`ThumbnailPhotos`, element);
+    });
+
+    
+    ExteriorPhotos.map((element, index) => {
+      formData.append(`ExteriorPhotos`, element);
+    });
+
+    // console.log(ThumbnailPhotos , ExteriorPhotos);
+    
     const response = await vehicleApi.addAuctionVehicle(formData);
-    if (response.status === 200 && response.data.status === 201 && response.data.success === true) {
-      // router.push('/dealer/car/');
-      console.log(response);
+    // console.log(response);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    //   // console.log("ok");
+      setPopupopen(true);
+
     }
   };
     
@@ -453,24 +494,10 @@ function Create() {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
-// Thumbnail Photos 
-    const [ThumbnailPhotos, setThumbnailPhotos] = React.useState([]);
-    const ThumbnailmaxNumber = 1;
 
-    const ThumbnailonChange = (imageList, addUpdateIndex) => {
-      // data for submit
-      console.log(imageList, addUpdateIndex);
-      setThumbnailPhotos(imageList);
-    };
-// Exterior Photos 
-    const [ExteriorPhotos , setExteriorPhotos] = React.useState([]);
-    const ExteriormaxNumber = 10;
-  
-    const ExteriormaxonChange = (imageList, addUpdateIndex) => {
-      // data for submit
-      console.log(imageList, addUpdateIndex);
-      setExteriorPhotos(imageList);
-    };
+   
+    
+
 // Interior Photos  
     const [InteriorPhotos  , setInteriorPhotos ] = React.useState([]);
     const InteriorPhotosNumber = 10;
@@ -507,6 +534,12 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
   console.log(imageList, addUpdateIndex);
   setDentsPhotos (imageList);
 };
+
+
+const handleCloseBtn = () => {
+  setPopupopen(false);
+};
+
   return (
     <>
       <Box className={dashboardStyles.tm_dashboard_main}>        
@@ -804,20 +837,34 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                       </Box>
                   </Grid>
                   <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      {/* <TextField id="outlined-basic" label="Insurance Validity*" onChange={handleInput} name='insuranceValidity' value={insuranceValidity} variant="outlined" fullWidth/> */}
-                      <InputLabel id="demo-simple-select-label">Insurance Validity</InputLabel>
-                      <Calendar onChange={handleInsuranceDate} value={insuranceValidity} />
+                        <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <DemoContainer components={['DatePicker']}>
+                              <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} value={insuranceValidity} sx={{width:'100%'}}/>
+                            </DemoContainer>
+                          </LocalizationProvider>
+                        </Box>
+                    </Grid>
+                    <Grid item md={3}>
+                        <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']}>
+                              <DatePicker label="Road Tax Validity" onChange={handleRoadTaxValidityDate} value={roadTaxValidity} sx={{width:'100%'}}/>
+                            </DemoContainer>
+                          </LocalizationProvider>
+                        </Box>
+                    </Grid>
+                    {/* <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date_time} ${"tm_dashboard_rightbar_form_date_time_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={['DateTimePicker']}>
+                            <DateTimePicker label="Basic date time picker" />
+                          </DemoContainer>
+                        </LocalizationProvider>
                       </Box>
-                  </Grid>
+                    </Grid> */}
         
-                  <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      {/* <TextField id="outlined-basic" label="Road Tax Validity*" onChange={handleInput} name='roadTaxValidity' value={roadTaxValidity} variant="outlined" fullWidth/> */}
-                      <InputLabel id="demo-simple-select-label">Road Tax Validity</InputLabel>
-                      <Calendar onChange={handleRoadTaxValidityDate} value={roadTaxValidity} />
-                      </Box>
-                  </Grid>
+                  
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
@@ -851,115 +898,70 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Add Thumbnail Photos (Upload only 1 Photo)</Typography>
                     </Box>
-                    <ImageUploading
-                      multiple
-                      value={ThumbnailPhotos}
-                      onChange={ThumbnailonChange}
-                      maxNumber={ThumbnailmaxNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='ThumbnailPhotos' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                        {ThumbnailPhotos.length > 0 &&
+                          ThumbnailPhotos.map((element, index) => {
+                            return (
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box key={index}>
+                                  <img
+                                    key={index}
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
                               </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Exterior Photos (maximum Upload upto 10 Photos)</Typography>
+                      <Typography variant='h6'>Add Exterior Photos (Upload only 5 Photo)</Typography>
                     </Box>
-                    <ImageUploading
-                      multiple
-                      value={ExteriorPhotos}
-                      onChange={ExteriormaxonChange}
-                      maxNumber={ExteriormaxNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='ExteriorPhotos' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                        {ExteriorPhotos.length > 0 &&
+                          ExteriorPhotos.map((element, index) => {
+                            return (
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box key={index}>
+                                  <img
+                                    key={index}
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
                               </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
                   </Box>
-                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                
+                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Add Interior Photos (maximum Upload upto 10 Photos)</Typography>
                     </Box>
@@ -1014,8 +1016,8 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                         </div>
                       )}
                     </ImageUploading>
-                  </Box>
-                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                  </Box> */}
+                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Add Engine Photos (maximum Upload upto 10 Photos)</Typography>
                     </Box>
@@ -1070,8 +1072,8 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                         </div>
                       )}
                     </ImageUploading>
-                  </Box>
-                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                  </Box> */}
+                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Add Tyres Photos (maximum Upload upto 10 Photos)</Typography>
                     </Box>
@@ -1126,8 +1128,8 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                         </div>
                       )}
                     </ImageUploading>
-                  </Box>
-                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                  </Box> */}
+                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Add Dents Photos (maximum Upload upto 10 Photos)</Typography>
                     </Box>
@@ -1182,7 +1184,7 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
                         </div>
                       )}
                     </ImageUploading>
-                  </Box>
+                  </Box> */}
                 </Box>
 
                 <Box sx={{margin:'50px 0 0'}}>
@@ -1433,7 +1435,26 @@ const DentsPhotosonChange = (imageList, addUpdateIndex) => {
               </Box>
             </Box>
           </Grid>
-        </Grid>        
+        </Grid>      
+        <Dialog
+        open={popupOpen}
+        onClose={handleCloseBtn}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Success Message"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You have added successfully!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          {/* <Button onClick={handleCloseBtn}>Ok</Button> */}
+          <Button onClick={handleCloseBtn} autoFocus>Ok</Button>
+        </DialogActions>
+      </Dialog>  
       </Box>
     </>
   )

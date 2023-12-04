@@ -92,3 +92,36 @@ a {
   color: #fff;
   cursor: pointer;
 }
+.tm_dashboard_img_upl_panel_title_gb label{
+  background-color: #45c08d;
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+    border: 2px solid #45c08d;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+}
+.tm_dashboard_img_upl_panel_img_gb{
+  position: relative;
+  display: inline-block;
+}
+.tm_dashboard_img_upl_panel_img_gb button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #45c08d;
+  color: #fff;
+}
+.tm_dashboard_img_upl_panel_img_gb img{
+  width: 100px;
+  height: 60px;
+  object-fit: cover;
+  object-position: center center;
+}
