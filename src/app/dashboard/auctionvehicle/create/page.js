@@ -78,6 +78,10 @@ function Create() {
   const [roadTaxValidity, setRoadTaxValidity]=useState(null);
   const [inspectionScore, setInspectionScore]=useState("");
 
+  const [auctionStartTime, setAuctionStartTime]=useState(null);
+  const [auctionEndTime, setAuctionEndTime]=useState(null);
+  
+
   const [comforts, setComforts] = useState([]);
   const [safety, setSafety] = useState([]);
   const [interior, setInterior] = useState([]);
@@ -93,7 +97,16 @@ function Create() {
   const [popupOpen, setPopupopen] = useState(false);
   const [ThumbnailPhotos, setThumbnailPhotos] = useState([]);
   const [ExteriorPhotos , setExteriorPhotos] = useState([]);
+  const [InteriorPhotos  , setInteriorPhotos ] = useState([]);
+  const [EnginePhotos  , setEnginePhotos ] = useState([]);
+  const [TyresPhotos  , setTyresPhotos ] = useState([]);
+  const [DentsPhotos  , setDentsPhotos ] = useState([]);
   
+
+  const [allCarImage, setAllcarImage] = useState([]);
+  const [thumbImage, setThumbImage] = useState([]);
+
+  const [error, setError] = useState("");
   
   useEffect(() => {
     getMakeModel();
@@ -361,19 +374,52 @@ function Create() {
     if (e.target.name === 'ThumbnailPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
       setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
+      // console.log(e.target.files[0]);
+      uploadAuctionImage(e.target.files[0]);
+      
     }
 
     if (e.target.name === 'ExteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
       setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
+      uploadAuctionImage2(e.target.files[0]);
     }
 
+    if (e.target.name === 'InteriorPhotos' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
+      uploadAuctionImage3(e.target.files[0]);
+    }
+
+    if (e.target.name === 'EnginePhotos' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      setEnginePhotos([...EnginePhotos, e.target.files[0]]);
+      uploadAuctionImage4(e.target.files[0]);
+    }
+
+    if (e.target.name === 'TyresPhotos' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      setTyresPhotos([...TyresPhotos, e.target.files[0]]);
+      uploadAuctionImage5(e.target.files[0]);
+    }
+
+    if (e.target.name === 'DentsPhotos' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      setDentsPhotos([...DentsPhotos, e.target.files[0]]);
+      uploadAuctionImage6(e.target.files[0]);
+    }
+
+    
 
   }
 
   const handleRemoveImage = async (id) => {
     setThumbnailPhotos(ThumbnailPhotos.filter((element) => element.name !== id.name));
     setExteriorPhotos(ExteriorPhotos.filter((element) => element.name !== id.name));
+    setInteriorPhotos(InteriorPhotos.filter((element) => element.name !== id.name));
+    setEnginePhotos(EnginePhotos.filter((element) => element.name !== id.name));
+    setTyresPhotos(TyresPhotos.filter((element) => element.name !== id.name));
+    setDentsPhotos(DentsPhotos.filter((element) => element.name !== id.name));
   };
 
   const handleInsuranceDate = (newDate) => {
@@ -382,50 +428,143 @@ function Create() {
   const handleRoadTaxValidityDate = (newDate) => {
     setRoadTaxValidity(newDate);
   };
+  const handleAuctionStartTime = (newDate) => {
+    setAuctionStartTime(newDate);
+  };
+  const handleAuctionEndTime = (newDate) => {
+    setAuctionEndTime(newDate);
+  };
+
   
+  
+const uploadAuctionImage= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionImage(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    // setAllcarImage(response.data.data);
+    setAllcarImage([...allCarImage, response.data.data]);
+    setThumbImage([...thumbImage, response.data.data]);
+    // console.log(response.data.data);
+  }
+}
+
+const uploadAuctionImage2= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionImage2(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setAllcarImage([...allCarImage, response.data.data]);
+    // console.log(response.data.data);
+  }
+}
+
+const uploadAuctionImage3= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionImage3(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setAllcarImage([...allCarImage, response.data.data]);
+    // console.log(response.data.data);
+  }
+}
+
+const uploadAuctionImage4= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionImage4(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setAllcarImage([...allCarImage, response.data.data]);
+    // console.log(response.data.data);
+  }
+}
+
+const uploadAuctionImage5= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionImage5(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setAllcarImage([...allCarImage, response.data.data]);
+    // console.log(response.data.data);
+  }
+}
+
+const uploadAuctionImage6= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionImage6(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setAllcarImage([...allCarImage, response.data.data]);
+    // console.log(response.data.data);
+  }
+}
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-    
-    const formData = new FormData();
-    formData.append('brand', brand);
-    formData.append('model', model);
-    formData.append('variant', variant);
-    formData.append('regYear', regYear);
-    formData.append('bodyType', bodyType);
-    formData.append('fuelType', fuelType);
-    formData.append('transmission', transmission);
-    formData.append('ownerType', ownerType);
-    formData.append('color', color);
-    formData.append('rto', rto);
-    formData.append('kmsDriven', kmsDriven);
-    formData.append('carPrice', carPrice);
-    formData.append('description', description);
-    formData.append('seat', seat);
-    formData.append('mileage', mileage);
-    formData.append('engine', engine);
-    formData.append('maxPower', maxPower);
-    formData.append('maxTorque', maxTorque);
-    formData.append('noc', noc);
-    formData.append('mfgYear', mfgYear);
-    formData.append('inspectionReport', inspectionReport);
-    formData.append('insuranceValidity', insuranceValidity);
-    formData.append('roadTaxValidity', roadTaxValidity);
-    formData.append('inspectionScore', inspectionScore);
-    formData.append('comforts', comforts);
-    formData.append('safety', safety);
-    formData.append('interior', interior);
-    formData.append('exterior', exterior);
-    formData.append('entertainment', entertainment);
-    // console.log(ThumbnailPhotos);
-    ThumbnailPhotos.map((element, index) => {
-      formData.append(`ThumbnailPhotos`, element);
-    });
 
+    console.log(allCarImage);
     
-    ExteriorPhotos.map((element, index) => {
-      formData.append(`ExteriorPhotos`, element);
-    });
+    // const formData = new FormData();
+    // formData.append('brand', brand);
+    // formData.append('model', model);
+    // formData.append('variant', variant);
+    // formData.append('regYear', regYear);
+    // formData.append('bodyType', bodyType);
+    // formData.append('fuelType', fuelType);
+    // formData.append('transmission', transmission);
+    // formData.append('ownerType', ownerType);
+    // formData.append('color', color);
+    // formData.append('rto', rto);
+    // formData.append('kmsDriven', kmsDriven);
+    // formData.append('carPrice', carPrice);
+    // formData.append('description', description);
+    // formData.append('seat', seat);
+    // formData.append('mileage', mileage);
+    // formData.append('engine', engine);
+    // formData.append('maxPower', maxPower);
+    // formData.append('maxTorque', maxTorque);
+    // formData.append('noc', noc);
+    // formData.append('mfgYear', mfgYear);
+    // formData.append('inspectionReport', inspectionReport);
+    // formData.append('insuranceValidity', insuranceValidity);
+    // formData.append('roadTaxValidity', roadTaxValidity);
+    // formData.append('inspectionScore', inspectionScore);
+    // formData.append('comforts', comforts);
+    // formData.append('safety', safety);
+    // formData.append('interior', interior);
+    // formData.append('exterior', exterior);
+    // formData.append('entertainment', entertainment);
+    // formData.append('allCarImage', allCarImage);
+
+    if(thumbImage.length==0)
+    {
+        setError("Thumbnail Photo is required!")
+    }
+    else
+    {
+
+      setError("");
+
+    const formData={auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+    
+    console.log(formData);
+    
+    // console.log(ThumbnailPhotos);
+    // ThumbnailPhotos.map((element, index) => {
+    //   formData.append(`ThumbnailPhotos`, element);
+    // });
+    // ExteriorPhotos.map((element, index) => {
+    //   formData.append(`ExteriorPhotos`, element);
+    // });
 
     // console.log(ThumbnailPhotos , ExteriorPhotos);
     
@@ -434,6 +573,8 @@ function Create() {
     if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
     //   // console.log("ok");
       setPopupopen(true);
+
+    }
 
     }
   };
@@ -496,44 +637,9 @@ function Create() {
   };
 
    
-    
 
-// Interior Photos  
-    const [InteriorPhotos  , setInteriorPhotos ] = React.useState([]);
-    const InteriorPhotosNumber = 10;
-  
-    const InteriorPhotosonChange = (imageList, addUpdateIndex) => {
-      // data for submit
-      console.log(imageList, addUpdateIndex);
-      setInteriorPhotos (imageList);
-    };
-// Engine Photos  
-    const [EnginePhotos  , setEnginePhotos ] = React.useState([]);
-    const EnginePhotosNumber = 10;
-  
-    const EnginePhotosonChange = (imageList, addUpdateIndex) => {
-      // data for submit
-      console.log(imageList, addUpdateIndex);
-      setEnginePhotos (imageList);
-    }
-// Tyres Photos 
-    const [TyresPhotos  , setTyresPhotos ] = React.useState([]);
-    const TyresPhotosNumber = 10;
-  
-    const TyresPhotosonChange = (imageList, addUpdateIndex) => {
-      // data for submit
-      console.log(imageList, addUpdateIndex);
-      setTyresPhotos (imageList);
-    };
-// Dents Photos
-const [DentsPhotos  , setDentsPhotos ] = React.useState([]);
-const DentsPhotosNumber = 10;
 
-const DentsPhotosonChange = (imageList, addUpdateIndex) => {
-  // data for submit
-  console.log(imageList, addUpdateIndex);
-  setDentsPhotos (imageList);
-};
+
 
 
 const handleCloseBtn = () => {
@@ -557,12 +663,12 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select brand *</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Brand *</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={brand}
-                          label="Select brand *"
+                          label="Select Brand *"
                           onChange={handleInput}
                           name='brand'
                           required
@@ -578,12 +684,12 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select model</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Model *</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={model}
-                          label="Select model"
+                          label="Select Model *"
                           onChange={handleInput}
                           name='model'
                           required
@@ -598,12 +704,12 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select variant</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Variant *</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={variant}
-                          label="Select variant"
+                          label="Select Variant *"
                           onChange={handleInput}
                           name='variant'
                           required
@@ -619,12 +725,12 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Registration Year</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Registration Year *</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={regYear}
-                          label="Registration Year"
+                          label="Registration Year *"
                           onChange={handleInput}
                           name='regYear'
                           required
@@ -639,14 +745,15 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select body type</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Body Type *</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={bodyType}
-                          label="Select body type"
+                          label="Select Body Type *"
                           onChange={handleInput}
                           name='bodyType'
+                          required
                         >
                           {bodyTypelist.length > 0 && bodyTypelist.map((data,key) => (
                             <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
@@ -659,14 +766,15 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select fuel type</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Fuel Type *</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={fuelType}
-                          label="Select body type"
+                          label="Select Fuel Type *"
                           onChange={handleInput}
                           name='fuelType'
+                          required
                         >
                           {fuelTypelist.length > 0 && fuelTypelist.map((data,key) => (
                             <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
@@ -679,14 +787,15 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select transmission*</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Transmission*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={transmission}
-                          label="Select Transmission"
+                          label="Select Transmission *"
                           onChange={handleInput}
                           name='transmission'
+                          required
                         >
                           <MenuItem value="Manual">Manual</MenuItem>
                           <MenuItem value="Automatic">Automatic</MenuItem>
@@ -697,14 +806,15 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select owner type*</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Owner Type*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={ownerType}
-                          label="Select Owner type"
+                          label="Select Owner Type *"
                           onChange={handleInput}
                           name='ownerType'
+                          required
                         >
                           {ownerTypelist.length > 0 && ownerTypelist.map((data,key) => (
                             <MenuItem key={key} value={data.type}>{data.type}</MenuItem>
@@ -716,14 +826,15 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select color*</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Select Color*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={color}
-                          label="Select color"
+                          label="Select Color *"
                           onChange={handleInput}
                           name='color'
+                          required
                         >
                           {colorList.length > 0 && colorList.map((data,key) => (
                             <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
@@ -740,9 +851,10 @@ const handleCloseBtn = () => {
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={rto}
-                          label="Select RTO"
+                          label="Select RTO*"
                           onChange={handleInput}
                           name='rto'
+                          required
                         >
                           {rtoList.length > 0 && rtoList.map((data,key) => (
                             <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
@@ -753,17 +865,17 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Kilometers Driven*" onChange={handleInput} name='kmsDriven' value={kmsDriven} variant="outlined" required fullWidth/>
+                    <TextField id="outlined-basic" label="Kilometers Driven" onChange={handleInput} name='kmsDriven' value={kmsDriven} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Your Selling Price*" onChange={handleInput} name='carPrice' value={carPrice} variant="outlined" required fullWidth/>
+                    <TextField id="outlined-basic" label="Your Selling Price" onChange={handleInput} name='carPrice' value={carPrice} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={12}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Description*" onChange={handleInput} name='description' value={description} variant="outlined" required fullWidth/>
+                    <TextField id="outlined-basic" label="Description" onChange={handleInput} name='description' value={description} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
@@ -777,6 +889,7 @@ const handleCloseBtn = () => {
                             label="Seating Capacity*"
                             onChange={handleInput}
                             name='seat'
+                            required
                           >
                             {seatList.length > 0 && seatList.map((data,key) => (
                             <MenuItem key={key} value={data.noOfSeats}>{data.noOfSeats}</MenuItem>
@@ -788,36 +901,37 @@ const handleCloseBtn = () => {
                     
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Mileage in kmpl*" onChange={handleInput} name='mileage' value={mileage} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' value={mileage} variant="outlined" required fullWidth/>
                       </Box>
                   </Grid>                 
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Engine (CC)*" onChange={handleInput} name='engine' value={engine} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Engine (CC)" onChange={handleInput} name='engine' value={engine} variant="outlined" required fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Power*" onChange={handleInput} name='maxPower' value={maxPower} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' value={maxPower} variant="outlined" required fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Torque*" onChange={handleInput} name='maxTorque' value={maxTorque} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' value={maxTorque} variant="outlined" required fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       
                       <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Noc</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Noc*</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={noc}
-                            label="Noc"
+                            label="Noc *"
                             onChange={handleInput}
                             name='noc'
+                            required
                           >
                             
                             <MenuItem value='true'>True</MenuItem>
@@ -828,19 +942,19 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="MFG Year*" name='mfgYear' onChange={handleInput} value={mfgYear} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="MFG Year" name='mfgYear' onChange={handleInput} value={mfgYear} variant="outlined" required fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Inspection Report*" onChange={handleInput} name='inspectionReport' value={inspectionReport} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Inspection Report" onChange={handleInput} name='inspectionReport' value={inspectionReport} required variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} value={insuranceValidity} sx={{width:'100%'}}/>
+                              <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} value={insuranceValidity} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
@@ -849,20 +963,29 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Road Tax Validity" onChange={handleRoadTaxValidityDate} value={roadTaxValidity} sx={{width:'100%'}}/>
+                              <DatePicker label="Road Tax Validity" onChange={handleRoadTaxValidityDate} value={roadTaxValidity} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
                     </Grid>
-                    {/* <Grid item md={3}>
+                    <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date_time} ${"tm_dashboard_rightbar_form_date_time_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer components={['DateTimePicker']}>
-                            <DateTimePicker label="Basic date time picker" />
+                            <DateTimePicker label="Auction Start Time" onChange={handleAuctionStartTime} value={auctionStartTime} sx={{width:'100%'}} required />
                           </DemoContainer>
                         </LocalizationProvider>
                       </Box>
-                    </Grid> */}
+                    </Grid>
+                    <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date_time} ${"tm_dashboard_rightbar_form_date_time_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={['DateTimePicker']}>
+                            <DateTimePicker label="Auction End Time" onChange={handleAuctionEndTime} value={auctionEndTime} sx={{width:'100%'}} required />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </Box>
+                    </Grid>
         
                   
                   <Grid item md={3}>
@@ -896,7 +1019,7 @@ const handleCloseBtn = () => {
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Thumbnail Photos (Upload only 1 Photo)</Typography>
+                      <Typography variant='h6'>Add Thumbnail Photos (Upload only 1 Photo) <Box sx={{color:"red"}}>{error}</Box></Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
@@ -905,6 +1028,7 @@ const handleCloseBtn = () => {
                             Upload File
                             <input type="file" onChange={handleInput} name='ThumbnailPhotos' hidden />
                           </Button>
+                          
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
@@ -960,6 +1084,143 @@ const handleCloseBtn = () => {
                         </Grid>
                       </Grid>
                   </Box>
+
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Add Interior Photos (Upload only 5 Photo)</Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='InteriorPhotos' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                        {InteriorPhotos.length > 0 &&
+                          InteriorPhotos.map((element, index) => {
+                            return (
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box key={index}>
+                                  <img
+                                    key={index}
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
+                  </Box>
+
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Add Engine Photos (Upload only 5 Photo)</Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='EnginePhotos' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                        {EnginePhotos.length > 0 &&
+                          EnginePhotos.map((element, index) => {
+                            return (
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box key={index}>
+                                  <img
+                                    key={index}
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
+                  </Box>
+
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Add Tyre Photos (Upload only 5 Photo)</Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='TyresPhotos' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                        {TyresPhotos.length > 0 &&
+                          TyresPhotos.map((element, index) => {
+                            return (
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box key={index}>
+                                  <img
+                                    key={index}
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
+                  </Box>
+
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Add Dent Photos (Upload only 5 Photo)</Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='DentsPhotos' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                        {DentsPhotos.length > 0 &&
+                          DentsPhotos.map((element, index) => {
+                            return (
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box key={index}>
+                                  <img
+                                    key={index}
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
+                  </Box>
+
                 
                   {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>

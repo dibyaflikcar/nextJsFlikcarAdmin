@@ -113,6 +113,60 @@ const API = axios.create({
     }
   };
 
+  vehicleApi.uploadAuctionImage = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionImage',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.uploadAuctionImage2 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionImage2',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.uploadAuctionImage3 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionImage3',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.uploadAuctionImage4 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionImage4',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.uploadAuctionImage5 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionImage5',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.uploadAuctionImage6 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionImage6',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
   
 
   
