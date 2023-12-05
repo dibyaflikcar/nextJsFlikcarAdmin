@@ -31,10 +31,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { useRouter } from 'next/navigation';
+
 
 
 
 function Create() {  
+
+  const router = useRouter()
   // const [open, setOpen] = React.useState(false);
   // const anchorRef = React.useRef(null);
   // const [page, setPage] = React.useState(0);
@@ -572,7 +576,9 @@ const uploadAuctionImage6= async (data)=>{
     // console.log(response);
     if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
     //   // console.log("ok");
-      setPopupopen(true);
+      // setPopupopen(true);
+      confirm("Car added successfully");
+      router.push("/dashboard/auctionvehicle");
 
     }
 
@@ -1035,13 +1041,13 @@ const handleCloseBtn = () => {
                         {ThumbnailPhotos.length > 0 &&
                           ThumbnailPhotos.map((element, index) => {
                             return (
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box key={index}>
-                                  <img
-                                    key={index}
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
                                     src={URL.createObjectURL(element)}
                                     alt='Uploaded Image'
                                     height='300'
+                                    width='300'
                                   />
                                   <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
                                 </Box>
@@ -1068,13 +1074,13 @@ const handleCloseBtn = () => {
                         {ExteriorPhotos.length > 0 &&
                           ExteriorPhotos.map((element, index) => {
                             return (
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box key={index}>
-                                  <img
-                                    key={index}
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box>
+                                  <Image
                                     src={URL.createObjectURL(element)}
                                     alt='Uploaded Image'
                                     height='300'
+                                    width='300'
                                   />
                                   <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
                                 </Box>
@@ -1102,13 +1108,13 @@ const handleCloseBtn = () => {
                         {InteriorPhotos.length > 0 &&
                           InteriorPhotos.map((element, index) => {
                             return (
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box key={index}>
-                                  <img
-                                    key={index}
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
                                     src={URL.createObjectURL(element)}
                                     alt='Uploaded Image'
                                     height='300'
+                                    width='300'
                                   />
                                   <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
                                 </Box>
@@ -1136,13 +1142,13 @@ const handleCloseBtn = () => {
                         {EnginePhotos.length > 0 &&
                           EnginePhotos.map((element, index) => {
                             return (
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box key={index}>
-                                  <img
-                                    key={index}
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
                                     src={URL.createObjectURL(element)}
                                     alt='Uploaded Image'
                                     height='300'
+                                    width='300'
                                   />
                                   <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
                                 </Box>
@@ -1170,13 +1176,13 @@ const handleCloseBtn = () => {
                         {TyresPhotos.length > 0 &&
                           TyresPhotos.map((element, index) => {
                             return (
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box key={index}>
-                                  <img
-                                    key={index}
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
                                     src={URL.createObjectURL(element)}
                                     alt='Uploaded Image'
                                     height='300'
+                                    width='300'
                                   />
                                   <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
                                 </Box>
@@ -1204,13 +1210,13 @@ const handleCloseBtn = () => {
                         {DentsPhotos.length > 0 &&
                           DentsPhotos.map((element, index) => {
                             return (
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box key={index}>
-                                  <img
-                                    key={index}
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
                                     src={URL.createObjectURL(element)}
                                     alt='Uploaded Image'
                                     height='300'
+                                    width='300'
                                   />
                                   <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
                                 </Box>
