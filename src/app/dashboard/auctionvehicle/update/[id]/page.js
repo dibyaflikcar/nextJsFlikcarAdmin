@@ -3,11 +3,11 @@ import React, { useState ,useEffect  } from 'react';
 import ImageUploading from 'react-images-uploading';
 
 import Image from 'next/image';
-import dashboardStyles from '../../dashboard.module.css';
+import dashboardStyles from '../../../dashboard.module.css';
 import {Box,Grid,TextField,Button,Typography} from '@mui/material';
-import '../../../globals.css';
-import Sidebar from '../../../../../components/Sidebar';
-import Header from '../../../../../components/Header';
+import '../../../../globals.css';
+import Sidebar from '../../../../../../components/Sidebar';
+import Header from '../../../../../../components/Header';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -16,7 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Margin } from '@mui/icons-material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import {vehicleApi} from '../../../../app/service/vehicle';
+import {vehicleApi} from '../../../../../app/service/vehicle';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -36,13 +36,9 @@ import { useRouter } from 'next/navigation';
 
 
 
-function Create() {  
+function Update({ params }) {  
 
   const router = useRouter()
-  // const [open, setOpen] = React.useState(false);
-  // const anchorRef = React.useRef(null);
-  // const [page, setPage] = React.useState(0);
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   
 
   const [brandlist, setBrandlist] = useState([]);
@@ -111,6 +107,19 @@ function Create() {
   const [thumbImage, setThumbImage] = useState([]);
 
   const [error, setError] = useState("");
+  const [auctionCarDatails, setAuctionCarDetails] = useState();
+  const [thumbImages, setThumbImages] = useState([]);
+  const [extImages,setExtImages]=useState([]);
+  const [intImages,setIntImages]=useState([]);
+  const [engineImages,setEngineImages]=useState([]);
+  const [tyreImages,settyreImages]=useState([]);
+  const [dentImages,setdentImages]=useState([]);
+
+
+  const [InsuranceValidityDemo,setInsuranceValidityDemo]=useState(null);
+  const [RoadTaxValidityDemo,setRoadTaxValidityDemo]=useState(null);
+
+  
   
   useEffect(() => {
     getMakeModel();
@@ -120,13 +129,8 @@ function Create() {
     getColor();
     getRto();
     getSeat();
-    // setComforts([]);
-    // setSafety([]);
-    // setInterior([]);
-    // setExterior([]);
-    // setEntertainment([]);
-
     getCarFeatureList([]);
+    // getAuctionCarDetails([]);
   
     const currentYear = new Date().getFullYear();
     const startYear = 2000;
@@ -144,12 +148,129 @@ function Create() {
             // console.log(response.data.data);
       if (response.data.status === 200) {
         setBrandlist(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
+        const data={id:params.id};
+        const response2 = await vehicleApi.getAuctionCarDetails(data);
+            // console.log(response2.data.data);
+          if (response2.data.status === 200) {
+            const result=response2.data.data;
+            console.log(result);
+            setAuctionCarDetails(result);
+            setcarPrice(result.carPrice);
+            setBrand(result.properties.brand);
+
+            const filteredResult = response.data.data.filter((item) => item.name == result.properties.brand);
+            setModelList(filteredResult[0].models);
+
+            setModel(result.properties.model);
+            const filteredResult2 = filteredResult[0].models.filter((item) => item.name == result.properties.model);
+            // console.log(filteredResult2[0].variants.length);
+            if(filteredResult2[0].variants.length>0)
+            {
+              setVariantList(filteredResult2[0].variants);
+            }
+            setVariant(result.properties.variant);
+            setregYear(result.properties.registerationYear);
+            setbodyType(result.properties.bodyType);
+            setfuelType(result.properties.fuelType);
+            setTransmission(result.properties.transmission);
+            setownerType(result.properties.ownerType);
+            setColor(result.properties.color);
+            setRto(result.properties.rtoLocation);
+            setkmsDriven(result.properties.kmsDriven);
+            setDescription(result.properties.carDescription);
+            setSeat(result.properties.seat);
+            setMileage(result.properties.mileage);
+            setEngine(result.properties.engineCC);
+            setmaxPower(result.properties.maxPower);
+            setMaxTorque(result.properties.maxTorque);
+            setNoc(result.properties.noc);
+            setmfgYear(result.properties.manufacturingYear);
+            setInspectionReport(result.properties.inspectionReport);
+
+            const date = new Date(result.properties.insuranceValidity);
+            setInsuranceValidityDemo(date.toLocaleDateString('en-US'));
+            const date2 = new Date(result.properties.roadTaxValidity);
+            setRoadTaxValidityDemo(date2.toLocaleDateString('en-US'));
+            
+            
+            // setInsuranceValidity(result.properties.insuranceValidity);
+
+            // const date2 = new Date(result.properties.roadTaxValidity);
+            // const month2 = (date2.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+            // const day2 = date2.getDate().toString().padStart(2, '0');
+            // const year2 = date2.getFullYear();
+            // const formattedDate2 = `${month2}/${day2}/${year2}`;
+            // setRoadTaxValidity(formattedDate2);
+
+            setInspectionScore(result.properties.inspectionScore);
+            
+
+            const thumbImages = result.images.filter((item) => item.type == "THUMB");
+            setThumbImages(thumbImages);
+
+            const extImages = result.images.filter((item) => item.type == "EXT");
+            setExtImages(extImages);
+
+            const intImages = result.images.filter((item) => item.type == "INT");
+            setIntImages(intImages);
+
+            const engineImages = result.images.filter((item) => item.type == "ENGINE");
+            setEngineImages(engineImages);
+
+            const tyreImages = result.images.filter((item) => item.type == "TYRE");
+            settyreImages(tyreImages);
+
+            const dentImages = result.images.filter((item) => item.type == "DENT");
+            setdentImages(dentImages);
+
+            setComforts(result.properties.comfort);
+            setSafety(result.properties.safety);
+            setInterior(result.properties.interior);
+            setExterior(result.properties.exterior);
+            setEntertainment(result.properties.entertainment);
+
+
+            
+          } 
       } 
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+
+  // const getAuctionCarDetails = async ()=>{
+  //   const data={id:params.id};
+  //   try {
+  //     const response = await vehicleApi.getAuctionCarDetails(data);
+  //           // console.log(response.data.data);
+  //     if (response.data.status === 200) {
+  //       const result=response.data.data;
+  //       console.log(result);
+  //       setAuctionCarDetails(result);
+  //       setcarPrice(result.carPrice);
+  //       setBrand(result.properties.brand);
+
+  //       console.log(brandlist);
+  //       const filteredResult = brandlist.filter((item) => item.name == result.properties.brand);
+  //       setModelList(filteredResult[0].models);
+
+  //       setModel(result.properties.model);
+  //       const filteredResult2 = modellist.filter((item) => item.name == result.properties.model);
+  //       // console.log(filteredResult2[0].variants.length);
+  //       if(filteredResult2[0].variants.length>0)
+  //       {
+  //         setVariantList(filteredResult2[0].variants);
+  //       }
+  //       setVariant(result.properties.variant);
+        
+  //     } 
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // }
+
+  
 
   const getBodytype = async () => {
     try {
@@ -256,6 +377,7 @@ function Create() {
       const filteredResult = brandlist.filter((item) => item.name == e.target.value);
       // console.log(filteredResult[0].models);
       setModelList(filteredResult[0].models);
+
     }
     if (e.target.name === 'model') {
       setModel(e.target.value);
@@ -435,6 +557,7 @@ function Create() {
   };
   const handleAuctionStartTime = (newDate) => {
     setAuctionStartTime(newDate);
+    // console.log(newDate);
   };
   const handleAuctionEndTime = (newDate) => {
     setAuctionEndTime(newDate);
@@ -451,7 +574,7 @@ const uploadAuctionImage= async (data)=>{
     // setAllcarImage(response.data.data);
     setAllcarImage([...allCarImage, response.data.data]);
     setThumbImage([...thumbImage, response.data.data]);
-    setError();
+    
     // console.log(response.data.data);
   }
 }
@@ -588,26 +711,6 @@ const uploadAuctionImage6= async (data)=>{
   };
     
 
-  // const getModelList = async (brandId) => {
-  //   // setModel('');
-  //   // setVariantList([]);
-  //   const response = await vehicleApi.getModel(brandId);
-  //   if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-  //     setModelList(response.data);
-  //     console.log(response.data);
-  //   }
-  // };
-
-  
-
-  // return focus to the button when we transitioned from !open -> open
-  // const prevOpen = React.useRef(open);
-  // React.useEffect(() => {
-  //   if (prevOpen.current === true && open === false) {
-  //     anchorRef.current.focus();
-  //   }
-  //   prevOpen.current = open;
-  // }, [open]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -645,11 +748,6 @@ const uploadAuctionImage6= async (data)=>{
   };
 
    
-
-
-
-
-
 const handleCloseBtn = () => {
   setPopupopen(false);
 };
@@ -664,7 +762,7 @@ const handleCloseBtn = () => {
               <Header/>
               <Box className={dashboardStyles.tm_dashboard_rightbar_form_main}>
                 <Box className={dashboardStyles.tm_dashboard_rightbar_form_title}>
-                  <Typography variant='h3'>List your car!</Typography>
+                  <Typography variant='h3'>Update your car!  </Typography>
                 </Box>
                 <form onSubmit={handleSubmit}>
                 <Grid container spacing={4}>
@@ -873,12 +971,12 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Kilometers Driven" onChange={handleInput} name='kmsDriven' type="number" value={kmsDriven} variant="outlined" required fullWidth/>
+                    <TextField id="outlined-basic" label="Kilometers Driven" onChange={handleInput} name='kmsDriven' value={kmsDriven} type="number" variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Your Selling Price" onChange={handleInput} name='carPrice' type="number" value={carPrice} variant="outlined" required fullWidth/>
+                    <TextField id="outlined-basic" label="Your Selling Price" onChange={handleInput} name='carPrice' value={carPrice}  type="number" InputLabelProps={{shrink: true,}} variant="outlined" required fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={12}>
@@ -950,7 +1048,7 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="MFG Year" name='mfgYear' onChange={handleInput} value={mfgYear} type="number" variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="MFG Year" name='mfgYear' type="number" onChange={handleInput} value={mfgYear} variant="outlined" required fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
@@ -965,6 +1063,7 @@ const handleCloseBtn = () => {
                               <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} value={insuranceValidity} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
+                          <Typography>Preview : {InsuranceValidityDemo}</Typography>
                         </Box>
                     </Grid>
                     <Grid item md={3}>
@@ -974,6 +1073,8 @@ const handleCloseBtn = () => {
                               <DatePicker label="Road Tax Validity" onChange={handleRoadTaxValidityDate} value={roadTaxValidity} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
+                          <Typography>Preview : {RoadTaxValidityDemo}</Typography>
+                          
                         </Box>
                     </Grid>
                     <Grid item md={3}>
@@ -1036,10 +1137,28 @@ const handleCloseBtn = () => {
                             Upload File
                             <input type="file" onChange={handleInput} name='ThumbnailPhotos' hidden />
                           </Button>
-                          
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
+                      
+                      
+                      {thumbImages.length > 0 &&
+                          thumbImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={element.path}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+
                         {ThumbnailPhotos.length > 0 &&
                           ThumbnailPhotos.map((element, index) => {
                             return (
@@ -1059,6 +1178,9 @@ const handleCloseBtn = () => {
                         </Grid>
                       </Grid>
                   </Box>
+
+                  
+
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Add Exterior Photos (Upload only 5 Photo)</Typography>
@@ -1072,7 +1194,24 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
+
                       <Grid item md={9}>
+                      {extImages.length > 0 &&
+                          extImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box>
+                                  <Image
+                                    src={element.path}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
                         {ExteriorPhotos.length > 0 &&
                           ExteriorPhotos.map((element, index) => {
                             return (
@@ -1107,6 +1246,22 @@ const handleCloseBtn = () => {
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
+                      {intImages.length > 0 &&
+                          intImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={element.path}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
                         {InteriorPhotos.length > 0 &&
                           InteriorPhotos.map((element, index) => {
                             return (
@@ -1141,7 +1296,24 @@ const handleCloseBtn = () => {
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
-                        {EnginePhotos.length > 0 &&
+                      {engineImages.length > 0 &&
+                          engineImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={element.path}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+
+                      {EnginePhotos.length > 0 &&
                           EnginePhotos.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
@@ -1157,6 +1329,7 @@ const handleCloseBtn = () => {
                               </Box>
                             );
                           })}
+                        
                         </Grid>
                       </Grid>
                   </Box>
@@ -1175,6 +1348,22 @@ const handleCloseBtn = () => {
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
+                      {tyreImages.length > 0 &&
+                          tyreImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={element.path}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
                         {TyresPhotos.length > 0 &&
                           TyresPhotos.map((element, index) => {
                             return (
@@ -1209,6 +1398,23 @@ const handleCloseBtn = () => {
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
+                      
+                      {dentImages.length > 0 &&
+                          dentImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={element.path}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
                         {DentsPhotos.length > 0 &&
                           DentsPhotos.map((element, index) => {
                             return (
@@ -1230,312 +1436,13 @@ const handleCloseBtn = () => {
                   </Box>
 
                 
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Interior Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={InteriorPhotos}
-                      onChange={InteriorPhotosonChange}
-                      maxNumber={InteriorPhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Engine Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={EnginePhotos}
-                      onChange={EnginePhotosonChange}
-                      maxNumber={EnginePhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Tyres Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={TyresPhotos}
-                      onChange={TyresPhotosonChange}
-                      maxNumber={TyresPhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Dents Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={DentsPhotos}
-                      onChange={DentsPhotosonChange}
-                      maxNumber={DentsPhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
+                  
                 </Box>
 
                 <Box sx={{margin:'50px 0 0'}}>
                   <Grid container spacing={4}>
                     
-                    {/* <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Alloy wheels *</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            label="Alloy wheels *"
-                            onChange={handleChange}
-                          >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Grid>
-                    <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Spare wheel*</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            label="Spare wheel*"
-                            onChange={handleChange}
-                          >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Grid>
-                    <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Turbo chargers*</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            label="Turbo chargers*"
-                            onChange={handleChange}
-                          >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Grid>
-                    <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Front break type*</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            label="Front break type*"
-                            onChange={handleChange}
-                          >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Grid>
-                    <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Fuel tank capacity (in liters)*" variant="outlined" fullWidth/>
-                      </Box>
-                    </Grid> */}
+                    
                   </Grid>
                 </Box>
                 <Box sx={{margin:'50px 0 0'}}>
@@ -1729,4 +1636,4 @@ const handleCloseBtn = () => {
   )
 }
 
-export default Create
+export default Update

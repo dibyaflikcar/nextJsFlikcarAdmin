@@ -96,7 +96,7 @@ function Auctionvehicle() {
                                       <TableCell align="center">{data.carDetails.brand} {data.carDetails.model} {data.carDetails.variant}</TableCell>
                                       <TableCell align="center">{data.carDetails.kmsDriven}</TableCell>
                                       <TableCell align="center">{data.carDetails.registerationYear}</TableCell>
-                                      <TableCell align="center"><EditIcon /> <DeleteIcon /></TableCell>
+                                      <TableCell align="center"><Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> <DeleteIcon /></TableCell>
                                     </TableRow>
                                   ))}
                       </TableBody>

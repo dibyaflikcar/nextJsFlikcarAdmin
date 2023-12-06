@@ -113,6 +113,15 @@ const API = axios.create({
     }
   };
 
+  vehicleApi.getAuctionCarDetails = async (data) => {
+    try {
+      const res = API.post('/vehicle/getAuctionCarDetails',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
   vehicleApi.uploadAuctionImage = async (data) => {
     try {
       const res = API.post('/vehicle/uploadAuctionImage',data);
