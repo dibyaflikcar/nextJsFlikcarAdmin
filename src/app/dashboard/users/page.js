@@ -25,8 +25,8 @@ import ArraytoCsv from '../../../../components/ArraytoCsv';
 
 
 
-function Enquiry() {  
-  const [vehicleEnquiry,setVehicleEnquiry]=useState([]);
+function User() {  
+  const [userList,setUserList]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -45,10 +45,10 @@ function Enquiry() {
 
   const fetchData = async () => {
     try {
-      const response = await vehicleApi.getVehicleEnquiry();
+      const response = await vehicleApi.getUsers();
             // console.log(response);
       if (response.data.status === 200) {
-          setVehicleEnquiry(response.data.data);
+        setUserList(response.data.data);
       }
       
     } catch (error) {
@@ -73,7 +73,7 @@ function Enquiry() {
   }
 
   const handleDownloadCsv = () => {
-    ArraytoCsv(vehicleEnquiry, 'Enquiry-list.csv');
+    ArraytoCsv(userList, 'user-list.csv');
   };
 
  
@@ -88,7 +88,7 @@ function Enquiry() {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'> Vehicle Enquiry</Typography>
+                    <Typography variant='h4'> Users List</Typography>
                   </Box>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
                     <Button variant="contained" onClick={handleDownloadCsv}>Download CSV</Button>
@@ -100,32 +100,28 @@ function Enquiry() {
                     <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" colSpan={8}>Vehicle Enquiry List</TableCell>
+                          <TableCell align="center" colSpan={8}>Users List</TableCell>
                           {/* <TableCell align="center" colSpan={3}>List</TableCell> */}
                         </TableRow>
                         <TableRow>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Model	</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Phone</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Reg Year</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Status</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Phone No</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>User Type	</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Created At</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
                       
                       <TableBody>
-                                {vehicleEnquiry.map((data,key) => (
+                                {userList.map((data,key) => (
                                     <TableRow key={key}>
                                       <TableCell align="center" component="th" scope="row">{data.id}</TableCell>
-                                      <TableCell align="center" >{data.brand} </TableCell>
-                                      <TableCell align="center">{data.model} </TableCell>
-                                      <TableCell align="center">{data.phone}</TableCell>
-                                      <TableCell align="center">{data.registrationYear}</TableCell>
-                                      <TableCell align="center">{data.status}</TableCell>
+                                      <TableCell align="center" >{data.phone} </TableCell>
+                                      <TableCell align="center">{data.userTypeStatus} <EditIcon /></TableCell>
+                                      <TableCell align="center">{data.createdAt ? data.createdAt : 'NA'}</TableCell>
                                       <TableCell align="center">
                                         {/* <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link>  */}
-                                        <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
+                                        {/* <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /> */}
                                     </TableCell>
                                     </TableRow>
                                   ))}
@@ -135,7 +131,7 @@ function Enquiry() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={vehicleEnquiry.length}
+        count={userList.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -151,4 +147,4 @@ function Enquiry() {
   )
 }
 
-export default Enquiry
+export default User

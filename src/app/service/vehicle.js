@@ -244,6 +244,14 @@ vehicleApi.addBrand = async (data) => {
     return error.response;
   }
 };
+vehicleApi.updateBrand = async (data) => {
+  try {
+    const res = API.post('/vehicle/updateBrand', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
 vehicleApi.deleteBrand = async (data) => {
   try {
     const res = API.post('/vehicle/deleteBrand',data);
@@ -252,6 +260,60 @@ vehicleApi.deleteBrand = async (data) => {
     return error.response;
   }
 };
+
+//Model start here
+vehicleApi.getBrandwithID = async (data) => {
+  try {
+    const res = API.post('/vehicle/getBrandwithID', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+vehicleApi.addModel = async (data) => {
+  try {
+    const res = API.post('/vehicle/addModel', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+vehicleApi.updateModel = async (data) => {
+  try {
+    const res = API.post('/vehicle/updateModel', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+vehicleApi.deleteModel = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteModel', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// user start here
+vehicleApi.getUsers = async () => {
+  try {
+    const res = API.get('/vehicle/getUsers');
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
+
+
+
+
+
 
 
   

@@ -1182,7 +1182,7 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
+                      {/* <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">Car Sold Status</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
@@ -1191,12 +1191,29 @@ const handleCloseBtn = () => {
                             label="Car Sold Status"
                             onChange={handleInput}
                             name='carsoldStatus'
+                            helperText="Please select your currency"
                           >
                             
                             <MenuItem value='true'>Yes</MenuItem>
                             <MenuItem value='false'>No</MenuItem>
                           </Select>
-                        </FormControl>
+                        </FormControl> */}
+                        <TextField
+                          id="outlined-select-currency-native"
+                          select
+                          label="Car Sold Status"
+                          defaultValue={carsoldStatus}
+                          onChange={handleInput}
+                          name='carsoldStatus'
+                          SelectProps={{
+                            native: true,
+                          }}
+                          fullWidth
+                          // helperText="Please select your currency"
+                        >
+                            <option key="1" value="true">Yes </option>
+                            <option key="2" value="false">No </option>
+                        </TextField>
                       </Box>
                   </Grid>
                   
