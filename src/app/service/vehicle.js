@@ -113,9 +113,36 @@ const API = axios.create({
     }
   };
 
+  vehicleApi.updateAuctionVehicle = async (data) => {
+    try {
+      const res = API.post('/vehicle/updateAuctionVehicle',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
   vehicleApi.getAuctionCarDetails = async (data) => {
     try {
       const res = API.post('/vehicle/getAuctionCarDetails',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.getAuctionDetails = async (data) => {
+    try {
+      const res = API.post('/vehicle/getAuctionDetails',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  vehicleApi.deleteAuctionVehicle = async (data) => {
+    try {
+      const res = API.post('/vehicle/deleteAuctionVehicle',data);
       return res;
     } catch (error) {
       return error.response;
@@ -177,8 +204,55 @@ const API = axios.create({
   };
 
   
+// vehicle enquiry section
 
-  
+vehicleApi.getVehicleEnquiry = async () => {
+  try {
+    const res = API.get('/vehicle/getVehicleEnquiry');
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+vehicleApi.deleteVehicleEnquiry = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteVehicleEnquiry',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
+// Brand start here
+
+vehicleApi.getBrand = async () => {
+  try {
+    const res = API.get('/vehicle/getBrand');
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+vehicleApi.addBrand = async (data) => {
+  try {
+    const res = API.post('/vehicle/addBrand', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.deleteBrand = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteBrand',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 
   
   

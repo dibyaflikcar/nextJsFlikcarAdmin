@@ -21,10 +21,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Link from 'next/link';
 
-function Auctionvehicle() {  
-  const [auctionData,setAuctionData]=useState([]);
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function Brand() {  
+  const [brand,setBrand]=useState("");
+  const [brandList,setBrandList]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const [popupOpen, setPopupopen] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -35,16 +44,39 @@ function Auctionvehicle() {
     setPage(0);
   };
 
+  const handleCloseBtn = () => {
+    setPopupopen(false);
+  };
+
+  const handleInput = (e)=>{
+    if(e.target.name=="brand")
+    {
+        setBrand(e.target.value);
+    }
+  };
+
+  const handleSubmit =async (e)=>{
+    e.preventDefault(); 
+    const formData={brand};
+
+    const response = await vehicleApi.addBrand(formData);
+    // console.log(response);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      confirm("Brand added successfully");
+      fetchData();
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []); 
 
   const fetchData = async () => {
     try {
-      const response = await vehicleApi.getAuction();
+      const response = await vehicleApi.getBrand();
             // console.log(response.data.data);
       if (response.data.status === 200) {
-          setAuctionData(response.data.data);
+          setBrandList(response.data.data);
       }
       
     } catch (error) {
@@ -52,16 +84,19 @@ function Auctionvehicle() {
     }
   };
 
+  const handleAdd = async ()=>{
+    setPopupopen(true);
+  };
+
   const handleDelete = async (id) => {
     // alert(id);
-    const userConfirmed = confirm("Do you want to delete this car?");
+    const userConfirmed = confirm("Do you want to delete this brand?");
     if (userConfirmed) {
-      // Perform the action when the user clicks OK
       const formData={id};
-      const response = await vehicleApi.deleteAuctionVehicle(formData);
+      const response = await vehicleApi.deleteBrand(formData);
       if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
         // console.log(response);
-        alert("car has been deleted");
+        alert("Brand Deleted Successfully");
         fetchData();
         
       }
@@ -80,10 +115,10 @@ function Auctionvehicle() {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'>Auction Vehicle List</Typography>
+                    <Typography variant='h4'>Brand List</Typography>
                   </Box>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
-                    <Link href="/dashboard/auctionvehicle/create"><Button variant="contained">Add</Button></Link>
+                    <Button variant="contained" onClick={handleAdd}>Add</Button>
                   </Box>
                 </Box>
                  
@@ -92,28 +127,24 @@ function Auctionvehicle() {
                     <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" colSpan={8}>Auction List</TableCell>
+                          <TableCell align="center" colSpan={8}>Brand List</TableCell>
                           {/* <TableCell align="center" colSpan={3}>List</TableCell> */}
                         </TableRow>
                         <TableRow>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Image</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand Model Variant	</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Kms Driven</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Reg Year</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
                       
                       <TableBody>
-                                {auctionData.map((data,key) => (
+                                {brandList.map((data,key) => (
                                     <TableRow key={key}>
-                                      <TableCell align="center" component="th" scope="row">{data.id}</TableCell>
-                                      <TableCell align="center" ><Image src={data.carDetails.imagePath} alt='Image' height={50} width={50}  /></TableCell>
-                                      <TableCell align="center">{data.carDetails.brand} {data.carDetails.model} {data.carDetails.variant}</TableCell>
-                                      <TableCell align="center">{data.carDetails.kmsDriven}</TableCell>
-                                      <TableCell align="center">{data.carDetails.registrationYear}</TableCell>
-                                      <TableCell align="center"><Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /></TableCell>
+                                      <TableCell align="center" component="th" scope="row">{key+1}</TableCell>
+                                      <TableCell align="center">{data.data.name}</TableCell>
+                                      <TableCell align="center">
+                                        {/* <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> */}
+                                         <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /></TableCell>
                                     </TableRow>
                                   ))}
                       </TableBody>
@@ -122,7 +153,7 @@ function Auctionvehicle() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={auctionData.length}
+        count={brandList.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -132,10 +163,27 @@ function Auctionvehicle() {
               </Box>
             </Box>
           </Grid>
-        </Grid>        
+        </Grid>   
+        <Dialog open={popupOpen} onClose={handleCloseBtn} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">{"Add Brand"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          <form onSubmit={handleSubmit}>
+                 <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="Brand" onChange={handleInput} name='brand' type="text" value={brand} variant="outlined" required fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn}>
+                    <Button variant="contained" type='submit'>submit</Button>           
+                  </Box>
+          </form>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>       
       </Box>
     </>
   )
 }
 
-export default Auctionvehicle
+export default Brand

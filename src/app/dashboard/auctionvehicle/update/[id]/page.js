@@ -30,7 +30,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 
 
@@ -104,7 +104,7 @@ function Update({ params }) {
   
 
   const [allCarImage, setAllcarImage] = useState([]);
-  const [thumbImage, setThumbImage] = useState([]);
+  const [thumbImage, setThumbImage] = useState(null);
 
   const [error, setError] = useState("");
   const [auctionCarDatails, setAuctionCarDetails] = useState();
@@ -116,10 +116,14 @@ function Update({ params }) {
   const [dentImages,setdentImages]=useState([]);
 
 
-  const [InsuranceValidityDemo,setInsuranceValidityDemo]=useState(null);
-  const [RoadTaxValidityDemo,setRoadTaxValidityDemo]=useState(null);
-
   
+
+  const [docId,setDocid]=useState(null);
+  const [carsoldStatus,setCarsoldStatus]=useState(null);
+
+  const [auctionDetails,setAuctionDetails]=useState([]);
+
+ 
   
   useEffect(() => {
     getMakeModel();
@@ -150,11 +154,50 @@ function Update({ params }) {
         setBrandlist(response.data.data);
         // console.log(response.data.data);
         const data={id:params.id};
+        setDocid(params.id);
+        const getAuctionDetails = await vehicleApi.getAuctionDetails(data);
+        if (getAuctionDetails.data.status === 200)
+        {
+            setAuctionDetails(getAuctionDetails.data.data);
+            setCarsoldStatus(getAuctionDetails.data.data.isSoldOut);
+
+            //startAuction
+            if(getAuctionDetails.data.data.startTime!=0)
+            {
+              const date = new Date(getAuctionDetails.data.data.startTime);
+              const year = date.getFullYear();
+              const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+              const day = date.getDate().toString().padStart(2, '0');
+              const hours = date.getHours().toString().padStart(2, '0');
+              const minutes = date.getMinutes().toString().padStart(2, '0');
+              const AuctionStartTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+              setAuctionStartTime(dayjs(AuctionStartTime));
+            }
+            
+
+            //endAuction
+            if(getAuctionDetails.data.data.endTime!=0)
+            {
+              const date2 = new Date(getAuctionDetails.data.data.endTime);
+              const year2 = date2.getFullYear();
+              const month2 = (date2.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+              const day2 = date2.getDate().toString().padStart(2, '0');
+              const hours2 = date2.getHours().toString().padStart(2, '0');
+              const minutes2 = date2.getMinutes().toString().padStart(2, '0');
+              const AuctionEndTime = `${year2}-${month2}-${day2}T${hours2}:${minutes2}`;
+              setAuctionEndTime(dayjs(AuctionEndTime));
+            }
+            
+
+            setThumbImage(getAuctionDetails.data.data.carDetails.imagePath);
+            
+        }
+
         const response2 = await vehicleApi.getAuctionCarDetails(data);
             // console.log(response2.data.data);
           if (response2.data.status === 200) {
             const result=response2.data.data;
-            console.log(result);
+            // console.log(result);
             setAuctionCarDetails(result);
             setcarPrice(result.carPrice);
             setBrand(result.properties.brand);
@@ -170,7 +213,7 @@ function Update({ params }) {
               setVariantList(filteredResult2[0].variants);
             }
             setVariant(result.properties.variant);
-            setregYear(result.properties.registerationYear);
+            setregYear(result.properties.registrationYear);
             setbodyType(result.properties.bodyType);
             setfuelType(result.properties.fuelType);
             setTransmission(result.properties.transmission);
@@ -187,11 +230,22 @@ function Update({ params }) {
             setNoc(result.properties.noc);
             setmfgYear(result.properties.manufacturingYear);
             setInspectionReport(result.properties.inspectionReport);
+            setAllcarImage(result.images);
 
-            const date = new Date(result.properties.insuranceValidity);
-            setInsuranceValidityDemo(date.toLocaleDateString('en-US'));
-            const date2 = new Date(result.properties.roadTaxValidity);
-            setRoadTaxValidityDemo(date2.toLocaleDateString('en-US'));
+            if(result.properties.insuranceValidity!=0)
+            {
+              const date = new Date(result.properties.insuranceValidity);
+              // dayjs('2022-04-17')
+              setInsuranceValidity(dayjs(date.toLocaleDateString('en-US')));
+            }
+            
+            if(result.properties.roadTaxValidity!=0)
+            {
+              const date2 = new Date(result.properties.roadTaxValidity);
+              setRoadTaxValidity(dayjs(date2.toLocaleDateString('en-US')));
+            }
+           
+
             
             
             // setInsuranceValidity(result.properties.insuranceValidity);
@@ -499,40 +553,89 @@ function Update({ params }) {
 
     if (e.target.name === 'ThumbnailPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
-      // console.log(e.target.files[0]);
-      uploadAuctionImage(e.target.files[0]);
+      
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<500000)
+      {
+          setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
+          uploadAuctionImage(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
       
     }
 
     if (e.target.name === 'ExteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
-      uploadAuctionImage2(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
+          uploadAuctionImage2(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'InteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
-      uploadAuctionImage3(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
+          uploadAuctionImage3(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'EnginePhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setEnginePhotos([...EnginePhotos, e.target.files[0]]);
-      uploadAuctionImage4(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setEnginePhotos([...EnginePhotos, e.target.files[0]]);
+          uploadAuctionImage4(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'TyresPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setTyresPhotos([...TyresPhotos, e.target.files[0]]);
-      uploadAuctionImage5(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setTyresPhotos([...TyresPhotos, e.target.files[0]]);
+          uploadAuctionImage5(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'DentsPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setDentsPhotos([...DentsPhotos, e.target.files[0]]);
-      uploadAuctionImage6(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setDentsPhotos([...DentsPhotos, e.target.files[0]]);
+          uploadAuctionImage6(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     
@@ -573,7 +676,8 @@ const uploadAuctionImage= async (data)=>{
     // console.log(response);
     // setAllcarImage(response.data.data);
     setAllcarImage([...allCarImage, response.data.data]);
-    setThumbImage([...thumbImage, response.data.data]);
+    setThumbImage(response.data.data.path);
+
     
     // console.log(response.data.data);
   }
@@ -640,41 +744,11 @@ const uploadAuctionImage6= async (data)=>{
   const handleSubmit = async (e) => {
     e.preventDefault(); 
 
-    console.log(allCarImage);
-    
-    // const formData = new FormData();
-    // formData.append('brand', brand);
-    // formData.append('model', model);
-    // formData.append('variant', variant);
-    // formData.append('regYear', regYear);
-    // formData.append('bodyType', bodyType);
-    // formData.append('fuelType', fuelType);
-    // formData.append('transmission', transmission);
-    // formData.append('ownerType', ownerType);
-    // formData.append('color', color);
-    // formData.append('rto', rto);
-    // formData.append('kmsDriven', kmsDriven);
-    // formData.append('carPrice', carPrice);
-    // formData.append('description', description);
-    // formData.append('seat', seat);
-    // formData.append('mileage', mileage);
-    // formData.append('engine', engine);
-    // formData.append('maxPower', maxPower);
-    // formData.append('maxTorque', maxTorque);
-    // formData.append('noc', noc);
-    // formData.append('mfgYear', mfgYear);
-    // formData.append('inspectionReport', inspectionReport);
-    // formData.append('insuranceValidity', insuranceValidity);
-    // formData.append('roadTaxValidity', roadTaxValidity);
-    // formData.append('inspectionScore', inspectionScore);
-    // formData.append('comforts', comforts);
-    // formData.append('safety', safety);
-    // formData.append('interior', interior);
-    // formData.append('exterior', exterior);
-    // formData.append('entertainment', entertainment);
-    // formData.append('allCarImage', allCarImage);
+    // console.log(allCarImage);
+    // console.log(thumbImage);
+  
 
-    if(thumbImage.length==0)
+    if(thumbImage==null)
     {
         setError("Thumbnail Photo is required!")
     }
@@ -683,28 +757,15 @@ const uploadAuctionImage6= async (data)=>{
 
       setError("");
 
-    const formData={auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+    const formData={docId,auctionStartTime,auctionEndTime,carsoldStatus,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
     
     console.log(formData);
     
-    // console.log(ThumbnailPhotos);
-    // ThumbnailPhotos.map((element, index) => {
-    //   formData.append(`ThumbnailPhotos`, element);
-    // });
-    // ExteriorPhotos.map((element, index) => {
-    //   formData.append(`ExteriorPhotos`, element);
-    // });
-
-    // console.log(ThumbnailPhotos , ExteriorPhotos);
-    
-    const response = await vehicleApi.addAuctionVehicle(formData);
-    // console.log(response);
+    const response = await vehicleApi.updateAuctionVehicle(formData);
     if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    //   // console.log("ok");
       // setPopupopen(true);
-      confirm("Car added successfully");
+      confirm("Car updated successfully");
       router.push("/dashboard/auctionvehicle");
-
     }
 
     }
@@ -1060,20 +1121,18 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} value={insuranceValidity} sx={{width:'100%'}} required/>
+                              <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} format="DD-MM-YYYY" value={insuranceValidity}  sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
-                          <Typography>Preview : {InsuranceValidityDemo}</Typography>
                         </Box>
                     </Grid>
                     <Grid item md={3}>
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Road Tax Validity" onChange={handleRoadTaxValidityDate} value={roadTaxValidity} sx={{width:'100%'}} required/>
+                              <DatePicker label="Road Tax Validity" onChange={handleRoadTaxValidityDate} format="DD-MM-YYYY" value={roadTaxValidity} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
-                          <Typography>Preview : {RoadTaxValidityDemo}</Typography>
                           
                         </Box>
                     </Grid>
@@ -1081,16 +1140,18 @@ const handleCloseBtn = () => {
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date_time} ${"tm_dashboard_rightbar_form_date_time_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer components={['DateTimePicker']}>
-                            <DateTimePicker label="Auction Start Time" onChange={handleAuctionStartTime} value={auctionStartTime} sx={{width:'100%'}} required />
+                            <DateTimePicker label="Auction Start Time" onChange={handleAuctionStartTime} format="DD-MM-YYYY HH:mm" value={auctionStartTime} sx={{width:'100%'}} required />
                           </DemoContainer>
                         </LocalizationProvider>
+                        
+                        
                       </Box>
                     </Grid>
                     <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date_time} ${"tm_dashboard_rightbar_form_date_time_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer components={['DateTimePicker']}>
-                            <DateTimePicker label="Auction End Time" onChange={handleAuctionEndTime} value={auctionEndTime} sx={{width:'100%'}} required />
+                            <DateTimePicker label="Auction End Time" onChange={handleAuctionEndTime} format="DD-MM-YYYY HH:mm" value={auctionEndTime} sx={{width:'100%'}} required />
                           </DemoContainer>
                         </LocalizationProvider>
                       </Box>
@@ -1118,7 +1179,25 @@ const handleCloseBtn = () => {
                           </Select>
                         </FormControl>
                       </Box>
-                      
+                  </Grid>
+                  <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Car Sold Status</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={carsoldStatus}
+                            label="Car Sold Status"
+                            onChange={handleInput}
+                            name='carsoldStatus'
+                          >
+                            
+                            <MenuItem value='true'>Yes</MenuItem>
+                            <MenuItem value='false'>No</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
                   </Grid>
                   
                 </Grid>

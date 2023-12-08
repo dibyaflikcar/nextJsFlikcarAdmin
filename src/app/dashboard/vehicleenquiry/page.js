@@ -21,8 +21,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Link from 'next/link';
 
-function Auctionvehicle() {  
-  const [auctionData,setAuctionData]=useState([]);
+import ArraytoCsv from '../../../../components/ArraytoCsv';
+
+
+
+function Enquiry() {  
+  const [vehicleEnquiry,setVehicleEnquiry]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -41,10 +45,10 @@ function Auctionvehicle() {
 
   const fetchData = async () => {
     try {
-      const response = await vehicleApi.getAuction();
-            // console.log(response.data.data);
+      const response = await vehicleApi.getVehicleEnquiry();
+            // console.log(response);
       if (response.data.status === 200) {
-          setAuctionData(response.data.data);
+          setVehicleEnquiry(response.data.data);
       }
       
     } catch (error) {
@@ -58,15 +62,19 @@ function Auctionvehicle() {
     if (userConfirmed) {
       // Perform the action when the user clicks OK
       const formData={id};
-      const response = await vehicleApi.deleteAuctionVehicle(formData);
+      const response = await vehicleApi.deleteVehicleEnquiry(formData);
       if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
         // console.log(response);
-        alert("car has been deleted");
+        alert("you have deleted successfully");
         fetchData();
         
       }
     } 
   }
+
+  const handleDownloadCsv = () => {
+    ArraytoCsv(vehicleEnquiry, 'Enquiry-list.csv');
+  };
 
  
   return (
@@ -80,40 +88,45 @@ function Auctionvehicle() {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'>Auction Vehicle List</Typography>
+                    <Typography variant='h4'> Vehicle Enquiry</Typography>
                   </Box>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
-                    <Link href="/dashboard/auctionvehicle/create"><Button variant="contained">Add</Button></Link>
+                    <Link href="/dashboard/auctionvehicle/create"><Button variant="contained" onClick={handleDownloadCsv}>Download CSV</Button></Link>
                   </Box>
                 </Box>
                  
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>            
-                  <TableContainer sx={{ maxHeight: 800 }}>
+                  <TableContainer sx={{ maxHeight: 700 }}>
                     <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" colSpan={8}>Auction List</TableCell>
+                          <TableCell align="center" colSpan={8}>Vehicle Enquiry List</TableCell>
                           {/* <TableCell align="center" colSpan={3}>List</TableCell> */}
                         </TableRow>
                         <TableRow>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Image</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand Model Variant	</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Kms Driven</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Model	</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Phone</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Reg Year</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Status</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
                       
                       <TableBody>
-                                {auctionData.map((data,key) => (
+                                {vehicleEnquiry.map((data,key) => (
                                     <TableRow key={key}>
                                       <TableCell align="center" component="th" scope="row">{data.id}</TableCell>
-                                      <TableCell align="center" ><Image src={data.carDetails.imagePath} alt='Image' height={50} width={50}  /></TableCell>
-                                      <TableCell align="center">{data.carDetails.brand} {data.carDetails.model} {data.carDetails.variant}</TableCell>
-                                      <TableCell align="center">{data.carDetails.kmsDriven}</TableCell>
-                                      <TableCell align="center">{data.carDetails.registrationYear}</TableCell>
-                                      <TableCell align="center"><Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /></TableCell>
+                                      <TableCell align="center" >{data.brand} </TableCell>
+                                      <TableCell align="center">{data.model} </TableCell>
+                                      <TableCell align="center">{data.phone}</TableCell>
+                                      <TableCell align="center">{data.registrationYear}</TableCell>
+                                      <TableCell align="center">{data.status}</TableCell>
+                                      <TableCell align="center">
+                                        {/* <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link>  */}
+                                        <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
+                                    </TableCell>
                                     </TableRow>
                                   ))}
                       </TableBody>
@@ -122,7 +135,7 @@ function Auctionvehicle() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={auctionData.length}
+        count={vehicleEnquiry.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -138,4 +151,4 @@ function Auctionvehicle() {
   )
 }
 
-export default Auctionvehicle
+export default Enquiry

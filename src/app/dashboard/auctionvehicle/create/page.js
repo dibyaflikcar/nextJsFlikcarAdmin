@@ -377,40 +377,89 @@ function Create() {
 
     if (e.target.name === 'ThumbnailPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
-      // console.log(e.target.files[0]);
-      uploadAuctionImage(e.target.files[0]);
+      
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<500000)
+      {
+          setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
+          uploadAuctionImage(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
       
     }
 
     if (e.target.name === 'ExteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
-      uploadAuctionImage2(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
+          uploadAuctionImage2(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'InteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
-      uploadAuctionImage3(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
+          uploadAuctionImage3(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'EnginePhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setEnginePhotos([...EnginePhotos, e.target.files[0]]);
-      uploadAuctionImage4(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setEnginePhotos([...EnginePhotos, e.target.files[0]]);
+          uploadAuctionImage4(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'TyresPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setTyresPhotos([...TyresPhotos, e.target.files[0]]);
-      uploadAuctionImage5(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setTyresPhotos([...TyresPhotos, e.target.files[0]]);
+          uploadAuctionImage5(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     if (e.target.name === 'DentsPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      setDentsPhotos([...DentsPhotos, e.target.files[0]]);
-      uploadAuctionImage6(e.target.files[0]);
+      if(e.target.files[0].size<500000)
+      {
+          setDentsPhotos([...DentsPhotos, e.target.files[0]]);
+          uploadAuctionImage6(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 500kb!")
+      }
+      
     }
 
     
@@ -517,7 +566,7 @@ const uploadAuctionImage6= async (data)=>{
   const handleSubmit = async (e) => {
     e.preventDefault(); 
 
-    console.log(allCarImage);
+    // console.log(allCarImage);
     
     // const formData = new FormData();
     // formData.append('brand', brand);
@@ -562,7 +611,7 @@ const uploadAuctionImage6= async (data)=>{
 
     const formData={auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
     
-    console.log(formData);
+    // console.log(formData);
     
     // console.log(ThumbnailPhotos);
     // ThumbnailPhotos.map((element, index) => {
