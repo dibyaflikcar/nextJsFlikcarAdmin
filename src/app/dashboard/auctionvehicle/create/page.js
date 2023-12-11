@@ -958,7 +958,7 @@ const handleCloseBtn = () => {
                     
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' type="number" value={mileage} variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' type="number" value={mileage} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>                 
                   <Grid item md={3}>
@@ -968,12 +968,12 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' type="number" value={maxPower} variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' type="number" value={maxPower} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' type="number" value={maxTorque} variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' type="number" value={maxTorque} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>

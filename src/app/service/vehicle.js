@@ -308,6 +308,42 @@ vehicleApi.getUsers = async () => {
   }
 };
 
+vehicleApi.getUserbyId = async (data) => {
+  try {
+    const res = API.post('/vehicle/getUserbyId',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.updateUserType = async (data) => {
+  try {
+    const res = API.post('/vehicle/updateUserType',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.updateUser = async (data) => {
+  try {
+    const res = API.post('/vehicle/updateUser',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.deleteUser = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteUser',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
+
+
 
 
 

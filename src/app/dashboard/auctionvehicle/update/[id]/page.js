@@ -232,14 +232,14 @@ function Update({ params }) {
             setInspectionReport(result.properties.inspectionReport);
             setAllcarImage(result.images);
 
-            if(result.properties.insuranceValidity!=0)
+            if(result.properties.insuranceValidity!=null)
             {
               const date = new Date(result.properties.insuranceValidity);
               // dayjs('2022-04-17')
               setInsuranceValidity(dayjs(date.toLocaleDateString('en-US')));
             }
             
-            if(result.properties.roadTaxValidity!=0)
+            if(result.properties.roadTaxValidity!=null)
             {
               const date2 = new Date(result.properties.roadTaxValidity);
               setRoadTaxValidity(dayjs(date2.toLocaleDateString('en-US')));
@@ -1068,7 +1068,7 @@ const handleCloseBtn = () => {
                     
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' type="number" value={mileage} variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' type="number" value={mileage} variant="outlined"  fullWidth/>
                       </Box>
                   </Grid>                 
                   <Grid item md={3}>
@@ -1078,12 +1078,12 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' type="number" value={maxPower} variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' type="number" value={maxPower} variant="outlined"  fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' type="number" value={maxTorque} variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' type="number" value={maxTorque} variant="outlined" fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
@@ -1136,6 +1136,7 @@ const handleCloseBtn = () => {
                           
                         </Box>
                     </Grid>
+                    
                     <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date_time} ${"tm_dashboard_rightbar_form_date_time_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>

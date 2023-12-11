@@ -33,7 +33,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-import ArraytoCsv from '../../../../components/ArraytoCsv';
+// import ArraytoCsv from '../../../../components/ArraytoCsv';
 
 
 
@@ -43,6 +43,7 @@ function User() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [docId,setDocId]=useState("");
   const [editpopupOpen, setEditPopupopen] = useState(false);
+  const [userType, setUserType] = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,35 +59,14 @@ function User() {
   };
 
   const handleInput = (e)=>{
-    if(e.target.name=="brand")
+    if(e.target.name=="userType")
     {
-        setBrand(e.target.value);
+      setUserType(e.target.value);
     }
-    if(e.target.name=="newbrand")
-    {
-      setNewBrand(e.target.value);
-    }
-    if(e.target.name=="model")
-    {
-      setModel(e.target.value);
-    }
-    
     
   };
 
-  const handleUpdate =async (e)=>{
-    e.preventDefault(); 
-    const formData={brand:newbrand};
-
-    const response = await vehicleApi.addBrand(formData);
-    // console.log(response);
-    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-      setNewBrand("");
-      setPopupopen(false);
-      confirm("Brand added successfully");
-      fetchData();
-    }
-  };
+  
 
   useEffect(() => {
     fetchData();
@@ -109,15 +89,30 @@ function User() {
     // alert(userType);
     setEditPopupopen(true);
     setDocId(id);
+    setUserType(userType);
+  }
+
+  const UpdateUserType = async (e)=>{
+    e.preventDefault(); 
+    const formData={docId , userType};
+    // alert(formData.userType);
+      const response = await vehicleApi.updateUserType(formData);
+      if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+        // console.log(response);
+        setEditPopupopen(false);
+        alert("you have updated successfully");
+        fetchData();
+        
+      }
   }
 
   const handleDelete = async (id) => {
     // alert(id);
-    const userConfirmed = confirm("Do you want to delete this car?");
+    const userConfirmed = confirm("Do you want to delete this user?");
     if (userConfirmed) {
       // Perform the action when the user clicks OK
       const formData={id};
-      const response = await vehicleApi.deleteVehicleEnquiry(formData);
+      const response = await vehicleApi.deleteUser(formData);
       if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
         // console.log(response);
         alert("you have deleted successfully");
@@ -145,9 +140,9 @@ function User() {
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
                     <Typography variant='h4'> Users List</Typography>
                   </Box>
-                  <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
+                  {/* <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
                     <Button variant="contained" onClick={handleDownloadCsv}>Download CSV</Button>
-                  </Box>
+                  </Box> */}
                 </Box>
                  
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>            
@@ -175,8 +170,8 @@ function User() {
                                       <TableCell align="center">{data.userTypeStatus} <EditIcon onClick={(e) => handleEdit(`${data.id}`,`${data.userTypeStatus}`)} /></TableCell>
                                       <TableCell align="center">{data.createdAt ? data.createdAt : 'NA'}</TableCell>
                                       <TableCell align="center">
-                                        {/* <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link>  */}
-                                        {/* <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /> */}
+                                        <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> 
+                                        <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
                                     </TableCell>
                                     </TableRow>
                                   ))}
@@ -199,10 +194,10 @@ function User() {
         </Grid>        
       </Box>
       <Dialog open={editpopupOpen} onClose={handleCloseBtn} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-          <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Update Brand"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Update User Type"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-            <form onSubmit={handleUpdate}>
+            <form onSubmit={UpdateUserType}>
                 <Grid item md={3}>
                     {/* <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                     <TextField id="outlined-basic" label="Brand" onChange={handleInput} name='brand' type="text" value={brand} variant="outlined" required fullWidth/>
@@ -213,21 +208,26 @@ function User() {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                        //   value={brand}
+                          value={userType}
                           label="Select User Type *"
                           onChange={handleInput}
-                          name='brand'
+                          name='userType'
                           required
                         >
                             <MenuItem key="1" value="CUSTOMER">CUSTOMER</MenuItem>
+                            <MenuItem key="2" value="DEALER_FORMS_SUBMITTED">DEALER_FORMS_SUBMITTED</MenuItem>
+                            <MenuItem key="3" value="DEALER_REJECTED">DEALER_REJECTED</MenuItem>
+                            <MenuItem key="4" value="DEALER">DEALER</MenuItem>
+                            <MenuItem key="5" value="BLOCKED">BLOCKED</MenuItem>
+                            <MenuItem key="6" value="DELETED">DELETED</MenuItem>
                           
                         </Select>
                       </FormControl>
                     </Box>
                 </Grid>
-                {/* <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
+                <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
                     <Button variant="contained" type='submit'>Update</Button>           
-                </Box> */}
+                </Box>
             </form>
             </DialogContentText>
           </DialogContent>
