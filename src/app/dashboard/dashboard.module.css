@@ -170,6 +170,13 @@
     color: #45c08d;
     background-color: transparent;
 }
+.tm_auctionvehicle_table_phone a{
+    
+    font-weight: 700;
+}
+.tm_auctionvehicle_table_phone a:hover{
+    color: #45c08d;
+}
 /* dashboard_rightbar_form */
 .tm_dashboard_rightbar_form_main{
     padding: 50px;

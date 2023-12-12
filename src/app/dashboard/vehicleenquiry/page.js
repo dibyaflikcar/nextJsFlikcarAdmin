@@ -21,7 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Link from 'next/link';
 
-import ArraytoCsv from '../../../../components/ArraytoCsv';
+// import ArraytoCsv from '../../../../components/ArraytoCsv';
 
 
 
@@ -90,9 +90,9 @@ function Enquiry() {
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
                     <Typography variant='h4'> Vehicle Enquiry</Typography>
                   </Box>
-                  <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
+                  {/* <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
                     <Button variant="contained" onClick={handleDownloadCsv}>Download CSV</Button>
-                  </Box>
+                  </Box> */}
                 </Box>
                  
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>            

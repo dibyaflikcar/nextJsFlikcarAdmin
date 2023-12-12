@@ -139,6 +139,16 @@ const API = axios.create({
       return error.response;
     }
   };
+  vehicleApi.getBidList = async (data) => {
+    try {
+      const res = API.post('/vehicle/getBidList',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  
 
   vehicleApi.deleteAuctionVehicle = async (data) => {
     try {
@@ -340,6 +350,16 @@ vehicleApi.deleteUser = async (data) => {
     return error.response;
   }
 };
+vehicleApi.uploadDealerDocumentImage = async (data) => {
+  try {
+    const res = API.post('/vehicle/uploadDealerDocumentImage',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
 
 
 

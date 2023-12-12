@@ -13,25 +13,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CloseIcon from '@mui/icons-material/Close';
-import { Margin } from '@mui/icons-material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import {vehicleApi} from '../../../../../app/service/vehicle';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import NativeSelect from '@mui/material/NativeSelect';
 
 
 
@@ -42,59 +26,52 @@ function Update({ params }) {
   
   const [docId,setDocid]=useState(null);
   const [userList, setUserlist] = useState([]);
-  const [userType, setUserType] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [userType, setUserType] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [phone, setPhone] = useState(null);
 
   //onboard dealer
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [shopName, setShopName] = useState("");
-  const [shopAddress, setShopAddress] = useState("");
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [pinCode, setPinCode] = useState("");
-  const [panCardNumber, setPanCardNumber] = useState("");
-  const [addressProofNumber, setAddressProofNumber] = useState("");
-  const [tradeLicenseNumber, setTradeLicenseNumber] = useState("");
-  const [cancelledChequeNumber, setCancelledChequeNumber] = useState("");
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [shopName, setShopName] = useState(null);
+  const [shopAddress, setShopAddress] = useState(null);
+  const [selectedState, setSelectedState] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [pinCode, setPinCode] = useState(null);
+  const [panCardNumber, setPanCardNumber] = useState(null);
+  const [addressProofNumber, setAddressProofNumber] = useState(null);
+  const [tradeLicenseNumber, setTradeLicenseNumber] = useState(null);
+  const [cancelledChequeNumber, setCancelledChequeNumber] = useState(null);
 
   //shop details
   const [shopPhone, setShopPhone] = useState("");
   const [gstNumber, setGstNumber] = useState("");
-  const [addressLine1, setAddressLine1] = useState("");
-  const [addressLine2, setAddressLine2] = useState("");
-  const [addressLine3, setAddressLine3] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [postalCode, setPostalCode] = useState("");
+  const [addressLine1, setAddressLine1] = useState(null);
+  const [addressLine2, setAddressLine2] = useState(null);
+  const [addressLine3, setAddressLine3] = useState(null);
+  const [city, setCity] = useState(null);
+  const [state, setState] = useState(null);
+  const [postalCode, setPostalCode] = useState(null);
+
+  // images
+
+  const [PancardPhoto, setPancardPhoto] = useState("");
+  const [AddressProofFrontPhoto, setAddressProofFrontPhoto] = useState("");
+  const [AddressProofBackPhoto, setAddressProofBackPhoto] = useState("");
+  const [TradeLicensePhoto, setTradeLicensePhoto] = useState("");
+  const [CancelledChequePhoto, setCancelledChequePhoto] = useState("");
+  const [ShopPhoto, setShopPhoto] = useState("");
+  const [allImage, setAllImage] = useState([]);
 
   
-  
 
-  const [popupOpen, setPopupopen] = useState(false);
-  const [ThumbnailPhotos, setThumbnailPhotos] = useState([]);
-  const [ExteriorPhotos , setExteriorPhotos] = useState([]);
-  const [InteriorPhotos  , setInteriorPhotos ] = useState([]);
-  const [EnginePhotos  , setEnginePhotos ] = useState([]);
-  const [TyresPhotos  , setTyresPhotos ] = useState([]);
-  const [DentsPhotos  , setDentsPhotos ] = useState([]);
-  
-
-  const [allCarImage, setAllcarImage] = useState([]);
-  const [thumbImage, setThumbImage] = useState(null);
-
-  const [error, setError] = useState("");
-  const [auctionCarDatails, setAuctionCarDetails] = useState();
-  const [thumbImages, setThumbImages] = useState([]);
-  const [extImages,setExtImages]=useState([]);
-  const [intImages,setIntImages]=useState([]);
-  const [engineImages,setEngineImages]=useState([]);
-  const [tyreImages,settyreImages]=useState([]);
-  const [dentImages,setdentImages]=useState([]);
-
-
+  const [panImages, setPanImages] = useState([]);
+  const [AddressProofFrontImages,setAddressProofFrontImages]=useState([]);
+  const [AddressProofBackImages,setAddressProofBackImages]=useState([]);
+  const [TradeLicenseImages,setTradeLicenseImages]=useState([]);
+  const [CancelledChequeImages,setCancelledChequeImages]=useState([]);
+  const [ShopImages,setShopImages]=useState([]);
 
  
   
@@ -107,15 +84,31 @@ function Update({ params }) {
       const data={docId:params.id};
         setDocid(params.id);
       const response = await vehicleApi.getUserbyId(data);
-            console.log(response.data.data);
+      const result=response.data.data;
+            // console.log(response.data.data);
+            
       if (response.data.status === 200) {
-        const result=response.data.data;
+        
         setUserlist(response.data.data);
         setUserType(result.userTypeStatus);
-        setFirstName(result.profile.firstName);
-        setLastName(result.profile.lastName);
         setPhone(result.phone);
+        
+        if(result.profile)
+        {
+          if(result.profile.firstName)
+          {
+            setFirstName(result.profile.firstName);
+          }
+          
+          if(result.profile.lastName)
+          {
+            setLastName(result.profile.lastName);
+          }
+          
+        }
 
+        
+        
         //dealer onboard
         setName(result.dealerOnboardFormData.name);
         setEmail(result.dealerOnboardFormData.email);
@@ -129,17 +122,70 @@ function Update({ params }) {
         setTradeLicenseNumber(result.dealerOnboardFormData.tradeLicenseNumber);
         setCancelledChequeNumber(result.dealerOnboardFormData.cancelledChequeNumber);
 
+        
         //shop details
+        
+          setShopPhone(result.shop.phone);
+          setGstNumber(result.shop.gstNumber);
+          if(result.shop.addresses!=null)
+          {
+            setAddressLine1(result.shop.addresses[0].addressLine1);
+            setAddressLine2(result.shop.addresses[0].addressLine2);
+            setAddressLine3(result.shop.addresses[0].addressLine3);
+            setCity(result.shop.addresses[0].city);
+            setState(result.shop.addresses[0].state);
+            setPostalCode(result.shop.addresses[0].postalCode);
+          }
+          
+        
+          
+        
+        //images
+        
+        // console.log(result.dealerOnboardFormData.docsImagePaths);
+        if(result.dealerOnboardFormData?.docsImagePaths)
+        {
+          setAllImage(result.dealerOnboardFormData.docsImagePaths);
+          if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "pan"))
+          {
+            const pancardImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "pan");
+            setPancardPhoto(pancardImage[0].url);
+          }
+          
+          if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofFront"))
+          {
+            const addressProofFrontImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofFront");
+            setAddressProofFrontPhoto(addressProofFrontImage[0].url);
+          }
+          
+          if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofBack"))
+          {
+            const addressProofBackImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofBack");
+            setAddressProofBackPhoto(addressProofBackImage[0].url);
+          }
+          
+          if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "tradeLicense"))
+          {
+            const tradeLicenseImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "tradeLicense");
+            setTradeLicensePhoto(tradeLicenseImage[0].url);
+          }
+          
+          if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "cancelledCheque"))
+          {
+            const cancelledChequeImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "cancelledCheque");
+            setCancelledChequePhoto(cancelledChequeImage[0].url);
+          }
+          
+          if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "shop"))
+          {
+            const shopImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "shop");
+            setShopPhoto(shopImage[0].url);
+          }
+          
+        }
+        
 
-        setShopPhone(result.shop.phone);
-        setGstNumber(result.shop.gstNumber);
-
-        setAddressLine1(result.shop.addresses[0].addressLine1);
-        setAddressLine2(result.shop.addresses[0].addressLine2);
-        setAddressLine3(result.shop.addresses[0].addressLine3);
-        setCity(result.shop.addresses[0].city);
-        setState(result.shop.addresses[0].state);
-        setPostalCode(result.shop.addresses[0].postalCode);
+        
      
       } 
     } catch (error) {
@@ -159,7 +205,9 @@ function Update({ params }) {
     if (e.target.name === 'lastName') {
       setLastName(e.target.value);
     }
-
+    if (e.target.name === 'userType') {
+      setUserType(e.target.value);
+    }
     // dealer onBoard
     if (e.target.name === 'name') {
       setName(e.target.value);
@@ -221,23 +269,91 @@ function Update({ params }) {
       setPostalCode(e.target.value);
     }
     
+  
     
-    // if (e.target.name === 'ThumbnailPhotos' && e.target.files.length > 0) {
-    //   // console.log(e.target.files);
-      
-    //   // console.log(e.target.files[0].size);
-    //   if(e.target.files[0].size<500000)
-    //   {
-    //       setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
-    //       uploadAuctionImage(e.target.files[0]);
-    //   }
-    //   else
-    //   {
-    //       alert("Image size should be less than 500kb!")
-    //   }
-      
-      
-    // }
+    if (e.target.name === 'PancardPhoto' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<1000000)
+      {
+          setPanImages([...panImages, e.target.files[0]]);
+          uploadDealerDocumentImage(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 1MB!")
+      }
+    }
+
+    if (e.target.name === 'AddressProofFrontPhoto' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<1000000)
+      {
+        setAddressProofFrontImages([...AddressProofFrontImages, e.target.files[0]]);
+          uploadDealerDocumentImage2(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 1MB!")
+      }
+    }
+
+    if (e.target.name === 'AddressProofBackPhoto' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<1000000)
+      {
+        setAddressProofBackImages([...AddressProofBackImages, e.target.files[0]]);
+          uploadDealerDocumentImage3(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 1MB!")
+      }
+    }
+
+    if (e.target.name === 'TradeLicensePhoto' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<1000000)
+      {
+        setTradeLicenseImages([...TradeLicenseImages, e.target.files[0]]);
+          uploadDealerDocumentImage4(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 1MB!")
+      }
+    }
+
+    if (e.target.name === 'CancelledChequePhoto' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<1000000)
+      {
+        setCancelledChequeImages([...CancelledChequeImages, e.target.files[0]]);
+          uploadDealerDocumentImage5(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 1MB!")
+      }
+    }
+
+    if (e.target.name === 'ShopPhoto' && e.target.files.length > 0) {
+      // console.log(e.target.files);
+      // console.log(e.target.files[0].size);
+      if(e.target.files[0].size<1000000)
+      {
+        setShopImages([...ShopImages, e.target.files[0]]);
+          uploadDealerDocumentImage6(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 1MB!")
+      }
+    }
 
   }
 
@@ -250,34 +366,96 @@ function Update({ params }) {
   //   setDentsPhotos(DentsPhotos.filter((element) => element.name !== id.name));
   // };
 
-
-
-  
-  
-const uploadAuctionImage= async (data)=>{
+const uploadDealerDocumentImage= async (data)=>{
   const formData = new FormData();
     formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage(formData);
+    formData.append('type', 'pan');
+  const response = await vehicleApi.uploadDealerDocumentImage(formData);
   if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    // setAllcarImage(response.data.data);
-    setAllcarImage([...allCarImage, response.data.data]);
-    setThumbImage(response.data.data.path);
-
-    
     // console.log(response.data.data);
+    const keyToRemove = 'type';
+    const valueToRemove = 'pan'
+    const newArray = allImage.filter(obj => obj[keyToRemove] !== valueToRemove);
+    setAllImage([...newArray, response.data.data]);
+
+  }
+}
+const uploadDealerDocumentImage2= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+    formData.append('type', 'addressProofFront');
+  const response = await vehicleApi.uploadDealerDocumentImage(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response.data.data);
+    const keyToRemove = 'type';
+    const valueToRemove = 'addressProofFront'
+    const newArray = allImage.filter(obj => obj[keyToRemove] !== valueToRemove);
+    setAllImage([...newArray, response.data.data]);
   }
 }
 
+const uploadDealerDocumentImage3= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+    formData.append('type', 'addressProofBack');
+  const response = await vehicleApi.uploadDealerDocumentImage(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response.data.data);
+    const keyToRemove = 'type';
+    const valueToRemove = 'addressProofBack'
+    const newArray = allImage.filter(obj => obj[keyToRemove] !== valueToRemove);
+    setAllImage([...newArray, response.data.data]);
+  }
+}
 
+const uploadDealerDocumentImage4= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+    formData.append('type', 'tradeLicense');
+  const response = await vehicleApi.uploadDealerDocumentImage(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response.data.data);
+    const keyToRemove = 'type';
+    const valueToRemove = 'tradeLicense'
+    const newArray = allImage.filter(obj => obj[keyToRemove] !== valueToRemove);
+    setAllImage([...newArray, response.data.data]);
+  }
+}
 
+const uploadDealerDocumentImage5= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+    formData.append('type', 'cancelledCheque');
+  const response = await vehicleApi.uploadDealerDocumentImage(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response.data.data);
+    const keyToRemove = 'type';
+    const valueToRemove = 'cancelledCheque'
+    const newArray = allImage.filter(obj => obj[keyToRemove] !== valueToRemove);
+    setAllImage([...newArray, response.data.data]);
+  }
+}
 
-
+const uploadDealerDocumentImage6= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+    formData.append('type', 'shop');
+  const response = await vehicleApi.uploadDealerDocumentImage(formData);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response.data.data);
+    const keyToRemove = 'type';
+    const valueToRemove = 'shop'
+    const newArray = allImage.filter(obj => obj[keyToRemove] !== valueToRemove);
+    setAllImage([...newArray, response.data.data]);
+  }
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
 
-    const formData={docId,userType,firstName,lastName,phone,name,email,shopName,shopAddress,selectedState,selectedCity,pinCode,panCardNumber,addressProofNumber,tradeLicenseNumber,cancelledChequeNumber,shopPhone,gstNumber,addressLine1,addressLine2,addressLine3,city,state,postalCode};
+    // console.log(allImage);
+
+    const formData={docId,allImage,userType,firstName,lastName,phone,name,email,shopName,shopAddress,selectedState,selectedCity,pinCode,panCardNumber,addressProofNumber,tradeLicenseNumber,cancelledChequeNumber,shopPhone,gstNumber,addressLine1,addressLine2,addressLine3,city,state,postalCode};
     
     // console.log(formData);
     
@@ -345,28 +523,6 @@ const handleCloseBtn = () => {
                 </Box>
                 <form onSubmit={handleSubmit}>
                 <Grid container spacing={4}>
-                  {/* <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select Brand *</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={brand}
-                          label="Select Brand *"
-                          onChange={handleInput}
-                          name='brand'
-                          required
-                        >
-                          {brandlist.length > 0 && brandlist.map((data,key) => (
-                            <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
-                          ))}
-                          
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid> */}
-
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                     <TextField id="outlined-basic" label="Phone" onChange={handleInput} value={userList.phone} type="string" variant="outlined" 
@@ -379,18 +535,20 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="First Name" name='firstName' onChange={handleInput} value={firstName} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="First Name" name='firstName' onChange={handleInput} value={firstName} type="string" variant="outlined" 
+                    InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Last Name" name='lastName' onChange={handleInput} value={lastName} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Last Name" name='lastName' onChange={handleInput} value={lastName} type="string" variant="outlined" 
+                    InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                   <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select User Type *</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-label">Select User Type *</InputLabel> */}
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -399,6 +557,7 @@ const handleCloseBtn = () => {
                           onChange={handleInput}
                           name='userType'
                           required
+                          InputLabelProps={{shrink: true,}}
                         >
                             <MenuItem key="1" value="CUSTOMER">CUSTOMER</MenuItem>
                             <MenuItem key="2" value="DEALER_FORMS_SUBMITTED">DEALER_FORMS_SUBMITTED</MenuItem>
@@ -409,6 +568,7 @@ const handleCloseBtn = () => {
                           
                         </Select>
                       </FormControl>
+                     
                     </Box>
                   </Grid>
                   <Grid item md={12}>
@@ -416,148 +576,93 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Name" name='name' onChange={handleInput} value={name} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Name" name='name' onChange={handleInput} value={name} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Email" name='email' onChange={handleInput} value={email} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Email" name='email' onChange={handleInput} value={email} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Shop Name" name='shopName' onChange={handleInput} value={shopName} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Shop Name" name='shopName' onChange={handleInput} value={shopName} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Shop Adress" name='shopAddress' onChange={handleInput} value={shopAddress} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Shop Adress" name='shopAddress' onChange={handleInput} value={shopAddress} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="State" name='selectedState' onChange={handleInput} value={selectedState} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="State" name='selectedState' onChange={handleInput} value={selectedState} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="City" name='selectedCity' onChange={handleInput} value={selectedCity} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="City" name='selectedCity' onChange={handleInput} value={selectedCity} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Pincode" name='pinCode' onChange={handleInput} value={pinCode} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Pincode" name='pinCode' onChange={handleInput} value={pinCode} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="PAN Card Number" name='panCardNumber' onChange={handleInput} value={panCardNumber} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="PAN Card Number" name='panCardNumber' onChange={handleInput} value={panCardNumber} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Address Proof Number" name='addressProofNumber' onChange={handleInput} value={addressProofNumber} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Address Proof Number" name='addressProofNumber' onChange={handleInput} value={addressProofNumber} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Trade License Number" name='tradeLicenseNumber' onChange={handleInput} value={tradeLicenseNumber} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Trade License Number" name='tradeLicenseNumber' onChange={handleInput} value={tradeLicenseNumber} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Cancelled Cheque Number" name='cancelledChequeNumber' onChange={handleInput} value={cancelledChequeNumber} type="string" variant="outlined"  fullWidth/>
+                    <TextField id="outlined-basic" label="Cancelled Cheque Number" name='cancelledChequeNumber' onChange={handleInput} value={cancelledChequeNumber} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                     </Box>
                   </Grid>
-
                   <Grid item md={12}>
-                  <Typography>Shop Details</Typography>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Shop Phone No" name='shopPhone' onChange={handleInput} value={shopPhone} type="string" variant="outlined" fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="GST No" name='gstNumber' onChange={handleInput} value={gstNumber} type="string" variant="outlined" fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Address Line 1" name='addressLine1' onChange={handleInput} value={addressLine1} type="string" variant="outlined" required fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Address Line 2" name='addressLine2' onChange={handleInput} value={addressLine2} type="string" variant="outlined" required fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Address Line 3" name='addressLine3' onChange={handleInput} value={addressLine3} type="string" variant="outlined" required fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="City" name='city' onChange={handleInput} value={city} type="string" variant="outlined" required fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="State" name='state' onChange={handleInput} value={state} type="string" variant="outlined" required fullWidth/>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Postal Code" name='postalCode' onChange={handleInput} value={postalCode} type="string" variant="outlined" required fullWidth/>
-                    </Box>
-                  </Grid>
-                  
-                  
-        
-                  
-                  
-                </Grid>
-                {/* <Box className={`${dashboardStyles.tm_dashboard_img_upl} ${"tm_dashboard_img_upl_gb"}`}>
+                  <Box className={`${dashboardStyles.tm_dashboard_img_upl} ${"tm_dashboard_img_upl_gb"}`}>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
                     <Typography variant='h4'>Upload images</Typography>
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Thumbnail Photos (Upload only 1 Photo) <Box sx={{color:"red"}}>{error}</Box></Typography>
+                      <Typography variant='h6'>PAN Card Photo (Upload only 1 Photo)</Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='ThumbnailPhotos' hidden />
+                            <input type="file" onChange={handleInput} name='PancardPhoto' hidden />
                           </Button>
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
                       
-                      
-                      {thumbImages.length > 0 &&
-                          thumbImages.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box >
-                                  <Image
-                                    src={element.path}
-                                    alt='Uploaded Image'
-                                    height='300'
-                                    width='300'
-                                  />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
-                                </Box>
-                              </Box>
-                            );
-                          })}
+                      <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                        <Box >
+                          <Image
+                            src={PancardPhoto}
+                            alt='PAN Card Image'
+                            height='300'
+                            width='300'
+                          />
+                          {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
+                        </Box>
+                      </Box>
 
-                        {ThumbnailPhotos.length > 0 &&
-                          ThumbnailPhotos.map((element, index) => {
+                        {panImages.length > 0 &&
+                          panImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
@@ -567,7 +672,7 @@ const handleCloseBtn = () => {
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
                             );
@@ -576,41 +681,37 @@ const handleCloseBtn = () => {
                       </Grid>
                   </Box>
 
-                  
+                
 
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Exterior Photos (Upload only 5 Photo)</Typography>
+                      <Typography variant='h6'>Address Proof Front Photo (Upload only 1 Photo)</Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='ExteriorPhotos' hidden />
+                            <input type="file" onChange={handleInput} name='AddressProofFrontPhoto' hidden />
                           </Button>
                         </Box>                        
                       </Grid>
 
                       <Grid item md={9}>
-                      {extImages.length > 0 &&
-                          extImages.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box>
-                                  <Image
-                                    src={element.path}
-                                    alt='Uploaded Image'
-                                    height='300'
-                                    width='300'
-                                  />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
-                                </Box>
-                              </Box>
-                            );
-                          })}
-                        {ExteriorPhotos.length > 0 &&
-                          ExteriorPhotos.map((element, index) => {
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                          <Box>
+                            <Image
+                              src={AddressProofFrontPhoto}
+                              alt='Uploaded Image'
+                              height='300'
+                              width='300'
+                            />
+                            {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
+                          </Box>
+                        </Box>
+
+                        {AddressProofFrontImages.length > 0 &&
+                          AddressProofFrontImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box>
@@ -620,7 +721,7 @@ const handleCloseBtn = () => {
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
                             );
@@ -631,36 +732,32 @@ const handleCloseBtn = () => {
 
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Interior Photos (Upload only 5 Photo)</Typography>
+                      <Typography variant='h6'>Address Proof Back Photo(Upload only 1 Photo)</Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='InteriorPhotos' hidden />
+                            <input type="file" onChange={handleInput} name='AddressProofBackPhoto' hidden />
                           </Button>
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
-                      {intImages.length > 0 &&
-                          intImages.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box >
-                                  <Image
-                                    src={element.path}
-                                    alt='Uploaded Image'
-                                    height='300'
-                                    width='300'
-                                  />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
-                                </Box>
-                              </Box>
-                            );
-                          })}
-                        {InteriorPhotos.length > 0 &&
-                          InteriorPhotos.map((element, index) => {
+                        <Box  className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                          <Box >
+                            <Image
+                              src={AddressProofBackPhoto}
+                              alt='Uploaded Image'
+                              height='300'
+                              width='300'
+                            />
+                            {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
+                          </Box>
+                        </Box>
+
+                        {AddressProofBackImages.length > 0 &&
+                          AddressProofBackImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
@@ -670,7 +767,7 @@ const handleCloseBtn = () => {
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
                             );
@@ -681,51 +778,46 @@ const handleCloseBtn = () => {
 
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Engine Photos (Upload only 5 Photo)</Typography>
+                      <Typography variant='h6'>Cancel Cheque Photo(Upload only 1 Photo)</Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='EnginePhotos' hidden />
+                            <input type="file" onChange={handleInput} name='CancelledChequePhoto' hidden />
                           </Button>
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
-                      {engineImages.length > 0 &&
-                          engineImages.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                              <Box  className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={element.path}
+                                    src={CancelledChequePhoto}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
-                            );
-                          })}
 
-                      {EnginePhotos.length > 0 &&
-                          EnginePhotos.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box >
-                                  <Image
-                                    src={URL.createObjectURL(element)}
-                                    alt='Uploaded Image'
-                                    height='300'
-                                    width='300'
-                                  />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
-                                </Box>
-                              </Box>
-                            );
-                          })}
+                              {CancelledChequeImages.length > 0 &&
+                                  CancelledChequeImages.map((element, index) => {
+                                    return (
+                                      <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                        <Box >
+                                          <Image
+                                            src={URL.createObjectURL(element)}
+                                            alt='Uploaded Image'
+                                            height='300'
+                                            width='300'
+                                          />
+                                          {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
+                                        </Box>
+                                      </Box>
+                                    );
+                                  })}
                         
                         </Grid>
                       </Grid>
@@ -733,36 +825,31 @@ const handleCloseBtn = () => {
 
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Tyre Photos (Upload only 5 Photo)</Typography>
+                      <Typography variant='h6'>Trade License Photo (Upload only 1 Photo)</Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='TyresPhotos' hidden />
+                            <input type="file" onChange={handleInput} name='TradeLicensePhoto' hidden />
                           </Button>
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
-                      {tyreImages.length > 0 &&
-                          tyreImages.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={element.path}
+                                    src={TradeLicensePhoto}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
-                            );
-                          })}
-                        {TyresPhotos.length > 0 &&
-                          TyresPhotos.map((element, index) => {
+                        {TradeLicenseImages.length > 0 &&
+                          TradeLicenseImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
@@ -772,7 +859,7 @@ const handleCloseBtn = () => {
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
                             );
@@ -783,37 +870,33 @@ const handleCloseBtn = () => {
 
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Dent Photos (Upload only 5 Photo)</Typography>
+                      <Typography variant='h6'>Shop Photo (Upload only 1 Photo)</Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='DentsPhotos' hidden />
+                            <input type="file" onChange={handleInput} name='ShopPhoto' hidden />
                           </Button>
                         </Box>                        
                       </Grid>
                       <Grid item md={9}>
                       
-                      {dentImages.length > 0 &&
-                          dentImages.map((element, index) => {
-                            return (
-                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box >
-                                  <Image
-                                    src={element.path}
-                                    alt='Uploaded Image'
-                                    height='300'
-                                    width='300'
-                                  />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
-                                </Box>
-                              </Box>
-                            );
-                          })}
-                        {DentsPhotos.length > 0 &&
-                          DentsPhotos.map((element, index) => {
+                      <Box  className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                        <Box >
+                          <Image
+                            src={ShopPhoto}
+                            alt='Uploaded Image'
+                            height='300'
+                            width='300'
+                          />
+                          {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
+                        </Box>
+                      </Box>
+                            
+                        {ShopImages.length > 0 &&
+                          ShopImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
@@ -823,7 +906,7 @@ const handleCloseBtn = () => {
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  {/* <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button> */}
                                 </Box>
                               </Box>
                             );
@@ -834,9 +917,58 @@ const handleCloseBtn = () => {
 
                 
                   
-                </Box> */}
+                </Box>
+                  </Grid>
 
-              
+                  <Grid item md={12}>
+                  <Typography>Shop Details</Typography>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="Shop Phone No" name='shopPhone' onChange={handleInput} value={shopPhone} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="GST No" name='gstNumber' onChange={handleInput} value={gstNumber} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="Address Line 1" name='addressLine1' onChange={handleInput} value={addressLine1} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="Address Line 2" name='addressLine2' onChange={handleInput} value={addressLine2} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="Address Line 3" name='addressLine3' onChange={handleInput} value={addressLine3} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="City" name='city' onChange={handleInput} value={city} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="State" name='state' onChange={handleInput} value={state} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="Postal Code" name='postalCode' onChange={handleInput} value={postalCode} type="string" variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    </Box>
+                  </Grid>
+                  
+                  
+        
+                  
+                  
+                </Grid>
                 <Box sx={{margin:'50px 0 0'}}>
                   <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn}>
                     <Button variant="contained" type='submit'>submit</Button>           
@@ -847,25 +979,7 @@ const handleCloseBtn = () => {
             </Box>
           </Grid>
         </Grid>      
-        <Dialog
-        open={popupOpen}
-        onClose={handleCloseBtn}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Success Message"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            You have added successfully!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          {/* <Button onClick={handleCloseBtn}>Ok</Button> */}
-          <Button onClick={handleCloseBtn} autoFocus>Ok</Button>
-        </DialogActions>
-      </Dialog>  
+       
       </Box>
     </>
   )
