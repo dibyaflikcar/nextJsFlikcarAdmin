@@ -61,16 +61,18 @@ function Update({ params }) {
   const [color, setColor]=useState("");
   const [rtoList, setrtoList]=useState([]);
   const [rto, setRto]=useState("");
+  const [cityList, setCityList]=useState([]);
+  const [city, setCity]=useState("");
   const [kmsDriven, setkmsDriven]=useState("");
   const [carPrice, setcarPrice]=useState();
   const [description, setDescription]=useState("");
   const [seatList, setseatList]=useState([]);
   const [seat, setSeat]=useState("");
 
-  const [mileage, setMileage]=useState("");
+  const [mileage, setMileage]=useState(null);
   const [engine, setEngine]=useState("");
-  const [maxPower, setmaxPower]=useState("");
-  const [maxTorque, setMaxTorque]=useState("");
+  const [maxPower, setmaxPower]=useState(null);
+  const [maxTorque, setMaxTorque]=useState(null);
   const [noc, setNoc]=useState("");
   const [mfgYear, setmfgYear]=useState("");
   const [inspectionReport, setInspectionReport]=useState("");
@@ -132,6 +134,7 @@ function Update({ params }) {
     getOwnertype();
     getColor();
     getRto();
+    getCity();
     getSeat();
     getCarFeatureList([]);
     // getAuctionCarDetails([]);
@@ -220,6 +223,7 @@ function Update({ params }) {
             setownerType(result.properties.ownerType);
             setColor(result.properties.color);
             setRto(result.properties.rtoLocation);
+            setCity(result.properties.city);
             setkmsDriven(result.properties.kmsDriven);
             setDescription(result.properties.carDescription);
             setSeat(result.properties.seat);
@@ -390,6 +394,18 @@ function Update({ params }) {
       console.error('Error fetching data:', error);
     }
   };
+  const getCity = async () => {
+    try {
+      const response = await vehicleApi.getCity();
+            // console.log(response.data.data);
+      if (response.data.status === 200) {
+        setCityList(response.data.data);
+        // console.log(response.data);
+      } 
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const getSeat = async () => {
     try {
@@ -468,6 +484,9 @@ function Update({ params }) {
     }
     if (e.target.name === 'rto') {
       setRto(e.target.value);
+    }
+    if (e.target.name === 'city') {
+      setCity(e.target.value);
     }
     if (e.target.name === 'kmsDriven') {
       setkmsDriven(e.target.value);
@@ -757,7 +776,7 @@ const uploadAuctionImage6= async (data)=>{
 
       setError("");
 
-    const formData={docId,auctionStartTime,auctionEndTime,carsoldStatus,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+    const formData={docId,auctionStartTime,auctionEndTime,carsoldStatus,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
     
     console.log(formData);
     
@@ -1013,6 +1032,26 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select City*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={city}
+                          label="Select City*"
+                          onChange={handleInput}
+                          name='city'
+                          required
+                        >
+                          {cityList.length > 0 && cityList.map((data,key) => (
+                            <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Select RTO*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
@@ -1024,7 +1063,7 @@ const handleCloseBtn = () => {
                           required
                         >
                           {rtoList.length > 0 && rtoList.map((data,key) => (
-                            <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
+                            <MenuItem key={key} value={data.rtoName}>{data.rtoName} ({data.rtoCode})</MenuItem>
                           ))}
                         </Select>
                       </FormControl>
@@ -1068,7 +1107,7 @@ const handleCloseBtn = () => {
                     
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' type="number" value={mileage} variant="outlined"  fullWidth/>
+                      <TextField id="outlined-basic" label="Mileage in kmpl" onChange={handleInput} name='mileage' type="number" value={mileage} variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                       </Box>
                   </Grid>                 
                   <Grid item md={3}>
@@ -1078,12 +1117,12 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' type="number" value={maxPower} variant="outlined"  fullWidth/>
+                      <TextField id="outlined-basic" label="Max Power" onChange={handleInput} name='maxPower' type="number" value={maxPower} variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' type="number" value={maxTorque} variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Max Torque" onChange={handleInput} name='maxTorque' type="number" value={maxTorque} variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
                       </Box>
                   </Grid>
                   <Grid item md={3}>

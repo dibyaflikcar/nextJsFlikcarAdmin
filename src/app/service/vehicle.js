@@ -77,7 +77,7 @@ const API = axios.create({
     }
   };
 
-  vehicleApi.getRto = async () => {
+  vehicleApi.getCity = async () => {
     try {
       const res = API.get('/global/city');
       return res;
@@ -85,6 +85,17 @@ const API = axios.create({
       return error.response;
     }
   };
+
+  vehicleApi.getRto = async () => {
+    try {
+      const res = API.get('/vehicle/getRto');
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  
 
   vehicleApi.getSeat = async () => {
     try {
@@ -308,6 +319,26 @@ vehicleApi.deleteModel = async (data) => {
   }
 };
 
+// Variant start here
+vehicleApi.addVariant = async (data) => {
+  try {
+    const res = API.post('/vehicle/addVariant', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.deleteVariant = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteVariant', data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
+
 // user start here
 vehicleApi.getUsers = async () => {
   try {
@@ -358,6 +389,84 @@ vehicleApi.uploadDealerDocumentImage = async (data) => {
     return error.response;
   }
 };
+
+
+// color start here
+vehicleApi.getColorList = async () => {
+  try {
+    const res = API.get('/vehicle/getColorList');
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.addColor = async (data) => {
+  try {
+    const res = API.post('/vehicle/addColor',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.updateColor = async (data) => {
+  try {
+    const res = API.post('/vehicle/updateColor',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.deleteColor = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteColor',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
+// RTO start here
+vehicleApi.getRtoList = async () => {
+  try {
+    const res = API.get('/vehicle/getRtoList');
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.addRto = async (data) => {
+  try {
+    const res = API.post('/vehicle/addRto',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.updateRto = async (data) => {
+  try {
+    const res = API.post('/vehicle/updateRto',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+vehicleApi.deleteRto = async (data) => {
+  try {
+    const res = API.post('/vehicle/deleteRto',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+
+
+
+
+
+
+
 
 
 

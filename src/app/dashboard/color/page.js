@@ -31,19 +31,22 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Mode } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 
-function Brand() {  
-  const [docId,setDocId]=useState("");
-  const [newbrand,setNewBrand]=useState("");
-  const [brand,setBrand]=useState("");
-  const [model,setModel]=useState("");
-  const [brandList,setBrandList]=useState([]);
+function Color() {  
+  const [id,setId]=useState("");
+  const [newColorName,setNewColorName]=useState("");
+  const [newColorCode,setNewColorCode]=useState("");
+  const [editColorName,setEditColorName]=useState("");
+  const [editColorCode,setEditColorCode]=useState("");
+  const [colorList,setColorList]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [popupOpen, setPopupopen] = useState(false);
   const [editpopupOpen, setEditPopupopen] = useState(false);
-  const [addModelPopup, setAddModelpopup] = useState(false);
-  const [ModelError, setModelError] = useState("");
+
+  useEffect(() => {
+    fetchData();
+  }, []); 
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -57,54 +60,52 @@ function Brand() {
   const handleCloseBtn = () => {
     setPopupopen(false);
     setEditPopupopen(false);
-    setAddModelpopup(false);
   };
-
-  const handleInput = (e)=>{
-    if(e.target.name=="brand")
-    {
-        setBrand(e.target.value);
-    }
-    if(e.target.name=="newbrand")
-    {
-      setNewBrand(e.target.value);
-    }
-    if(e.target.name=="model")
-    {
-      setModel(e.target.value);
-    }
-    
-    
-  };
-
-  const handleSubmit =async (e)=>{
-    e.preventDefault(); 
-    const formData={brand:newbrand};
-
-    const response = await vehicleApi.addBrand(formData);
-    // console.log(response);
-    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-      setNewBrand("");
-      setPopupopen(false);
-      confirm("Brand added successfully");
-      fetchData();
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []); 
 
   const fetchData = async () => {
     try {
-      const response = await vehicleApi.getBrand();
+      const response = await vehicleApi.getColorList();
             // console.log(response.data.data);
       if (response.data.status === 200) {
-          setBrandList(response.data.data);
+        setColorList(response.data.data.reverse());
       }
       
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const handleInput = (e)=>{
+    if(e.target.name=="newColorName")
+    {
+      setNewColorName(e.target.value);
+    }
+    if(e.target.name=="newColorCode")
+    {
+      setNewColorCode(e.target.value);
+    }
+    if(e.target.name=="editColorName")
+    {
+      setEditColorName(e.target.value);
+    }
+    if(e.target.name=="editColorCode")
+    {
+      setEditColorCode(e.target.value);
+    }
+  };
+
+  const handleSubmit =async (e)=>{
+    e.preventDefault(); 
+    const formData={newColorName,newColorCode};
+
+    const response = await vehicleApi.addColor(formData);
+    // console.log(response);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      setNewColorName("");
+      setNewColorCode("");
+      setPopupopen(false);
+      confirm("Color added successfully");
+      fetchData();
     }
   };
 
@@ -114,68 +115,40 @@ function Brand() {
 
   const handleDelete = async (id) => {
     // alert(id);
-    const userConfirmed = confirm("Do you want to delete this brand?");
+    const userConfirmed = confirm("Do you want to delete this color?");
     if (userConfirmed) {
       const formData={id};
-      const response = await vehicleApi.deleteBrand(formData);
+      const response = await vehicleApi.deleteColor(formData);
       if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
         // console.log(response);
-        alert("Brand Deleted Successfully");
+        alert("Color Deleted Successfully");
         fetchData();
       }
     } 
   }
 
-  const handleEdit = async (id,name) => {
-    // alert(name);
+  const handleEdit = async (id,name,code) => {
+    // alert(id+" "+name+ " "+code);
+    setId(id);
+    setEditColorName(name);
+    setEditColorCode(code);
     setEditPopupopen(true);
-    setBrand(name);
-    setDocId(id);
+    
   }
 
   const handleUpdate =async (e)=>{
     e.preventDefault(); 
-    const formData={docId , brand};
+    const formData={id , editColorName,  editColorCode};
 
-    const response = await vehicleApi.updateBrand(formData);
+    const response = await vehicleApi.updateColor(formData);
     // console.log(response);
     if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
       setEditPopupopen(false);
-      confirm("Brand Updated successfully");
+      confirm("Color Updated successfully");
       fetchData();
     }
   };
 
-  const handleModelAdd = async (id,brand) => {
-    // alert(id +" "+brand);
-    setAddModelpopup(true);
-    setBrand(brand);
-    setDocId(id);
-    setModelError("");
-  }
-
-  const submitAddModel =async (e)=>{
-    e.preventDefault(); 
-    const formData={docId ,brand, model};
-
-    const response = await vehicleApi.addModel(formData);
-    // console.log(response);
-    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-      setAddModelpopup(false);
-      confirm("Model Added successfully");
-      setModel("");
-      fetchData();
-    }
-    else
-    {
-      setModelError("Model already exist!");
-    }
-  };
-  
-
-  
-
- 
   return (
     <>
       <Box className={dashboardStyles.tm_dashboard_main}>        
@@ -187,7 +160,7 @@ function Brand() {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'>Brand List</Typography>
+                    <Typography variant='h4'>Color List</Typography>
                   </Box>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
                     <Button variant="contained" onClick={handleAdd}>Add</Button>
@@ -199,28 +172,29 @@ function Brand() {
                     <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" colSpan={8}>Brand List</TableCell>
+                          <TableCell align="center" colSpan={8}>Color List</TableCell>
                           {/* <TableCell align="center" colSpan={3}>List</TableCell> */}
                         </TableRow>
                         <TableRow>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Model List</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Color Name</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Color Code</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
                       
                       <TableBody>
-                                {brandList.map((data,key) => (
+                                {colorList.map((data,key) => (
                                     <TableRow key={key}>
-                                      <TableCell align="center" component="th" scope="row">{key+1}</TableCell>
+                                      <TableCell align="center" component="th" scope="row">{data.id}</TableCell>
                                       <TableCell align="center">{data.data.name}</TableCell>
-                                      <TableCell align="center">
-                                         <AddCircleIcon onClick={(e) => handleModelAdd(`${data.id}`, `${data.data.name}`)} />
-                                         <Link as={`modellist/${data.id}`} href={`modellist?id=${data.id}`}><RemoveRedEyeIcon /></Link>
+                                      <TableCell align="center"> 
+                                        <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-around'}}>
+                                        <Typography variant='span'>{data.data.code}</Typography> <Typography variant='span' sx={{width:'15px', height:'15px',display:'inline-block',border:'1px solid #c6c6c6', backgroundColor:`${data.data.code}`}}></Typography>
+                                        </Box>
                                       </TableCell>
                                       <TableCell align="center">
-                                         <EditIcon onClick={(e) => handleEdit(`${data.id}`, `${data.data.name}`)} />
+                                         <EditIcon onClick={(e) => handleEdit(`${data.id}`, `${data.data.name}`,  `${data.data.code}`)} />
                                          <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
                                      </TableCell>
                                     </TableRow>
@@ -231,7 +205,7 @@ function Brand() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={brandList.length}
+        count={colorList.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -243,13 +217,18 @@ function Brand() {
           </Grid>
         </Grid>   
         <Dialog open={popupOpen} onClose={handleCloseBtn} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-            <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Add Brand"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Add Color"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
               <form onSubmit={handleSubmit}>
-                    <Grid item md={3}>
+                      <Grid item md={3}>
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                        <TextField id="outlined-basic" label="Brand" onChange={handleInput} name='newbrand' type="text" value={newbrand} variant="outlined" required fullWidth/>
+                        <TextField id="outlined-basic" label="Color Name" onChange={handleInput} name='newColorName' type="text" value={newColorName} variant="outlined" required fullWidth/>
+                        </Box>
+                      </Grid>
+                      <Grid item md={3}>
+                        <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                        <TextField id="outlined-basic" label="Color Code" onChange={handleInput} name='newColorCode' type="text" value={newColorCode} variant="outlined" required fullWidth/>
                         </Box>
                       </Grid>
                       <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
@@ -260,49 +239,32 @@ function Brand() {
             </DialogContent>
          </Dialog> 
          <Dialog open={editpopupOpen} onClose={handleCloseBtn} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-          <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Update Brand"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Update Color"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
             <form onSubmit={handleUpdate}>
-                  <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Brand" onChange={handleInput} name='brand' type="text" value={brand} variant="outlined" required fullWidth/>
-                      </Box>
-                    </Grid>
-                    <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
-                      <Button variant="contained" type='submit'>Update</Button>           
-                    </Box>
+                <Grid item md={3}>
+                  <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                  <TextField id="outlined-basic" label="Color Name" onChange={handleInput} name='editColorName' type="text" value={editColorName} variant="outlined" required fullWidth/>
+                  </Box>
+                </Grid>
+                <Grid item md={3}>
+                  <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                  <TextField id="outlined-basic" label="Color Code" onChange={handleInput} name='editColorCode' type="text" value={editColorCode} variant="outlined" required fullWidth/>
+                  </Box>
+                </Grid>
+              <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
+                <Button variant="contained" type='submit'>Update</Button>           
+              </Box>
             </form>
             </DialogContentText>
           </DialogContent>
          </Dialog>  
-         <Dialog open={addModelPopup} onClose={handleCloseBtn} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-          <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Add Model"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <Typography sx={{color:"red"}}>{ModelError}</Typography>
-            <form onSubmit={submitAddModel}>
-                    <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Brand" type="text" value={brand} variant="outlined" disabled fullWidth/>
-                      </Box>
-                    </Grid>
-                    <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Model" onChange={handleInput} name='model' type="text" value={model} variant="outlined" required fullWidth/>
-                      </Box>
-                    </Grid>
-                    <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
-                      <Button variant="contained" type='submit'>Submit</Button>           
-                    </Box>
-            </form>
-            </DialogContentText>
-          </DialogContent>
-         </Dialog>    
+     
             
       </Box>
     </>
   )
 }
 
-export default Brand
+export default Color

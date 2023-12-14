@@ -36,21 +36,27 @@ function Update({ params }) {
   const [brand, setBrand] = useState(null);
   const [modelList, setModelList] = useState([]);
   const [model, setModel] = useState("");
+  const [modelKey, setModelKey] = useState("");
+  const [modelName, setModelName]=useState("");
+  const [variant, setVariant]=useState("");
   const [docId,setDocid]=useState(null);
   const [indexId,setIndexId]=useState(null);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [editpopupOpen, setEditPopupopen] = useState(false);
+  const [AddVariantPopupopen, setAddVariantPopupopen] = useState(false);
 
- 
+  
   useEffect(() => {
     getBrandwithID();
   }, []); 
 
   const getBrandwithID = async () => {
     try {
-      setDocid(params.id);
-      const id=params.id;
+      
+      // const id=params.id;
+      const id = params.id ? params.id.replace(/%20/g, ' ') : '';
+      setDocid(id);
       const data={id};
       const response = await vehicleApi.getBrandwithID(data);
             console.log(response.data.data);
@@ -78,11 +84,16 @@ function Update({ params }) {
     if (e.target.name === 'model') {
       setModel(e.target.value);
     }  
+    if (e.target.name === 'variant') {
+      setVariant(e.target.value);
+    } 
+    
   }
 
   const handleCloseBtn = () => {
     setEditPopupopen(false);
-  };
+    setAddVariantPopupopen(false);
+ };
 
   const handleEdit =(indexId,model)=>{
     // alert(indexId +" "+model);
@@ -96,7 +107,7 @@ function Update({ params }) {
 
     const formData={docId,model,indexId};
     
-    console.log(formData);
+    // console.log(formData);
     
     const response = await vehicleApi.updateModel(formData);
     if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
@@ -119,52 +130,49 @@ function Update({ params }) {
         getBrandwithID();
       }
     }
-    
   }
+
+  const handleAddvariant =(docId,modelKey,modelName)=>{
+    // alert(docId +" "+modelKey);
+    setModelKey(modelKey);
+    setDocid(docId);
+    setModelName(modelName);
+    setAddVariantPopupopen(true);
+  }
+
+  const handleSubmitVariant = async (e) => {
+    e.preventDefault(); 
+
+    const formData={docId,modelKey,variant};
+    
+    // console.log(formData);
+    
+    const response = await vehicleApi.addVariant(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      setVariant("");
+      confirm("Variant added successfully");
+      setAddVariantPopupopen(false);
+      getBrandwithID();
+    }
+  };
+
+  const handleDeletevariant = async (docId,modelKey,variantKey)=>{
+    // alert(docId +" "+modelKey+" "+variantKey);
+    const userConfirmed = confirm("Do you want to delete this variant?");
+    if (userConfirmed) {
+      const formData={docId,modelKey,variantKey};
+      const response = await vehicleApi.deleteVariant(formData);
+      if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+        confirm("Variant deleted successfully");
+        getBrandwithID();
+      }
+    }
+  }
+  
+  
     
   return (
     <>
-      {/* <Box className={dashboardStyles.tm_dashboard_main}>        
-        <Grid container> 
-          <Sidebar/>         
-          <Grid item md={10}>
-            <Box className={dashboardStyles.tm_dashboard_rightbar_main}>
-              <Header/>
-              <Box className={dashboardStyles.tm_dashboard_rightbar_form_main}>
-                <Box className={dashboardStyles.tm_dashboard_rightbar_form_title}>
-                  <Typography variant='h3'>Update your Model! {params.id} </Typography>
-                </Box>
-                <form onSubmit={handleSubmit}>
-                <Grid container spacing={4}>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                    <TextField id="outlined-basic" label="Brand" onChange={handleInput} name='brand' type="text" value={brand} variant="outlined" required 
-                    InputLabelProps={{shrink: true, }} fullWidth/>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={4}>
-                  {modelList.length > 0 && modelList.map((data,key) => (
-                      <Grid item md={3}>
-                        <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                        <TextField id="outlined-basic" label="Models" onChange={handleInput} name='model' type="text" value={data.name} variant="outlined" required 
-                        InputLabelProps={{shrink: true, }} fullWidth/>
-                        </Box>
-                      </Grid>
-                  ))}
-                </Grid>
-                <Box sx={{margin:'50px 0 0'}}>
-                  <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn}>
-                    <Button variant="contained" type='submit'>submit</Button>           
-                  </Box>
-                </Box>
-                </form>
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>      
-       
-      </Box> */}
       <Box className={dashboardStyles.tm_dashboard_main}>        
         <Grid container> 
           <Sidebar/>         
@@ -174,7 +182,7 @@ function Update({ params }) {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'>Model List</Typography>
+                    <Typography variant='h4'>Model List </Typography>
                   </Box>
                   {/* <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
                     <Button variant="contained" >Add</Button>
@@ -193,22 +201,40 @@ function Update({ params }) {
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Model List</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Variant List</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
                       
                       <TableBody>
-                                {modelList.map((data,key) => (
+                                {modelList.map((data,key) => {
+                                    const variants=data.variants;
+                                    console.log(variants);
+                                  return (
                                     <TableRow key={key}>
                                       <TableCell align="center" component="th" scope="row">{key+1}</TableCell>
                                       <TableCell align="center">{brand}</TableCell>
                                       <TableCell align="center">{data.name}</TableCell>
                                       <TableCell align="center">
+                                        <AddCircleIcon onClick={(e) => handleAddvariant(`${docId}` , `${key}` , `${data.name}`)} />
+                                        {variants ? (<>
+                                        {variants.length && variants.map((element,index)=>(
+                                          <Box key={index} sx={{display:'flex', alignItems:'center', gap:'5px',marginBottom:'5px', justifyContent:'center'}}><Typography variant='span' sx={{fontSize:'14px', textTransform:'capitalize',}}>{element}</Typography> 
+                                          {/* <EditIcon sx={{fontSize:'16px', cursor:'pointer',"&:hover": {color: "#45c08d",},}}/> */}
+                                          <DeleteIcon onClick={(e) => handleDeletevariant(`${docId}` , `${key}` , `${index}`)} sx={{fontSize:'16px', cursor:'pointer',"&:hover": {color: "#FF0000",},}}/>
+                                          </Box>
+                                        ))}
+                                        </>):(<>NA</>)}
+                                        
+                                      </TableCell>
+                                      <TableCell align="center">
                                          <EditIcon onClick={(e) => handleEdit(`${key}` , `${data.name}`)} />
                                          <DeleteIcon onClick={(e) => handleDelete(`${key}`)} />
                                      </TableCell>
                                     </TableRow>
-                                  ))}
+                                  );
+                                    
+                                })}
                       </TableBody>
                     </Table>
       </TableContainer>
@@ -245,6 +271,35 @@ function Update({ params }) {
                     
                     <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
                       <Button variant="contained" type='submit'>Update</Button>           
+                    </Box>
+            </form>
+            </DialogContentText>
+          </DialogContent>
+         </Dialog>  
+
+         <Dialog open={AddVariantPopupopen} onClose={handleCloseBtn} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+          <DialogTitle id="alert-dialog-title" className={dashboardStyles.tm_dashboard_rightbar_add_brand_title}>{"Add Variant"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+            <form onSubmit={handleSubmitVariant}>
+                    <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <TextField id="outlined-basic" label="Brand" type="text" value={brand} variant="outlined" disabled fullWidth/>
+                      </Box>
+                    </Grid>
+                    <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <TextField id="outlined-basic" label="Model" onChange={handleInput} name='modelName' type="text" value={modelName} variant="outlined" disabled fullWidth/>
+                      </Box>
+                    </Grid>
+                    <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${dashboardStyles.tm_dashboard_rightbar_form_panel_odd} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <TextField id="outlined-basic" label="Variant" onChange={handleInput} name='variant' type="text" value={variant} variant="outlined" required fullWidth/>
+                      </Box>
+                    </Grid>
+                    
+                    <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn_odd}>
+                      <Button variant="contained" type='submit'>Submit</Button>           
                     </Box>
             </form>
             </DialogContentText>

@@ -70,6 +70,12 @@ const Sidebar = () => {
               <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
                 <Link href="/dashboard/users">-<FactoryIcon/> User List</Link>
               </AccordionDetails>
+              <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
+                <Link href="/dashboard/color">-<FactoryIcon/> Color List</Link>
+              </AccordionDetails>
+              <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
+                <Link href="/dashboard/rto">-<FactoryIcon/> RTO List</Link>
+              </AccordionDetails>
             </Accordion>                
           </Box>
           {/* <Box className={`${dashboardStyles.tm_dashboard_siderbar_menu_odd} ${"tm_dashboard_siderbar_menu_odd_gb"}`}>

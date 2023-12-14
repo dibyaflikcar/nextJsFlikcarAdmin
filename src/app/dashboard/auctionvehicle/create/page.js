@@ -46,41 +46,43 @@ function Create() {
   
 
   const [brandlist, setBrandlist] = useState([]);
-  const [brand, setBrand] = useState("");
+  const [brand, setBrand] = useState(null);
   const [modellist, setModelList] = useState([]);
-  const [model, setModel] = useState("");
+  const [model, setModel] = useState(null);
   const [variantList, setVariantList] = useState([]);
-  const [variant, setVariant] = useState("");
+  const [variant, setVariant] = useState(null);
   
   const [years, setYears] = useState([]);
-  const [regYear, setregYear] = useState("");
+  const [regYear, setregYear] = useState(null);
   const [bodyTypelist, setbodyTypelist]=useState([]);
-  const [bodyType, setbodyType]=useState("");
+  const [bodyType, setbodyType]=useState(null);
   const [fuelTypelist, setfuelTypelist]=useState([]);
-  const [fuelType, setfuelType]=useState("");
-  const [transmission, setTransmission]=useState("");
+  const [fuelType, setfuelType]=useState(null);
+  const [transmission, setTransmission]=useState(null);
   const [ownerTypelist, setownerTypelist]=useState([]);
-  const [ownerType, setownerType]=useState("");
+  const [ownerType, setownerType]=useState(null);
   const [colorList, setcolorList]=useState([]);
-  const [color, setColor]=useState("");
+  const [color, setColor]=useState(null);
   const [rtoList, setrtoList]=useState([]);
-  const [rto, setRto]=useState("");
-  const [kmsDriven, setkmsDriven]=useState("");
-  const [carPrice, setcarPrice]=useState();
-  const [description, setDescription]=useState("");
+  const [rto, setRto]=useState(null);
+  const [cityList, setCityList]=useState([]);
+  const [city, setCity]=useState(null);
+  const [kmsDriven, setkmsDriven]=useState(null);
+  const [carPrice, setcarPrice]=useState(null);
+  const [description, setDescription]=useState(null);
   const [seatList, setseatList]=useState([]);
-  const [seat, setSeat]=useState("");
+  const [seat, setSeat]=useState(null);
 
-  const [mileage, setMileage]=useState("");
-  const [engine, setEngine]=useState("");
-  const [maxPower, setmaxPower]=useState("");
-  const [maxTorque, setMaxTorque]=useState("");
-  const [noc, setNoc]=useState("");
-  const [mfgYear, setmfgYear]=useState("");
-  const [inspectionReport, setInspectionReport]=useState("");
+  const [mileage, setMileage]=useState(null);
+  const [engine, setEngine]=useState(null);
+  const [maxPower, setmaxPower]=useState(null);
+  const [maxTorque, setMaxTorque]=useState(null);
+  const [noc, setNoc]=useState(null);
+  const [mfgYear, setmfgYear]=useState(null);
+  const [inspectionReport, setInspectionReport]=useState(null);
   const [insuranceValidity, setInsuranceValidity]=useState(null);
   const [roadTaxValidity, setRoadTaxValidity]=useState(null);
-  const [inspectionScore, setInspectionScore]=useState("");
+  const [inspectionScore, setInspectionScore]=useState(null);
 
   const [auctionStartTime, setAuctionStartTime]=useState(null);
   const [auctionEndTime, setAuctionEndTime]=useState(null);
@@ -119,6 +121,7 @@ function Create() {
     getOwnertype();
     getColor();
     getRto();
+    getCity();
     getSeat();
     // setComforts([]);
     // setSafety([]);
@@ -215,6 +218,19 @@ function Create() {
       console.error('Error fetching data:', error);
     }
   };
+  const getCity = async () => {
+    try {
+      const response = await vehicleApi.getCity();
+            // console.log(response.data.data);
+      if (response.data.status === 200) {
+        setCityList(response.data.data);
+        // console.log(response.data);
+      } 
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
 
   const getSeat = async () => {
     try {
@@ -292,6 +308,9 @@ function Create() {
     }
     if (e.target.name === 'rto') {
       setRto(e.target.value);
+    }
+    if (e.target.name === 'city') {
+      setCity(e.target.value);
     }
     if (e.target.name === 'kmsDriven') {
       setkmsDriven(e.target.value);
@@ -609,7 +628,7 @@ const uploadAuctionImage6= async (data)=>{
 
       setError("");
 
-    const formData={auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+    const formData={auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
     
     // console.log(formData);
     
@@ -903,6 +922,26 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select City*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={city}
+                          label="Select City*"
+                          onChange={handleInput}
+                          name='city'
+                          required
+                        >
+                          {cityList.length > 0 && cityList.map((data,key) => (
+                            <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Select RTO*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
@@ -914,7 +953,7 @@ const handleCloseBtn = () => {
                           required
                         >
                           {rtoList.length > 0 && rtoList.map((data,key) => (
-                            <MenuItem key={key} value={data.name}>{data.name}</MenuItem>
+                            <MenuItem key={key} value={data.rtoName}>{data.rtoName} ({data.rtoCode})</MenuItem>
                           ))}
                         </Select>
                       </FormControl>
