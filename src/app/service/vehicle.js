@@ -224,6 +224,16 @@ const API = axios.create({
     }
   };
 
+  vehicleApi.uploadAuctionVideo1 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionVideo1',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  
   
 // vehicle enquiry section
 

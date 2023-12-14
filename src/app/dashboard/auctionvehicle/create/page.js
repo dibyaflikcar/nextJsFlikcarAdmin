@@ -30,6 +30,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useRouter } from 'next/navigation';
 
@@ -44,7 +45,7 @@ function Create() {
   // const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   
-
+  const [isLoader,setLoader]=useState(false);
   const [brandlist, setBrandlist] = useState([]);
   const [brand, setBrand] = useState(null);
   const [modellist, setModelList] = useState([]);
@@ -69,6 +70,7 @@ function Create() {
   const [city, setCity]=useState(null);
   const [kmsDriven, setkmsDriven]=useState(null);
   const [carPrice, setcarPrice]=useState(null);
+  const [oneClickBuyPrice, setOneClickBuyPrice]=useState(null);
   const [description, setDescription]=useState(null);
   const [seatList, setseatList]=useState([]);
   const [seat, setSeat]=useState(null);
@@ -107,10 +109,14 @@ function Create() {
   const [EnginePhotos  , setEnginePhotos ] = useState([]);
   const [TyresPhotos  , setTyresPhotos ] = useState([]);
   const [DentsPhotos  , setDentsPhotos ] = useState([]);
+
+  const [engineVideo  , setEngineVideo ] = useState(null);
   
 
   const [allCarImage, setAllcarImage] = useState([]);
   const [thumbImage, setThumbImage] = useState([]);
+
+  const [allCarVideo, setAllcarVideo] = useState([]);
 
   const [error, setError] = useState("");
   
@@ -123,11 +129,7 @@ function Create() {
     getRto();
     getCity();
     getSeat();
-    // setComforts([]);
-    // setSafety([]);
-    // setInterior([]);
-    // setExterior([]);
-    // setEntertainment([]);
+
 
     getCarFeatureList([]);
   
@@ -147,7 +149,7 @@ function Create() {
             // console.log(response.data.data);
       if (response.data.status === 200) {
         setBrandlist(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
       } 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -262,8 +264,6 @@ function Create() {
     }
   };
 
-  
-
   const handleInput= async(e)=>{
     
     if (e.target.name === 'brand') {
@@ -318,6 +318,9 @@ function Create() {
     if (e.target.name === 'carPrice') {
       setcarPrice(e.target.value);
     }
+    if (e.target.name === 'oneClickBuyPrice') {
+      setOneClickBuyPrice(e.target.value);
+    }
     if (e.target.name === 'description') {
       setDescription(e.target.value);
     }
@@ -345,12 +348,6 @@ function Create() {
     if (e.target.name === 'inspectionReport') {
       setInspectionReport(e.target.value);
     }
-    // if (e.target.name === 'insuranceValidity') {
-    //   setInsuranceValidity(e.target.value);
-    // }
-    // if (e.target.name === 'roadTaxValidity') {
-    //   setRoadTaxValidity(e.target.value);
-    // }
     if (e.target.name === 'inspectionScore') {
       setInspectionScore(e.target.value);
     }
@@ -464,7 +461,6 @@ function Create() {
       {
           alert("Image size should be less than 500kb!")
       }
-      
     }
 
     if (e.target.name === 'DentsPhotos' && e.target.files.length > 0) {
@@ -478,10 +474,23 @@ function Create() {
       {
           alert("Image size should be less than 500kb!")
       }
-      
     }
 
-    
+    if (e.target.name === 'engineVideo' && e.target.files.length > 0) {
+     
+      // console.log(e.target.files);
+      if(e.target.files[0].size<10000000)
+      {
+          // setEngineVideo(e.target.files[0]);
+          setLoader(true);
+          uploadAuctionVideo1(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 10MB!")
+      }
+    }
+
 
   }
 
@@ -508,7 +517,6 @@ function Create() {
     setAuctionEndTime(newDate);
   };
 
-  
   
 const uploadAuctionImage= async (data)=>{
   const formData = new FormData();
@@ -579,45 +587,28 @@ const uploadAuctionImage6= async (data)=>{
   }
 }
 
+const uploadAuctionVideo1= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionVideo1(formData);
+  setLoader(false);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setEngineVideo(response.data.data.path);
+    setAllcarVideo([...allCarVideo, response.data.data]);
+    
+    // console.log(response.data.data);
+  }
+}
 
+const handleRemoveVideo = async ()=>{
+  setEngineVideo(null);
+  setAllcarVideo([]);
+}
 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-
-    // console.log(allCarImage);
-    
-    // const formData = new FormData();
-    // formData.append('brand', brand);
-    // formData.append('model', model);
-    // formData.append('variant', variant);
-    // formData.append('regYear', regYear);
-    // formData.append('bodyType', bodyType);
-    // formData.append('fuelType', fuelType);
-    // formData.append('transmission', transmission);
-    // formData.append('ownerType', ownerType);
-    // formData.append('color', color);
-    // formData.append('rto', rto);
-    // formData.append('kmsDriven', kmsDriven);
-    // formData.append('carPrice', carPrice);
-    // formData.append('description', description);
-    // formData.append('seat', seat);
-    // formData.append('mileage', mileage);
-    // formData.append('engine', engine);
-    // formData.append('maxPower', maxPower);
-    // formData.append('maxTorque', maxTorque);
-    // formData.append('noc', noc);
-    // formData.append('mfgYear', mfgYear);
-    // formData.append('inspectionReport', inspectionReport);
-    // formData.append('insuranceValidity', insuranceValidity);
-    // formData.append('roadTaxValidity', roadTaxValidity);
-    // formData.append('inspectionScore', inspectionScore);
-    // formData.append('comforts', comforts);
-    // formData.append('safety', safety);
-    // formData.append('interior', interior);
-    // formData.append('exterior', exterior);
-    // formData.append('entertainment', entertainment);
-    // formData.append('allCarImage', allCarImage);
 
     if(thumbImage.length==0)
     {
@@ -628,7 +619,7 @@ const uploadAuctionImage6= async (data)=>{
 
       setError("");
 
-    const formData={auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+    const formData={allCarVideo,auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,oneClickBuyPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
     
     // console.log(formData);
     
@@ -655,27 +646,6 @@ const uploadAuctionImage6= async (data)=>{
     }
   };
     
-
-  // const getModelList = async (brandId) => {
-  //   // setModel('');
-  //   // setVariantList([]);
-  //   const response = await vehicleApi.getModel(brandId);
-  //   if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-  //     setModelList(response.data);
-  //     console.log(response.data);
-  //   }
-  // };
-
-  
-
-  // return focus to the button when we transitioned from !open -> open
-  // const prevOpen = React.useRef(open);
-  // React.useEffect(() => {
-  //   if (prevOpen.current === true && open === false) {
-  //     anchorRef.current.focus();
-  //   }
-  //   prevOpen.current = open;
-  // }, [open]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -713,11 +683,6 @@ const uploadAuctionImage6= async (data)=>{
   };
 
    
-
-
-
-
-
 const handleCloseBtn = () => {
   setPopupopen(false);
 };
@@ -967,6 +932,12 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                     <TextField id="outlined-basic" label="Your Selling Price" onChange={handleInput} name='carPrice' type="number" value={carPrice} variant="outlined" required fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <TextField id="outlined-basic" label="One Click Buy Price (Optional)" onChange={handleInput} name='oneClickBuyPrice' type="number" value={oneClickBuyPrice} variant="outlined" fullWidth/>
+                      <Typography variant='span' sx={{color:'red', marginTop:'5px', display:'block'}}>Note : If you put any value then this car will not show in auction</Typography>
                     </Box>
                   </Grid>
                   <Grid item md={12}>
@@ -1317,231 +1288,36 @@ const handleCloseBtn = () => {
                       </Grid>
                   </Box>
 
-                
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Interior Photos (maximum Upload upto 10 Photos)</Typography>
+                      <Typography variant='h6'>Engine Sound Video</Typography>
                     </Box>
-                    <ImageUploading
-                      multiple
-                      value={InteriorPhotos}
-                      onChange={InteriorPhotosonChange}
-                      maxNumber={InteriorPhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='engineVideo' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
                               
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box>
+                                    {engineVideo ? (<>
+                                    <video width="200" height="100" controls >
+                                      <source src={engineVideo} type="video/mp4"/>
+                                    </video>
+                                    <Button onClick={() => handleRemoveVideo()}><CloseIcon/> </Button>
+                                    </>):(<> {isLoader?(<CircularProgress />):(<></>)}</>)}
+                                    
+                                </Box>
                               </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Engine Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={EnginePhotos}
-                      onChange={EnginePhotosonChange}
-                      maxNumber={EnginePhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Tyres Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={TyresPhotos}
-                      onChange={TyresPhotosonChange}
-                      maxNumber={TyresPhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
-                  {/* <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
-                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Add Dents Photos (maximum Upload upto 10 Photos)</Typography>
-                    </Box>
-                    <ImageUploading
-                      multiple
-                      value={DentsPhotos}
-                      onChange={DentsPhotosonChange}
-                      maxNumber={DentsPhotosNumber}
-                      dataURLKey="data_url"
-                    >
-                      {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                      }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                          <Grid container spacing={4}>
-                            <Grid item md={3}> 
-                              <Box className={dashboardStyles.tm_dashboard_img_upl_btns}>
-                                <button
-                                  style={isDragging ? { color: 'red' } : undefined}
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                >
-                                  Click or Drop here
-                                </button>
-                                <button onClick={onImageRemoveAll}>Remove all images</button>
-                              </Box>
-                              
-                            </Grid>
-                            <Grid item md={9}>
-                              <Box className="tm_image_item_main">
-                                {imageList.map((image, index) => (                          
-                                  <Box key={index} className="image-item">
-                                      <Image src={image['data_url']} alt="" width="100" />
-                                      <Box className="image-item__btn-wrapper">
-                                        <button className='tm_image_item_main_update_btn' onClick={() => onImageUpdate(index)}>Update</button>
-                                        <button className='tm_image_item_main_remove_btn' onClick={() => onImageRemove(index)}><CloseIcon/></button>
-                                      </Box>                            
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          
-                          
-                        </div>
-                      )}
-                    </ImageUploading>
-                  </Box> */}
+                        </Grid>
+                      </Grid>
+                  </Box>
+                  
                 </Box>
 
                 <Box sx={{margin:'50px 0 0'}}>

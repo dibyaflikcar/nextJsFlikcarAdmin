@@ -32,27 +32,27 @@ function Update({ params }) {
   const [phone, setPhone] = useState(null);
 
   //onboard dealer
-  const [name, setName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [shopName, setShopName] = useState(null);
-  const [shopAddress, setShopAddress] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [pinCode, setPinCode] = useState(null);
-  const [panCardNumber, setPanCardNumber] = useState(null);
-  const [addressProofNumber, setAddressProofNumber] = useState(null);
-  const [tradeLicenseNumber, setTradeLicenseNumber] = useState(null);
-  const [cancelledChequeNumber, setCancelledChequeNumber] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [shopName, setShopName] = useState("");
+  const [shopAddress, setShopAddress] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [pinCode, setPinCode] = useState("");
+  const [panCardNumber, setPanCardNumber] = useState("");
+  const [addressProofNumber, setAddressProofNumber] = useState("");
+  const [tradeLicenseNumber, setTradeLicenseNumber] = useState("");
+  const [cancelledChequeNumber, setCancelledChequeNumber] = useState("");
 
   //shop details
   const [shopPhone, setShopPhone] = useState("");
   const [gstNumber, setGstNumber] = useState("");
-  const [addressLine1, setAddressLine1] = useState(null);
-  const [addressLine2, setAddressLine2] = useState(null);
-  const [addressLine3, setAddressLine3] = useState(null);
-  const [city, setCity] = useState(null);
-  const [state, setState] = useState(null);
-  const [postalCode, setPostalCode] = useState(null);
+  const [addressLine1, setAddressLine1] = useState("");
+  const [addressLine2, setAddressLine2] = useState("");
+  const [addressLine3, setAddressLine3] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
   // images
 
@@ -110,23 +110,67 @@ function Update({ params }) {
         
         
         //dealer onboard
-        setName(result.dealerOnboardFormData.name);
-        setEmail(result.dealerOnboardFormData.email);
-        setShopName(result.dealerOnboardFormData.shopName);
-        setShopAddress(result.dealerOnboardFormData.shopAddress);
-        setSelectedState(result.dealerOnboardFormData.selectedState);
-        setSelectedCity(result.dealerOnboardFormData.selectedCity);
-        setPinCode(result.dealerOnboardFormData.pinCode);
-        setPanCardNumber(result.dealerOnboardFormData.panCardNumber);
-        setAddressProofNumber(result.dealerOnboardFormData.addressProofNumber);
-        setTradeLicenseNumber(result.dealerOnboardFormData.tradeLicenseNumber);
-        setCancelledChequeNumber(result.dealerOnboardFormData.cancelledChequeNumber);
+        if(result.dealerOnboardFormData.name)
+        {
+          setName(result.dealerOnboardFormData.name);
+        }
+        
+        if(result.dealerOnboardFormData.email)
+        {
+          setEmail(result.dealerOnboardFormData.email);
+        }
+        if(result.dealerOnboardFormData.shopName)
+        {
+          setShopName(result.dealerOnboardFormData.shopName);
+        }
+        if(result.dealerOnboardFormData.shopAddress)
+        {
+          setShopAddress(result.dealerOnboardFormData.shopAddress);
+        }
+        if(result.dealerOnboardFormData.selectedState)
+        {
+          setSelectedState(result.dealerOnboardFormData.selectedState);
+        }
+        if(result.dealerOnboardFormData.selectedCity)
+        {
+          setSelectedCity(result.dealerOnboardFormData.selectedCity);
+        }
+        if(result.dealerOnboardFormData.pinCode)
+        {
+          setPinCode(result.dealerOnboardFormData.pinCode);
+        }
+        if(result.dealerOnboardFormData.panCardNumber)
+        {
+          setPanCardNumber(result.dealerOnboardFormData.panCardNumber);
+        }
+        if(result.dealerOnboardFormData.addressProofNumber)
+        {
+          setAddressProofNumber(result.dealerOnboardFormData.addressProofNumber);
+        }
+        
+        if(result.dealerOnboardFormData.tradeLicenseNumber)
+        {
+          setTradeLicenseNumber(result.dealerOnboardFormData.tradeLicenseNumber);
+        }
+        if(result.dealerOnboardFormData.cancelledChequeNumber)
+        {
+          setCancelledChequeNumber(result.dealerOnboardFormData.cancelledChequeNumber);
+        }
+        
 
         
         //shop details
-        
-          setShopPhone(result.shop.phone);
-          setGstNumber(result.shop.gstNumber);
+        if(result.shop)
+        {
+          if(result.shop.phone)
+          {
+            setShopPhone(result.shop.phone);
+          }
+          if(result.shop.gstNumber)
+          {
+            setGstNumber(result.shop.gstNumber);
+          }
+          
           if(result.shop.addresses!=null)
           {
             setAddressLine1(result.shop.addresses[0].addressLine1);
@@ -136,13 +180,15 @@ function Update({ params }) {
             setState(result.shop.addresses[0].state);
             setPostalCode(result.shop.addresses[0].postalCode);
           }
+        }
+          
           
         
           
         
         //images
         
-        // console.log(result.dealerOnboardFormData.docsImagePaths);
+        console.log(result.dealerOnboardFormData.docsImagePaths);
         if(result.dealerOnboardFormData?.docsImagePaths)
         {
           setAllImage(result.dealerOnboardFormData.docsImagePaths);

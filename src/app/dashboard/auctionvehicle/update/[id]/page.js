@@ -31,6 +31,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import dayjs from 'dayjs';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/navigation';
 
 
@@ -40,7 +41,7 @@ function Update({ params }) {
 
   const router = useRouter()
   
-
+  const [isLoader,setLoader]=useState(false);
   const [brandlist, setBrandlist] = useState([]);
   const [brand, setBrand] = useState("");
   const [modellist, setModelList] = useState([]);
@@ -64,7 +65,8 @@ function Update({ params }) {
   const [cityList, setCityList]=useState([]);
   const [city, setCity]=useState("");
   const [kmsDriven, setkmsDriven]=useState("");
-  const [carPrice, setcarPrice]=useState();
+  const [carPrice, setcarPrice]=useState(null);
+  const [oneClickBuyPrice, setOneClickBuyPrice]=useState(null);
   const [description, setDescription]=useState("");
   const [seatList, setseatList]=useState([]);
   const [seat, setSeat]=useState("");
@@ -107,6 +109,9 @@ function Update({ params }) {
 
   const [allCarImage, setAllcarImage] = useState([]);
   const [thumbImage, setThumbImage] = useState(null);
+
+  const [engineVideo  , setEngineVideo ] = useState(null);
+  const [allCarVideo, setAllcarVideo] = useState([]);
 
   const [error, setError] = useState("");
   const [auctionCarDatails, setAuctionCarDetails] = useState();
@@ -163,6 +168,11 @@ function Update({ params }) {
         {
             setAuctionDetails(getAuctionDetails.data.data);
             setCarsoldStatus(getAuctionDetails.data.data.isSoldOut);
+            if(getAuctionDetails.data.data.oneClickBuyPrice)
+            {
+              setOneClickBuyPrice(getAuctionDetails.data.data.oneClickBuyPrice);
+            }
+            
 
             //startAuction
             if(getAuctionDetails.data.data.startTime!=0)
@@ -282,6 +292,11 @@ function Update({ params }) {
             const dentImages = result.images.filter((item) => item.type == "DENT");
             setdentImages(dentImages);
 
+            const engineVideo = result.videos.filter((item) => item.type == "ENGINE");
+            // console.log(engineVideo);
+            setEngineVideo(engineVideo[0].path);
+            setAllcarVideo(result.videos);
+
             setComforts(result.properties.comfort);
             setSafety(result.properties.safety);
             setInterior(result.properties.interior);
@@ -297,39 +312,7 @@ function Update({ params }) {
     }
   };
 
-  // const getAuctionCarDetails = async ()=>{
-  //   const data={id:params.id};
-  //   try {
-  //     const response = await vehicleApi.getAuctionCarDetails(data);
-  //           // console.log(response.data.data);
-  //     if (response.data.status === 200) {
-  //       const result=response.data.data;
-  //       console.log(result);
-  //       setAuctionCarDetails(result);
-  //       setcarPrice(result.carPrice);
-  //       setBrand(result.properties.brand);
-
-  //       console.log(brandlist);
-  //       const filteredResult = brandlist.filter((item) => item.name == result.properties.brand);
-  //       setModelList(filteredResult[0].models);
-
-  //       setModel(result.properties.model);
-  //       const filteredResult2 = modellist.filter((item) => item.name == result.properties.model);
-  //       // console.log(filteredResult2[0].variants.length);
-  //       if(filteredResult2[0].variants.length>0)
-  //       {
-  //         setVariantList(filteredResult2[0].variants);
-  //       }
-  //       setVariant(result.properties.variant);
-        
-  //     } 
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // }
-
   
-
   const getBodytype = async () => {
     try {
       const response = await vehicleApi.getBodytype();
@@ -492,7 +475,25 @@ function Update({ params }) {
       setkmsDriven(e.target.value);
     }
     if (e.target.name === 'carPrice') {
-      setcarPrice(e.target.value);
+      if(e.target.value=="")
+      {
+        setcarPrice(null);
+      }
+      else
+      {
+        setcarPrice(e.target.value);
+      }
+    }
+    if (e.target.name === 'oneClickBuyPrice') {
+      if(e.target.value=="")
+      {
+        setOneClickBuyPrice(null);
+      }
+      else
+      {
+        setOneClickBuyPrice(e.target.value);
+      }
+      
     }
     if (e.target.name === 'description') {
       setDescription(e.target.value);
@@ -501,16 +502,37 @@ function Update({ params }) {
       setSeat(e.target.value);
     }
     if (e.target.name === 'mileage') {
-      setMileage(e.target.value);
+      if(e.target.value=="")
+      {
+        setMileage(null);
+      }
+      else
+      {
+        setMileage(e.target.value);
+      }
     }
     if (e.target.name === 'engine') {
       setEngine(e.target.value);
     }
     if (e.target.name === 'maxPower') {
-      setmaxPower(e.target.value);
+      if(e.target.value=="")
+      {
+        setmaxPower(null);
+      }
+      else
+      {
+        setmaxPower(e.target.value);
+      }
     }
     if (e.target.name === 'maxTorque') {
-      setMaxTorque(e.target.value);
+      if(e.target.value=="")
+      {
+        setMaxTorque(null);
+      }
+      else
+      {
+        setMaxTorque(e.target.value);
+      }
     }
     if (e.target.name === 'noc') {
       setNoc(e.target.value);
@@ -657,6 +679,21 @@ function Update({ params }) {
       
     }
 
+    if (e.target.name === 'engineVideo' && e.target.files.length > 0) {
+     
+      // console.log(e.target.files);
+      if(e.target.files[0].size<10000000)
+      {
+          // console.log(e.target.files[0]);
+          setLoader(true);
+          uploadAuctionVideo1(e.target.files[0]);
+      }
+      else
+      {
+          alert("video size should be less than 10MB!")
+      }
+    }
+
     
 
   }
@@ -752,20 +789,38 @@ const uploadAuctionImage6= async (data)=>{
   const response = await vehicleApi.uploadAuctionImage6(formData);
   if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
     // console.log(response);
+    
     setAllcarImage([...allCarImage, response.data.data]);
     // console.log(response.data.data);
   }
 }
 
+const uploadAuctionVideo1= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
 
+    setEngineVideo(null);
+    const response = await vehicleApi.uploadAuctionVideo1(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      setLoader(false);
+      
+      setEngineVideo(response.data.data.path);
+      setAllcarVideo([...allCarVideo,response.data.data]);
+      setAllcarVideo(prevArray => prevArray.filter(item => item.path !== engineVideo));
+    }
+}
 
+const handleRemoveVideo = async ()=>{
+  setEngineVideo(null);
+  setAllcarVideo([]);
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
 
     // console.log(allCarImage);
     // console.log(thumbImage);
-  
+ 
 
     if(thumbImage==null)
     {
@@ -776,9 +831,9 @@ const uploadAuctionImage6= async (data)=>{
 
       setError("");
 
-    const formData={docId,auctionStartTime,auctionEndTime,carsoldStatus,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+    const formData={allCarVideo,docId,auctionStartTime,auctionEndTime,carsoldStatus,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,oneClickBuyPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
     
-    console.log(formData);
+    // console.log(formData);
     
     const response = await vehicleApi.updateAuctionVehicle(formData);
     if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
@@ -1077,6 +1132,12 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                     <TextField id="outlined-basic" label="Your Selling Price" onChange={handleInput} name='carPrice' value={carPrice}  type="number" InputLabelProps={{shrink: true,}} variant="outlined" required fullWidth/>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                    <TextField id="outlined-basic" label="One Click Buy Price (Optional)" onChange={handleInput} name='oneClickBuyPrice' type="number" value={oneClickBuyPrice} variant="outlined" InputLabelProps={{shrink: true,}} fullWidth/>
+                    <Typography variant='span' sx={{color:'red', marginTop:'5px', display:'block'}}>Note : If you put any value then this car will not show in auction</Typography>
                     </Box>
                   </Grid>
                   <Grid item md={12}>
@@ -1571,7 +1632,35 @@ const handleCloseBtn = () => {
                       </Grid>
                   </Box>
 
-                
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Engine Sound Video</Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='engineVideo' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                              
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box>
+                                    {engineVideo ? (<>
+                                    <video width="200" height="100" controls >
+                                      <source src={engineVideo} type="video/mp4"/>
+                                    </video>
+                                    <Button onClick={() => handleRemoveVideo()}><CloseIcon/> </Button>
+                                    </>):(<></>)}
+                                    {isLoader?(<CircularProgress />):(<></>)}
+                                </Box>
+                              </Box>
+                        </Grid>
+                      </Grid>
+                  </Box>
                   
                 </Box>
 
