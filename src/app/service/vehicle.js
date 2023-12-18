@@ -170,6 +170,9 @@ const API = axios.create({
     }
   };
 
+  
+  
+
   vehicleApi.uploadAuctionImage = async (data) => {
     try {
       const res = API.post('/vehicle/uploadAuctionImage',data);
@@ -227,6 +230,14 @@ const API = axios.create({
   vehicleApi.uploadAuctionVideo1 = async (data) => {
     try {
       const res = API.post('/vehicle/uploadAuctionVideo1',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+  vehicleApi.uploadAuctionVideo2 = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadAuctionVideo2',data);
       return res;
     } catch (error) {
       return error.response;
@@ -470,6 +481,16 @@ vehicleApi.deleteRto = async (data) => {
   }
 };
 
+
+// blog start here
+vehicleApi.uploadBlogImage = async (data) => {
+  try {
+    const res = API.post('/vehicle/uploadBlogImage',data);
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};
 
 
 

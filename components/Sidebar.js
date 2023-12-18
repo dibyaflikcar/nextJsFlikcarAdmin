@@ -62,6 +62,9 @@ const Sidebar = () => {
                 <Link href="/dashboard/auctionvehicle">-<FactoryIcon/> Auction Vehicle</Link>
               </AccordionDetails>
               <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
+                <Link href="/dashboard/inspection">-<FactoryIcon/> Inspection List</Link>
+              </AccordionDetails>
+              <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
                 <Link href="/dashboard/vehicleenquiry">-<FactoryIcon/> Vehicle Enquiry</Link>
               </AccordionDetails>
               <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
@@ -78,7 +81,7 @@ const Sidebar = () => {
               </AccordionDetails>
             </Accordion>                
           </Box>
-          {/* <Box className={`${dashboardStyles.tm_dashboard_siderbar_menu_odd} ${"tm_dashboard_siderbar_menu_odd_gb"}`}>
+          <Box className={`${dashboardStyles.tm_dashboard_siderbar_menu_odd} ${"tm_dashboard_siderbar_menu_odd_gb"}`}>
             <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
               <Box className={dashboardStyles.tm_dashboard_siderbar_menu_odd_icon_text}>
                 <AccordionSummary
@@ -86,14 +89,14 @@ const Sidebar = () => {
                   aria-controls="panel2bh-content"
                   id="panel2bh-header"
                 >
-                  <Link href="javascript:void(0)"><DirectionsCarIcon/>Vehicle Management</Link>
+                  <Link href="javascript:void(0)"><DirectionsCarIcon/>CMS</Link>
                 </AccordionSummary>
               </Box>
               <AccordionDetails className={dashboardStyles.tm_dashboard_siderbar_menu_details}>
-                <Link href="javascript:void(0)">-<FactoryIcon/> auction Vehicle</Link>
+                <Link href="/dashboard/blog">-<FactoryIcon/> Blog List</Link>
               </AccordionDetails>
             </Accordion>                
-          </Box> */}
+          </Box>
         </Box>
       </Grid>
     </>

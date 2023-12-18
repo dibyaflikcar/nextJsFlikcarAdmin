@@ -77,7 +77,7 @@ function User() {
       const response = await vehicleApi.getUsers();
             // console.log(response);
       if (response.data.status === 200) {
-        setUserList(response.data.data);
+        setUserList(response.data.data.reverse());
       }
       
     } catch (error) {

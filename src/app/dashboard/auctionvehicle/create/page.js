@@ -46,6 +46,7 @@ function Create() {
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   
   const [isLoader,setLoader]=useState(false);
+  const [isLoader2,setLoader2]=useState(false);
   const [brandlist, setBrandlist] = useState([]);
   const [brand, setBrand] = useState(null);
   const [modellist, setModelList] = useState([]);
@@ -111,6 +112,7 @@ function Create() {
   const [DentsPhotos  , setDentsPhotos ] = useState([]);
 
   const [engineVideo  , setEngineVideo ] = useState(null);
+  const [silencerVideo  , setSilencerVideo ] = useState(null);
   
 
   const [allCarImage, setAllcarImage] = useState([]);
@@ -395,14 +397,14 @@ function Create() {
       // console.log(e.target.files);
       
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<500000)
+      if(e.target.files[0].size<5000000)
       {
           setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
           uploadAuctionImage(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 500kb!")
+          alert("Image size should be less than 5MB!")
       }
       
       
@@ -410,69 +412,69 @@ function Create() {
 
     if (e.target.name === 'ExteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      if(e.target.files[0].size<500000)
+      if(e.target.files[0].size<5000000)
       {
           setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
           uploadAuctionImage2(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 500kb!")
+          alert("Image size should be less than 5MB!")
       }
       
     }
 
     if (e.target.name === 'InteriorPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      if(e.target.files[0].size<500000)
+      if(e.target.files[0].size<5000000)
       {
           setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
           uploadAuctionImage3(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 500kb!")
+          alert("Image size should be less than 5MB!")
       }
       
     }
 
     if (e.target.name === 'EnginePhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      if(e.target.files[0].size<500000)
+      if(e.target.files[0].size<5000000)
       {
           setEnginePhotos([...EnginePhotos, e.target.files[0]]);
           uploadAuctionImage4(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 500kb!")
+          alert("Image size should be less than 5MB!")
       }
       
     }
 
     if (e.target.name === 'TyresPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      if(e.target.files[0].size<500000)
+      if(e.target.files[0].size<5000000)
       {
           setTyresPhotos([...TyresPhotos, e.target.files[0]]);
           uploadAuctionImage5(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 500kb!")
+          alert("Image size should be less than 5MB!")
       }
     }
 
     if (e.target.name === 'DentsPhotos' && e.target.files.length > 0) {
       // console.log(e.target.files);
-      if(e.target.files[0].size<500000)
+      if(e.target.files[0].size<5000000)
       {
           setDentsPhotos([...DentsPhotos, e.target.files[0]]);
           uploadAuctionImage6(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 500kb!")
+          alert("Image size should be less than 5MB!")
       }
     }
 
@@ -490,6 +492,21 @@ function Create() {
           alert("Image size should be less than 10MB!")
       }
     }
+    if (e.target.name === 'silencerVideo' && e.target.files.length > 0) {
+     
+      // console.log(e.target.files);
+      if(e.target.files[0].size<10000000)
+      {
+          setLoader2(true);
+          uploadAuctionVideo2(e.target.files[0]);
+      }
+      else
+      {
+          alert("Image size should be less than 10MB!")
+      }
+    }
+
+    
 
 
   }
@@ -601,9 +618,28 @@ const uploadAuctionVideo1= async (data)=>{
   }
 }
 
+const uploadAuctionVideo2= async (data)=>{
+  const formData = new FormData();
+    formData.append('file', data);
+  const response = await vehicleApi.uploadAuctionVideo2(formData);
+  setLoader2(false);
+  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+    // console.log(response);
+    setSilencerVideo(response.data.data.path);
+    setAllcarVideo([...allCarVideo, response.data.data]);
+    
+    // console.log(response.data.data);
+  }
+}
+
+
 const handleRemoveVideo = async ()=>{
   setEngineVideo(null);
-  setAllcarVideo([]);
+  setAllcarVideo(prevArray => prevArray.filter(item => item.path !== engineVideo));
+}
+const handleRemoveVideo2 = async ()=>{
+  setSilencerVideo(null);
+  setAllcarVideo(prevArray => prevArray.filter(item => item.path !== silencerVideo));
 }
 
 
@@ -1317,7 +1353,35 @@ const handleCloseBtn = () => {
                         </Grid>
                       </Grid>
                   </Box>
-                  
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Silencer Video</Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='silencerVideo' hidden />
+                          </Button>
+                        </Box>                        
+                      </Grid>
+                      <Grid item md={9}>
+                              
+                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box>
+                                    {silencerVideo ? (<>
+                                    <video width="200" height="100" controls >
+                                      <source src={silencerVideo} type="video/mp4"/>
+                                    </video>
+                                    <Button onClick={() => handleRemoveVideo2()}><CloseIcon/> </Button>
+                                    </>):(<> {isLoader2?(<CircularProgress />):(<></>)}</>)}
+                                    
+                                </Box>
+                              </Box>
+                        </Grid>
+                      </Grid>
+                  </Box>
                 </Box>
 
                 <Box sx={{margin:'50px 0 0'}}>

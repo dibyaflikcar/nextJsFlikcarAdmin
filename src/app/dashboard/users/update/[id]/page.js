@@ -188,48 +188,88 @@ function Update({ params }) {
         
         //images
         
-        console.log(result.dealerOnboardFormData.docsImagePaths);
+        // console.log(result.dealerOnboardFormData.docsImagePaths);
         if(result.dealerOnboardFormData?.docsImagePaths)
         {
           setAllImage(result.dealerOnboardFormData.docsImagePaths);
           if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "pan"))
           {
             const pancardImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "pan");
-            setPancardPhoto(pancardImage[0].url);
+            setPancardPhoto(pancardImage[0].path);
           }
           
           if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofFront"))
           {
             const addressProofFrontImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofFront");
-            setAddressProofFrontPhoto(addressProofFrontImage[0].url);
+            setAddressProofFrontPhoto(addressProofFrontImage[0].path);
           }
           
           if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofBack"))
           {
             const addressProofBackImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "addressProofBack");
-            setAddressProofBackPhoto(addressProofBackImage[0].url);
+            setAddressProofBackPhoto(addressProofBackImage[0].path);
           }
           
           if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "tradeLicense"))
           {
             const tradeLicenseImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "tradeLicense");
-            setTradeLicensePhoto(tradeLicenseImage[0].url);
+            setTradeLicensePhoto(tradeLicenseImage[0].path);
           }
           
           if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "cancelledCheque"))
           {
             const cancelledChequeImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "cancelledCheque");
-            setCancelledChequePhoto(cancelledChequeImage[0].url);
+            setCancelledChequePhoto(cancelledChequeImage[0].path);
           }
           
           if(result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "shop"))
           {
             const shopImage = result.dealerOnboardFormData.docsImagePaths.filter((item) => item.type == "shop");
-            setShopPhoto(shopImage[0].url);
+            setShopPhoto(shopImage[0].path);
           }
           
         }
         
+        if(result.dealerOnboardFormData?.docImagePath)
+        {
+          setAllImage(result.dealerOnboardFormData.docImagePath);
+          if(result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "pan"))
+          {
+            const pancardImage = result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "pan");
+            setPancardPhoto(pancardImage[0].path);
+          }
+          
+          if(result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "addressProofFront"))
+          {
+            const addressProofFrontImage = result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "addressProofFront");
+            setAddressProofFrontPhoto(addressProofFrontImage[0].path);
+          }
+          
+          if(result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "addressProofBack"))
+          {
+            const addressProofBackImage = result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "addressProofBack");
+            setAddressProofBackPhoto(addressProofBackImage[0].path);
+          }
+          
+          if(result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "tradeLicense"))
+          {
+            const tradeLicenseImage = result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "tradeLicense");
+            setTradeLicensePhoto(tradeLicenseImage[0].path);
+          }
+          
+          if(result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "cancelledCheque"))
+          {
+            const cancelledChequeImage = result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "cancelledCheque");
+            setCancelledChequePhoto(cancelledChequeImage[0].path);
+          }
+          
+          if(result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "shop"))
+          {
+            const shopImage = result.dealerOnboardFormData.docImagePath.filter((item) => item.type == "shop");
+            setShopPhoto(shopImage[0].path);
+          }
+          
+        }
 
         
      
@@ -320,84 +360,84 @@ function Update({ params }) {
     if (e.target.name === 'PancardPhoto' && e.target.files.length > 0) {
       // console.log(e.target.files);
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<1000000)
+      if(e.target.files[0].size<2000000)
       {
           setPanImages([...panImages, e.target.files[0]]);
           uploadDealerDocumentImage(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 1MB!")
+          alert("Image size should be less than 2MB!")
       }
     }
 
     if (e.target.name === 'AddressProofFrontPhoto' && e.target.files.length > 0) {
       // console.log(e.target.files);
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<1000000)
+      if(e.target.files[0].size<2000000)
       {
         setAddressProofFrontImages([...AddressProofFrontImages, e.target.files[0]]);
           uploadDealerDocumentImage2(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 1MB!")
+          alert("Image size should be less than 2MB!")
       }
     }
 
     if (e.target.name === 'AddressProofBackPhoto' && e.target.files.length > 0) {
       // console.log(e.target.files);
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<1000000)
+      if(e.target.files[0].size<2000000)
       {
         setAddressProofBackImages([...AddressProofBackImages, e.target.files[0]]);
           uploadDealerDocumentImage3(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 1MB!")
+          alert("Image size should be less than 2MB!")
       }
     }
 
     if (e.target.name === 'TradeLicensePhoto' && e.target.files.length > 0) {
       // console.log(e.target.files);
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<1000000)
+      if(e.target.files[0].size<2000000)
       {
         setTradeLicenseImages([...TradeLicenseImages, e.target.files[0]]);
           uploadDealerDocumentImage4(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 1MB!")
+          alert("Image size should be less than 2MB!")
       }
     }
 
     if (e.target.name === 'CancelledChequePhoto' && e.target.files.length > 0) {
       // console.log(e.target.files);
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<1000000)
+      if(e.target.files[0].size<2000000)
       {
         setCancelledChequeImages([...CancelledChequeImages, e.target.files[0]]);
           uploadDealerDocumentImage5(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 1MB!")
+          alert("Image size should be less than 2MB!")
       }
     }
 
     if (e.target.name === 'ShopPhoto' && e.target.files.length > 0) {
       // console.log(e.target.files);
       // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<1000000)
+      if(e.target.files[0].size<2000000)
       {
         setShopImages([...ShopImages, e.target.files[0]]);
           uploadDealerDocumentImage6(e.target.files[0]);
       }
       else
       {
-          alert("Image size should be less than 1MB!")
+          alert("Image size should be less than 2MB!")
       }
     }
 

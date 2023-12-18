@@ -20,13 +20,10 @@ import TableRow from '@mui/material/TableRow';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Link from 'next/link';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
-// import ArraytoCsv from '../../../../components/ArraytoCsv';
-
-
-
-function Enquiry() {  
-  const [vehicleEnquiry,setVehicleEnquiry]=useState([]);
+function Auctionvehicle() {  
+  const [auctionData,setAuctionData]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -45,11 +42,11 @@ function Enquiry() {
 
   const fetchData = async () => {
     try {
-      const response = await vehicleApi.getVehicleEnquiry();
-            // console.log(response);
-      if (response.data.status === 200) {
-          setVehicleEnquiry(response.data.data.reverse());
-      }
+      // const response = await vehicleApi.getAuction();
+      //       // console.log(response.data.data);
+      // if (response.data.status === 200) {
+      //     setAuctionData(response.data.data.reverse());
+      // }
       
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -62,19 +59,15 @@ function Enquiry() {
     if (userConfirmed) {
       // Perform the action when the user clicks OK
       const formData={id};
-      const response = await vehicleApi.deleteVehicleEnquiry(formData);
+      const response = await vehicleApi.deleteAuctionVehicle(formData);
       if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
         // console.log(response);
-        alert("you have deleted successfully");
+        alert("car has been deleted");
         fetchData();
         
       }
     } 
   }
-
-  const handleDownloadCsv = () => {
-    ArraytoCsv(vehicleEnquiry, 'Enquiry-list.csv');
-  };
 
  
   return (
@@ -88,67 +81,51 @@ function Enquiry() {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'> Vehicle Enquiry</Typography>
+                    <Typography variant='h4'>Inspection Vehicle List</Typography>
                   </Box>
-                  {/* <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
-                    <Button variant="contained" onClick={handleDownloadCsv}>Download CSV</Button>
-                  </Box> */}
+                  <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
+                    <Link href="/dashboard/inspection/create"><Button variant="contained">Add</Button></Link>
+                  </Box>
                 </Box>
                  
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>            
-                  <TableContainer sx={{ maxHeight: 700 }}>
+                  <TableContainer sx={{ maxHeight: 800 }}>
                     <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" colSpan={8}>Vehicle Enquiry List</TableCell>
+                          <TableCell align="center" colSpan={8}>Auction List</TableCell>
                           {/* <TableCell align="center" colSpan={3}>List</TableCell> */}
                         </TableRow>
                         <TableRow>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Model	</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Phone</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Image</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand Model Variant	</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Kms Driven</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Reg Year</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Status</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Created At</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>View Bid</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
                       
                       <TableBody>
-                                {vehicleEnquiry.map((data,key) => {
-
-                                  const date = new Date(data.createdAt);
-                                  const year = date.getFullYear();
-                                  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-                                  const day = date.getDate().toString().padStart(2, '0');
-                                  const hours = date.getHours().toString().padStart(2, '0');
-                                  const minutes = date.getMinutes().toString().padStart(2, '0');
-                                  const createdAt = `${year}-${month}-${day} ${hours}:${minutes}`;
-                                  return (
+                                {auctionData.map((data,key) => (
                                     <TableRow key={key}>
                                       <TableCell align="center" component="th" scope="row">{data.id}</TableCell>
-                                      <TableCell align="center" >{data.brand} </TableCell>
-                                      <TableCell align="center">{data.model} </TableCell>
-                                      <TableCell align="center">{data.phone}</TableCell>
-                                      <TableCell align="center">{data.registrationYear}</TableCell>
-                                      <TableCell align="center">{data.status}</TableCell>
-                                      <TableCell align="center">{data.createdAt ? createdAt : 'N/A'}</TableCell>
-                                      <TableCell align="center">
-                                        {/* <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link>  */}
-                                        <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
-                                      </TableCell>
+                                      <TableCell align="center" ><Image src={data.carDetails.imagePath} alt='Image' height={50} width={50}  /></TableCell>
+                                      <TableCell align="center">{data.carDetails.brand} {data.carDetails.model} {data.carDetails.variant}</TableCell>
+                                      <TableCell align="center">{data.carDetails.kmsDriven}</TableCell>
+                                      <TableCell align="center">{data.carDetails.registrationYear}</TableCell>
+                                      <TableCell align="center"><Link as={`bid/${data.id}`} href={`bid?id=${data.id}`}><RemoveRedEyeIcon /></Link> </TableCell>
+                                      <TableCell align="center"><Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /></TableCell>
                                     </TableRow>
-                                  );
-                                    
-                                  })}
+                                  ))}
                       </TableBody>
                     </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={vehicleEnquiry.length}
+        count={auctionData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -164,4 +141,4 @@ function Enquiry() {
   )
 }
 
-export default Enquiry
+export default Auctionvehicle

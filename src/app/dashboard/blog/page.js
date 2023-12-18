@@ -7,7 +7,7 @@ import '../../globals.css';
 import Sidebar from '../../../../components/Sidebar';
 import Header from '../../../../components/Header';
 import Paper from '@mui/material/Paper';
-import {vehicleApi} from '../../../app/service/vehicle';
+import {globalApi} from '../../../app/service/global';
 
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -20,13 +20,10 @@ import TableRow from '@mui/material/TableRow';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Link from 'next/link';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
-// import ArraytoCsv from '../../../../components/ArraytoCsv';
-
-
-
-function Enquiry() {  
-  const [vehicleEnquiry,setVehicleEnquiry]=useState([]);
+function Blog() {  
+  const [blogList,setBlogList]=useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -45,10 +42,10 @@ function Enquiry() {
 
   const fetchData = async () => {
     try {
-      const response = await vehicleApi.getVehicleEnquiry();
-            // console.log(response);
+      const response = await globalApi.getBlog();
+            // console.log(response.data.data);
       if (response.data.status === 200) {
-          setVehicleEnquiry(response.data.data.reverse());
+        setBlogList(response.data.data.reverse());
       }
       
     } catch (error) {
@@ -58,23 +55,19 @@ function Enquiry() {
 
   const handleDelete = async (id) => {
     // alert(id);
-    const userConfirmed = confirm("Do you want to delete this car?");
+    const userConfirmed = confirm("Do you want to delete this blog?");
     if (userConfirmed) {
       // Perform the action when the user clicks OK
       const formData={id};
-      const response = await vehicleApi.deleteVehicleEnquiry(formData);
+      const response = await globalApi.deleteBlog(formData);
       if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
         // console.log(response);
-        alert("you have deleted successfully");
+        alert("blog has been deleted");
         fetchData();
         
       }
     } 
   }
-
-  const handleDownloadCsv = () => {
-    ArraytoCsv(vehicleEnquiry, 'Enquiry-list.csv');
-  };
 
  
   return (
@@ -88,36 +81,32 @@ function Enquiry() {
               <Box className={dashboardStyles.tm_auctionvehicle_table_main}>
                 <Box className={dashboardStyles.tm_auctionvehicle_table_main_top}>
                   <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_title}>
-                    <Typography variant='h4'> Vehicle Enquiry</Typography>
+                    <Typography variant='h4'>Blog List</Typography>
                   </Box>
-                  {/* <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
-                    <Button variant="contained" onClick={handleDownloadCsv}>Download CSV</Button>
-                  </Box> */}
+                  <Box className={dashboardStyles.tm_auctionvehicle_table_main_top_btn}>
+                    <Link href="/dashboard/blog/create"><Button variant="contained">Add</Button></Link>
+                  </Box>
                 </Box>
                  
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>            
-                  <TableContainer sx={{ maxHeight: 700 }}>
+                  <TableContainer sx={{ maxHeight: 800 }}>
                     <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" colSpan={8}>Vehicle Enquiry List</TableCell>
+                          <TableCell align="center" colSpan={8}>Blog List</TableCell>
                           {/* <TableCell align="center" colSpan={3}>List</TableCell> */}
                         </TableRow>
                         <TableRow>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Id</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Brand</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Model	</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Phone</TableCell>
-                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Reg Year</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Image</TableCell>
+                            <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Title</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Status</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Created At</TableCell>
                             <TableCell  align="center" style={{ top: 57, minWidth: 170 }}>Action</TableCell>
                         </TableRow>
                       </TableHead>
-                      
                       <TableBody>
-                                {vehicleEnquiry.map((data,key) => {
-
+                                {blogList.map((data,key) => {
                                   const date = new Date(data.createdAt);
                                   const year = date.getFullYear();
                                   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
@@ -126,16 +115,14 @@ function Enquiry() {
                                   const minutes = date.getMinutes().toString().padStart(2, '0');
                                   const createdAt = `${year}-${month}-${day} ${hours}:${minutes}`;
                                   return (
-                                    <TableRow key={key}>
+                                      <TableRow key={key}>
                                       <TableCell align="center" component="th" scope="row">{data.id}</TableCell>
-                                      <TableCell align="center" >{data.brand} </TableCell>
-                                      <TableCell align="center">{data.model} </TableCell>
-                                      <TableCell align="center">{data.phone}</TableCell>
-                                      <TableCell align="center">{data.registrationYear}</TableCell>
+                                      <TableCell align="center" ><Image src={data.imagePath} alt='Image' height={50} width={50}  /></TableCell>
+                                      <TableCell align="center">{data.title}</TableCell>
                                       <TableCell align="center">{data.status}</TableCell>
-                                      <TableCell align="center">{data.createdAt ? createdAt : 'N/A'}</TableCell>
+                                      <TableCell align="center">{createdAt}</TableCell>
                                       <TableCell align="center">
-                                        {/* <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link>  */}
+                                        <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> 
                                         <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
                                       </TableCell>
                                     </TableRow>
@@ -148,7 +135,7 @@ function Enquiry() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={vehicleEnquiry.length}
+        count={blogList.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -164,4 +151,4 @@ function Enquiry() {
   )
 }
 
-export default Enquiry
+export default Blog
