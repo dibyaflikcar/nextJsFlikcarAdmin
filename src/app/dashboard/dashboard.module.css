@@ -1,0 +1,280 @@
+
+.tm_dashboard_siderbar_main{
+    background-color: #405189;
+    padding: 30px 20px;
+    height: 100vh;
+    position: fixed;
+    width: 17%;
+}
+.tm_dashboard_siderbar_logo{
+    text-align: center;
+}
+.tm_dashboard_siderbar_logo img{
+    width: 80px !important;
+}
+.tm_dashboard_siderbar_title{
+    margin: 20px 0;
+}
+.tm_dashboard_siderbar_title h4{
+    color: #ececec;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+/* .tm_dashboard_siderbar_menu_icon_text{
+    
+} */
+.tm_dashboard_siderbar_menu_icon_text a{
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+.tm_dashboard_siderbar_menu_icon_text a:hover{
+    color: #45c08d;
+}
+.tm_dashboard_siderbar_menu_icon_text svg{
+    margin-right: 5px;
+}
+.tm_dashboard_siderbar_menu_odd{
+    margin: 15px 0;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text a{  
+    display: flex;
+    align-items: center;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text svg{  
+    margin-right: 5px;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text a{
+    color: #fff;
+}
+.tm_dashboard_siderbar_menu_odd_icon_text svg{
+    color: #fff;
+}
+.tm_dashboard_siderbar_menu_details a{
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+}
+.tm_dashboard_siderbar_menu_details a svg{
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.tm_dashboard_rightbar_main{    
+    height: 100%;    
+}
+/* dashboard_header */
+.tm_dashboard_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 50px;
+    background-color: #fff;
+}
+.tm_dashboard_header_right button{
+    color: #45c08d;
+    font-weight: 700;
+    padding: 0;
+}
+.tm_dashboard_header_right_bd_tlt{
+    display: contents;
+    align-items: center;
+}
+.tm_dashboard_header_left svg{
+    font-size: 40px;
+}
+.tm_dashboard_header_right_bd_tlt_icon img{
+    width: 60px !important;
+    margin-right: 10px;
+}
+.tm_dashboard_header_right_bd_tlt_text{
+    text-align: left;
+}
+.tm_dashboard_header_right_bd_tlt_text h5{
+    color: #212529;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+.tm_dashboard_header_right_bd_tlt_text h6{
+    color: #212529;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+.tm_dashboard_rightbar_panel_main{
+    padding: 50px;
+}
+.tm_dashboard_rightbar_panel{
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20px;
+}
+.tm_dashboard_rightbar_panel_text h5{
+    color: #797979;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.tm_dashboard_rightbar_panel_text h3{
+    color: #212529;
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.tm_dashboard_rightbar_panel_text a{
+    color: #45c08d;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;   
+}
+.tm_dashboard_rightbar_panel_icon{
+    width: 60px;
+    height: 60px;
+    background-color: #45c08d;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+.tm_dashboard_rightbar_panel_icon svg{
+    color: #fff;
+    font-size: 30px;
+}
+/* auctionvehicle */
+.tm_auctionvehicle_table_main{
+    padding: 30px 50px;
+}
+.tm_auctionvehicle_table_main_top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.tm_auctionvehicle_table_main_top_btn button{
+    background-color: #45c08d;
+    width: 150px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 20px;
+    padding: 7px;
+    border: 2px solid #45c08d;
+}
+.tm_auctionvehicle_table_main_top_btn button:hover{
+    color: #45c08d;
+    background-color: transparent;
+}
+.tm_auctionvehicle_table_phone a{
+    
+    font-weight: 700;
+}
+.tm_auctionvehicle_table_phone a:hover{
+    color: #45c08d;
+}
+/* dashboard_rightbar_form */
+.tm_dashboard_rightbar_form_main{
+    padding: 50px;
+}
+.tm_dashboard_rightbar_form_title {
+    margin-bottom: 20px;
+}
+.tm_dashboard_rightbar_form_title h3{
+    color: #050505;
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    font-weight: 600;  
+    text-transform: capitalize;
+}
+.tm_dashboard_img_upl{
+    margin-top: 20px;
+}
+.tm_dashboard_img_upl_title{
+    margin: 25px 0 0;
+}
+.tm_dashboard_img_upl_title h4{
+    color: #050505;
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 600;  
+    text-transform: capitalize;
+}
+.tm_dashboard_img_upl_btns button{
+    background-color: #45c08d;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 700;   
+    padding: 15px;
+    border: 2px solid #45c08d;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.tm_dashboard_img_upl_btns button:hover{
+    background-color: transparent;
+    color: #45c08d;
+}
+.tm_dashboard_img_upl_panel{
+    background-color: #eee;
+    padding: 30px;
+    margin-top: 20px;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
+.tm_dashboard_img_upl_panel_title h6{
+    color: #050505;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;  
+    text-transform: capitalize;
+}
+.tm_dashboard_rightbar_form_submit_btn {
+    text-align: center;
+}
+.tm_dashboard_rightbar_form_submit_btn button{
+    background-color: #000;
+    width: 25%;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 30px;
+    padding: 12px;
+    border: 2px solid #000;
+}
+.tm_dashboard_rightbar_form_submit_btn_odd button:hover{
+    color: #000;
+    background-color: transparent;
+}
+.tm_dashboard_rightbar_add_brand_title{
+    color: #45c08d;
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    font-weight: 700;  
+    text-transform: capitalize;
+    text-align: center;
+}
+.tm_dashboard_rightbar_form_panel_odd{
+    padding-top: 10px;
+}
+.tm_dashboard_rightbar_form_submit_btn_odd {
+    text-align: center;
+}
+.tm_dashboard_rightbar_form_submit_btn_odd button{
+    background-color: #000;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 30px;
+    padding: 12px;
+    border: 2px solid #000;
+}
+.tm_dashboard_rightbar_form_submit_btn button:hover{
+    color: #000;
+    background-color: transparent;
+}
