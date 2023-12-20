@@ -25,11 +25,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { useRouter } from 'next/navigation';
@@ -40,88 +36,117 @@ import { useRouter } from 'next/navigation';
 function Create() {  
 
   const router = useRouter()
-  // const [open, setOpen] = React.useState(false);
-  // const anchorRef = React.useRef(null);
-  // const [page, setPage] = React.useState(0);
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  
-  const [isLoader,setLoader]=useState(false);
-  const [isLoader2,setLoader2]=useState(false);
+
+  // Basic Document Part
+  const [years, setYears] = useState([]);
+  const [carList,setCarList]=useState([]);
+  const [inspectorList,setInspectorList]=useState([]);
+
+  const [vehicle, setVehicle]=useState("");
+  const [inspector, setInspector]=useState("");
+  const [custContactNo, setCustContactNo]=useState("");
+  const [cityList, setCityList]=useState([]);
+  const [city, setCity]=useState("");
+  const [regType, setRegType]=useState("");
+  const [regNo, setRegNo]=useState("");
+  const [rcAvailability, setRcAvailability]=useState("");
+  const [rcCondition, setRcCondition]=useState("");
+  const [regDate, setRegistrationDate]=useState(null);
+  const [fitnessUpto, setFitnessuptoDate]=useState(null);
+  const [tobeScraped, setTobeScraped]=useState(null);
+  const [regState, setRegState]=useState(null);
+  const [rtoList, setrtoList]=useState([]);
+  const [rto, setRto]=useState(null);
+  const [ownerSerialNo, setOwnerSerialNo]=useState(null);
   const [brandlist, setBrandlist] = useState([]);
   const [brand, setBrand] = useState(null);
   const [modellist, setModelList] = useState([]);
   const [model, setModel] = useState(null);
   const [variantList, setVariantList] = useState([]);
   const [variant, setVariant] = useState(null);
-  
-  const [years, setYears] = useState([]);
-  const [regYear, setregYear] = useState(null);
-  const [bodyTypelist, setbodyTypelist]=useState([]);
-  const [bodyType, setbodyType]=useState(null);
+  const [engineNo, setEngineNo] = useState(null);
+  const [chassisNo, setChassisNo] = useState(null);
+  const [regOwnerName, setRegOwnerName] = useState(null);
+  const [mfgMonth, setMfgMonth] = useState(null);
+  const [mfgYear, setMfgYear] = useState(null);
   const [fuelTypelist, setfuelTypelist]=useState([]);
   const [fuelType, setfuelType]=useState(null);
-  const [transmission, setTransmission]=useState(null);
-  const [ownerTypelist, setownerTypelist]=useState([]);
-  const [ownerType, setownerType]=useState(null);
-  const [colorList, setcolorList]=useState([]);
-  const [color, setColor]=useState(null);
-  const [rtoList, setrtoList]=useState([]);
-  const [rto, setRto]=useState(null);
-  const [cityList, setCityList]=useState([]);
-  const [city, setCity]=useState(null);
-  const [kmsDriven, setkmsDriven]=useState(null);
-  const [carPrice, setcarPrice]=useState(null);
-  const [oneClickBuyPrice, setOneClickBuyPrice]=useState(null);
-  const [description, setDescription]=useState(null);
+  const [cc, setCC]=useState(null);
+  const [hypoDetails, setHypoDetails]=useState(null);
   const [seatList, setseatList]=useState([]);
   const [seat, setSeat]=useState(null);
-
-  const [mileage, setMileage]=useState(null);
-  const [engine, setEngine]=useState(null);
-  const [maxPower, setmaxPower]=useState(null);
-  const [maxTorque, setMaxTorque]=useState(null);
-  const [noc, setNoc]=useState(null);
-  const [mfgYear, setmfgYear]=useState(null);
-  const [inspectionReport, setInspectionReport]=useState(null);
-  const [insuranceValidity, setInsuranceValidity]=useState(null);
+  const [missmatchRC, setMissmatchRC]=useState(null);
   const [roadTaxValidity, setRoadTaxValidity]=useState(null);
-  const [inspectionScore, setInspectionScore]=useState(null);
-
-  const [auctionStartTime, setAuctionStartTime]=useState(null);
-  const [auctionEndTime, setAuctionEndTime]=useState(null);
+  const [roadTaxValidUpto, setRoadTaxValidUpto]=useState(null);
+  const [insurance, setInsurance]=useState(null);
+  const [insuranceValidity, setInsuranceValidity]=useState(null);
+  const [noClaimBonus, setNoClaimBonus]=useState(null);
+  const [missmatchInsurance, setMissmatchInsurance]=useState(null);
+  const [duplicateKey, setDuplicateKey]=useState(null);
+  const [rtoNoc, setRtoNoc]=useState(null);
+  const [rtoNocIssueDate, setRtoNocIssueDate]=useState(null);
+  const [commentsOnBasic, setCommentsOnBasic] = useState([]);
+  const [rcAvailabilityImages, setRcAvailabilityImages] = useState([]);
+  const [chassisImages, setChassisImages] = useState([]);
+  const [hypoImages, setHypoImages] = useState([]);
+  const [roadTaxValidityImages, setRoadTaxValidityImages] = useState([]);
+  const [insuranceImages, setInsuranceImages] = useState([]);
+  const [duplicateKeyImages, setDuplicateKeyImages] = useState([]);
+  const [rtoNocImages, setRtoNocImages] = useState([]);
+  const [isLoader,setLoader]=useState(false);
+  const [isLoader2,setLoader2]=useState(false);
+  const [isLoader3,setLoader3]=useState(false);
+  const [isLoader4,setLoader4]=useState(false);
+  const [isLoader5,setLoader5]=useState(false);
+  const [isLoader6,setLoader6]=useState(false);
+  const [isLoader7,setLoader7]=useState(false);
+  const [engine, setEngine]=useState(null);
+  const [battery, setBattery]=useState(null);
+  const [coolant, setCoolant]=useState(null);
+  const [engineOilDipstick, setEngineOilDipstick]=useState(null);
+  const [engineOil, setEngineOil]=useState(null);
+  const [engineMount, setEngineMount]=useState(null);
+  const [engineBlowbyStatus, setEngineBlowbyStatus]=useState(null);
+  const [exhaustSmoke, setExhaustSmoke]=useState(null);
+  const [radiator, setRadiator]=useState(null);
+  const [clutch, setClutch]=useState(null);
+  const [gear, setGear]=useState(null);
+  const [steering, setSteering]=useState(null);
+  const [brake, setBrake]=useState(null);
+  const [suspension, setSuspension]=useState(null);
+  const [commentsOnEngine, setCommentsOnEngine] = useState([]);
+  const [commentsOnTransmission, setCommentsOnTransmission] = useState([]);
+  const [fuelLevel, setFuelLevel]=useState(null);
+  const [electrical, setElectrical]=useState(null);
+  const [rearWiper, setRearWiper]=useState(null);
+  const [rearDefogger, setRearDefogger]=useState(null);
+  const [powerWindow, setPowerWindow]=useState(null);
+  const [rhsFrontPW, setRhsFrontPW]=useState(null);
+  const [lhsFrontPW, setLhsFrontPW]=useState(null);
+  const [lhsRearPW, setLhsRearPW]=useState(null);
+  const [rhsRearPW, setRhsRearPW]=useState(null);
+  const [leatherSeats, setLeatherSeats]=useState(null);
+  const [fabricSeats, setFabricSeats]=useState(null);
+  const [commentsOnInterior, setCommentsOnInterior] = useState([]);
+  const [commentsOnElectrical, setCommentsOnElectrical] = useState([]);
+  const [bonnet, setBonnet]=useState(null);
+  const [upperCrossMember, setUpperCrossMember]=useState(null);
+  const [lowerCrossMember, setLowerCrossMember]=useState(null);
+  const [radiatorSupport, setRadiatorSupport]=useState(null);
+  const [headlightSupport, setHeadlightSupport]=useState(null);
+  const [lhsApron, setLhsApron]=useState(null);
+  const [rhsApron, setRhsApron]=useState(null);
+  const [frontWindshield, setFrontWindshield]=useState(null);
+  const [firewall, setFirewall]=useState(null);
+  const [cowlTop, setCowlTop]=useState(null);
+  const [roof, setRoof]=useState(null);
+  const [frontBumper, setFrontBumper]=useState(null);
+  const [lhsHeadlamp, setLhsHeadlamp]=useState(null);
+  const [rhsHeadlamp, setRhsHeadlamp]=useState(null);
+  
   
 
-  const [comforts, setComforts] = useState([]);
-  const [safety, setSafety] = useState([]);
-  const [interior, setInterior] = useState([]);
-  const [exterior, setExterior] = useState([]);
-  const [entertainment, setEntertainment] = useState([]);
 
-  const [comfortList, setComfortList] = useState([]);
-  const [safetyList, setSafetyList] = useState([]);
-  const [interiorList, setInteriorList] = useState([]);
-  const [exteriorList, setExteriorList] = useState([]);
-  const [entertainmentList, setEntertainmentList] = useState([]);
-
-  const [popupOpen, setPopupopen] = useState(false);
-  const [ThumbnailPhotos, setThumbnailPhotos] = useState([]);
-  const [ExteriorPhotos , setExteriorPhotos] = useState([]);
-  const [InteriorPhotos  , setInteriorPhotos ] = useState([]);
-  const [EnginePhotos  , setEnginePhotos ] = useState([]);
-  const [TyresPhotos  , setTyresPhotos ] = useState([]);
-  const [DentsPhotos  , setDentsPhotos ] = useState([]);
-
-  const [engineVideo  , setEngineVideo ] = useState(null);
-  const [silencerVideo  , setSilencerVideo ] = useState(null);
-  
-
-  const [allCarImage, setAllcarImage] = useState([]);
-  const [thumbImage, setThumbImage] = useState([]);
-
-  const [allCarVideo, setAllcarVideo] = useState([]);
-
-  const [error, setError] = useState("");
-  
   useEffect(() => {
     getMakeModel();
     getBodytype();
@@ -131,9 +156,9 @@ function Create() {
     getRto();
     getCity();
     getSeat();
-
-
     getCarFeatureList([]);
+    getCarList();
+    getInspectorList();
   
     const currentYear = new Date().getFullYear();
     const startYear = 2000;
@@ -144,6 +169,32 @@ function Create() {
     setYears(yearsArray);
 
   }, []); 
+
+  const getCarList = async () => {
+    try {
+      const response = await vehicleApi.getAuction();
+            // console.log(response.data.data);
+      if (response.data.status === 200) {
+          setCarList(response.data.data.reverse());
+      }
+      
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const getInspectorList = async () => {
+    try {
+      const response = await vehicleApi.getInspectorList();
+            // console.log(response.data.data);
+      if (response.data.status === 200) {
+        setInspectorList(response.data.data.reverse());
+      }
+      
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const getMakeModel = async () => {
     try {
@@ -235,7 +286,6 @@ function Create() {
     }
   };
   
-
   const getSeat = async () => {
     try {
       const response = await vehicleApi.getSeat();
@@ -268,6 +318,43 @@ function Create() {
 
   const handleInput= async(e)=>{
     
+    // Basic Document Part
+    if (e.target.name === 'vehicle') {
+      setVehicle(e.target.value);
+    }
+    if (e.target.name === 'inspector') {
+      setInspector(e.target.value);
+    }
+    if (e.target.name === 'custContactNo') {
+      setCustContactNo(e.target.value);
+    }
+    if (e.target.name === 'city') {
+      setCity(e.target.value);
+    }
+    if (e.target.name === 'regType') {
+      setRegType(e.target.value);
+    }
+    if (e.target.name === 'regNo') {
+      setRegNo(e.target.value);
+    }
+    if (e.target.name === 'rcAvailability') {
+      setRcAvailability(e.target.value);
+    }
+    if (e.target.name === 'rcCondition') {
+      setRcCondition(e.target.value);
+    }
+    if (e.target.name === 'tobeScraped') {
+      setTobeScraped(e.target.value);
+    }
+    if (e.target.name === 'regState') {
+      setRegState(e.target.value);
+    }
+    if (e.target.name === 'rto') {
+      setRto(e.target.value);
+    }
+    if (e.target.name === 'ownerSerialNo') {
+      setOwnerSerialNo(e.target.value);
+    }
     if (e.target.name === 'brand') {
       setBrand(e.target.value);
     
@@ -284,390 +371,409 @@ function Create() {
       {
         setVariantList(filteredResult[0].variants);
       }
-      
     }
     if(e.target.name === "variant")
     {
       setVariant(e.target.value);
     }
-    if (e.target.name === 'regYear') {
-      setregYear(e.target.value);
+    if(e.target.name === "engineNo")
+    {
+      setEngineNo(e.target.value);
     }
-    if (e.target.name === 'bodyType') {
-      setbodyType(e.target.value);
+    if(e.target.name === "chassisNo")
+    {
+      setChassisNo(e.target.value);
+    }
+    if(e.target.name === "regOwnerName")
+    {
+      setRegOwnerName(e.target.value);
+    }
+    if(e.target.name === "mfgMonth")
+    {
+      setMfgMonth(e.target.value);
+    }
+    if(e.target.name === "mfgYear")
+    {
+      setMfgYear(e.target.value);
     }
     if (e.target.name === 'fuelType') {
       setfuelType(e.target.value);
     }
-    if (e.target.name === 'transmission') {
-      setTransmission(e.target.value);
+    if (e.target.name === 'cc') {
+      setCC(e.target.value);
     }
-    if (e.target.name === 'ownerType') {
-      setownerType(e.target.value);
-    }
-    if (e.target.name === 'color') {
-      setColor(e.target.value);
-    }
-    if (e.target.name === 'rto') {
-      setRto(e.target.value);
-    }
-    if (e.target.name === 'city') {
-      setCity(e.target.value);
-    }
-    if (e.target.name === 'kmsDriven') {
-      setkmsDriven(e.target.value);
-    }
-    if (e.target.name === 'carPrice') {
-      setcarPrice(e.target.value);
-    }
-    if (e.target.name === 'oneClickBuyPrice') {
-      setOneClickBuyPrice(e.target.value);
-    }
-    if (e.target.name === 'description') {
-      setDescription(e.target.value);
+    if (e.target.name === 'hypoDetails') {
+      setHypoDetails(e.target.value);
     }
     if (e.target.name === 'seat') {
       setSeat(e.target.value);
     }
-    if (e.target.name === 'mileage') {
-      setMileage(e.target.value);
+    if (e.target.name === 'missmatchRC') {
+      setMissmatchRC(e.target.value);
+    }
+    if (e.target.name === 'roadTaxValidity') {
+      setRoadTaxValidity(e.target.value);
+    }
+    if (e.target.name === 'insurance') {
+      setInsurance(e.target.value);
+    }
+    if (e.target.name === 'noClaimBonus') {
+      setNoClaimBonus(e.target.value);
+    }
+    if (e.target.name === 'missmatchInsurance') {
+      setMissmatchInsurance(e.target.value);
+    }
+    if (e.target.name === 'duplicateKey') {
+      setDuplicateKey(e.target.value);
+    }
+    if (e.target.name === 'rtoNoc') {
+      setRtoNoc(e.target.value);
+    }
+    if (e.target.name === 'commentsOnBasic') {
+      if (e.target.checked) {
+        setCommentsOnBasic([...commentsOnBasic, e.target.value]);
+      } else {
+        setCommentsOnBasic(commentsOnBasic.filter((element) => Number(element) !== Number(e.target.value)));
+      }
+    }
+    if (e.target.name === 'rcAvailabilityImages' && e.target.files.length > 0) {
+        uploadInspectionImage(e.target.files[0]);
+    }
+    if (e.target.name === 'chassisImages' && e.target.files.length > 0) {
+        uploadInspectionImage2(e.target.files[0]);
+    }
+    if (e.target.name === 'hypoImages' && e.target.files.length > 0) {
+      uploadInspectionImage3(e.target.files[0]);
+    }
+    if (e.target.name === 'roadTaxValidityImages' && e.target.files.length > 0) {
+      uploadInspectionImage4(e.target.files[0]);
+    }
+    if (e.target.name === 'insuranceImages' && e.target.files.length > 0) {
+      uploadInspectionImage5(e.target.files[0]);
+    }
+    if (e.target.name === 'duplicateKeyImages' && e.target.files.length > 0) {
+      uploadInspectionImage6(e.target.files[0]);
+    }
+    if (e.target.name === 'rtoNocImages' && e.target.files.length > 0) {
+      uploadInspectionImage7(e.target.files[0]);
     }
     if (e.target.name === 'engine') {
       setEngine(e.target.value);
     }
-    if (e.target.name === 'maxPower') {
-      setmaxPower(e.target.value);
+    if (e.target.name === 'battery') {
+      setBattery(e.target.value);
     }
-    if (e.target.name === 'maxTorque') {
-      setMaxTorque(e.target.value);
+    if (e.target.name === 'coolant') {
+      setCoolant(e.target.value);
     }
-    if (e.target.name === 'noc') {
-      setNoc(e.target.value);
+    if (e.target.name === 'engineOilDipstick') {
+      setEngineOilDipstick(e.target.value);
     }
-    if (e.target.name === 'mfgYear') {
-      setmfgYear(e.target.value);
+    if (e.target.name === 'engineOil') {
+      setEngineOil(e.target.value);
     }
-    if (e.target.name === 'inspectionReport') {
-      setInspectionReport(e.target.value);
+    if (e.target.name === 'engineMount') {
+      setEngineMount(e.target.value);
     }
-    if (e.target.name === 'inspectionScore') {
-      setInspectionScore(e.target.value);
+    if (e.target.name === 'engineBlowbyStatus') {
+      setEngineBlowbyStatus(e.target.value);
     }
-    if (e.target.name === 'comforts') {
+    if (e.target.name === 'exhaustSmoke') {
+      setExhaustSmoke(e.target.value);
+    }
+    if (e.target.name === 'radiator') {
+      setRadiator(e.target.value);
+    }
+    if (e.target.name === 'clutch') {
+      setClutch(e.target.value);
+    }
+    if (e.target.name === 'gear') {
+      setGear(e.target.value);
+    }
+    if (e.target.name === 'steering') {
+      setSteering(e.target.value);
+    }
+    if (e.target.name === 'brake') {
+      setBrake(e.target.value);
+    }
+    if (e.target.name === 'suspension') {
+      setSuspension(e.target.value);
+    }
+    if (e.target.name === 'commentsOnEngine') {
       if (e.target.checked) {
-        setComforts([...comforts, e.target.value]);
+        setCommentsOnEngine([...commentsOnEngine, e.target.value]);
       } else {
-        setComforts(comforts.filter((element) => Number(element) !== Number(e.target.value)));
+        setCommentsOnEngine(commentsOnEngine.filter((element) => Number(element) !== Number(e.target.value)));
       }
     }
-
-    if (e.target.name === 'safety') {
+    if (e.target.name === 'commentsOnTransmission') {
       if (e.target.checked) {
-        setSafety([...safety, e.target.value]);
+        setCommentsOnTransmission([...commentsOnTransmission, e.target.value]);
       } else {
-        setSafety(safety.filter((element) => Number(element) !== Number(e.target.value)));
+        setCommentsOnTransmission(commentsOnTransmission.filter((element) => Number(element) !== Number(e.target.value)));
       }
     }
-
-    if (e.target.name === 'interior') {
+    if (e.target.name === 'fuelLevel') {
+      setFuelLevel(e.target.value);
+    }
+    if (e.target.name === 'electrical') {
+      setElectrical(e.target.value);
+    }
+    if (e.target.name === 'rearWiper') {
+      setRearWiper(e.target.value);
+    }
+    if (e.target.name === 'rearDefogger') {
+      setRearDefogger(e.target.value);
+    }
+    if (e.target.name === 'powerWindow') {
+      setPowerWindow(e.target.value);
+    }
+    if (e.target.name === 'rhsFrontPW') {
+      setRhsFrontPW(e.target.value);
+    }
+    if (e.target.name === 'lhsFrontPW') {
+      setLhsFrontPW(e.target.value);
+    }
+    if (e.target.name === 'lhsRearPW') {
+      setLhsRearPW(e.target.value);
+    }
+    if (e.target.name === 'rhsRearPW') {
+      setRhsRearPW(e.target.value);
+    }
+    if (e.target.name === 'leatherSeats') {
+      setLeatherSeats(e.target.value);
+    }
+    if (e.target.name === 'fabricSeats') {
+      setFabricSeats(e.target.value);
+    }
+    if (e.target.name === 'commentsOnInterior') {
       if (e.target.checked) {
-        setInterior([...interior, e.target.value]);
+        setCommentsOnInterior([...commentsOnInterior, e.target.value]);
       } else {
-        setInterior(interior.filter((element) => Number(element) !== Number(e.target.value)));
+        setCommentsOnInterior(commentsOnInterior.filter((element) => Number(element) !== Number(e.target.value)));
       }
     }
-
-    if (e.target.name === 'exterior') {
+    if (e.target.name === 'commentsOnElectrical') {
       if (e.target.checked) {
-        setExterior([...exterior, e.target.value]);
+        setCommentsOnElectrical([...commentsOnElectrical, e.target.value]);
       } else {
-        setExterior(exterior.filter((element) => Number(element) !== Number(e.target.value)));
+        setCommentsOnElectrical(commentsOnElectrical.filter((element) => Number(element) !== Number(e.target.value)));
       }
     }
-
-    if (e.target.name === 'entertainment') {
-      if (e.target.checked) {
-        setEntertainment([...entertainment, e.target.value]);
-      } else {
-        setEntertainment(entertainment.filter((element) => Number(element) !== Number(e.target.value)));
-      }
+    if (e.target.name === 'bonnet') {
+      setBonnet(e.target.value);
     }
-
-    if (e.target.name === 'ThumbnailPhotos' && e.target.files.length > 0) {
-      // console.log(e.target.files);
-      
-      // console.log(e.target.files[0].size);
-      if(e.target.files[0].size<5000000)
-      {
-          setThumbnailPhotos([...ThumbnailPhotos, e.target.files[0]]);
-          uploadAuctionImage(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 5MB!")
-      }
-      
-      
+    if (e.target.name === 'upperCrossMember') {
+      setUpperCrossMember(e.target.value);
     }
-
-    if (e.target.name === 'ExteriorPhotos' && e.target.files.length > 0) {
-      // console.log(e.target.files);
-      if(e.target.files[0].size<5000000)
-      {
-          setExteriorPhotos([...ExteriorPhotos, e.target.files[0]]);
-          uploadAuctionImage2(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 5MB!")
-      }
-      
+    if (e.target.name === 'lowerCrossMember') {
+      setLowerCrossMember(e.target.value);
     }
-
-    if (e.target.name === 'InteriorPhotos' && e.target.files.length > 0) {
-      // console.log(e.target.files);
-      if(e.target.files[0].size<5000000)
-      {
-          setInteriorPhotos([...InteriorPhotos, e.target.files[0]]);
-          uploadAuctionImage3(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 5MB!")
-      }
-      
+    if (e.target.name === 'radiatorSupport') {
+      setRadiatorSupport(e.target.value);
     }
-
-    if (e.target.name === 'EnginePhotos' && e.target.files.length > 0) {
-      // console.log(e.target.files);
-      if(e.target.files[0].size<5000000)
-      {
-          setEnginePhotos([...EnginePhotos, e.target.files[0]]);
-          uploadAuctionImage4(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 5MB!")
-      }
-      
+    if (e.target.name === 'headlightSupport') {
+      setHeadlightSupport(e.target.value);
     }
-
-    if (e.target.name === 'TyresPhotos' && e.target.files.length > 0) {
-      // console.log(e.target.files);
-      if(e.target.files[0].size<5000000)
-      {
-          setTyresPhotos([...TyresPhotos, e.target.files[0]]);
-          uploadAuctionImage5(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 5MB!")
-      }
+    if (e.target.name === 'lhsApron') {
+      setLhsApron(e.target.value);
     }
-
-    if (e.target.name === 'DentsPhotos' && e.target.files.length > 0) {
-      // console.log(e.target.files);
-      if(e.target.files[0].size<5000000)
-      {
-          setDentsPhotos([...DentsPhotos, e.target.files[0]]);
-          uploadAuctionImage6(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 5MB!")
-      }
+    if (e.target.name === 'rhsApron') {
+      setRhsApron(e.target.value);
     }
-
-    if (e.target.name === 'engineVideo' && e.target.files.length > 0) {
-     
-      // console.log(e.target.files);
-      if(e.target.files[0].size<10000000)
-      {
-          // setEngineVideo(e.target.files[0]);
-          setLoader(true);
-          uploadAuctionVideo1(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 10MB!")
-      }
+    if (e.target.name === 'frontWindshield') {
+      setFrontWindshield(e.target.value);
     }
-    if (e.target.name === 'silencerVideo' && e.target.files.length > 0) {
-     
-      // console.log(e.target.files);
-      if(e.target.files[0].size<10000000)
-      {
-          setLoader2(true);
-          uploadAuctionVideo2(e.target.files[0]);
-      }
-      else
-      {
-          alert("Image size should be less than 10MB!")
-      }
+    if (e.target.name === 'firewall') {
+      setFirewall(e.target.value);
     }
-
+    if (e.target.name === 'cowlTop') {
+      setCowlTop(e.target.value);
+    }
+    if (e.target.name === 'roof') {
+      setRoof(e.target.value);
+    }
+    if (e.target.name === 'frontBumper') {
+      setFrontBumper(e.target.value);
+    }
+    if (e.target.name === 'lhsHeadlamp') {
+      setLhsHeadlamp(e.target.value);
+    }
+    if (e.target.name === 'rhsHeadlamp') {
+      setRhsHeadlamp(e.target.value);
+    }
+    
+    
     
 
-
   }
-
-  const handleRemoveImage = async (id) => {
-    setThumbnailPhotos(ThumbnailPhotos.filter((element) => element.name !== id.name));
-    setExteriorPhotos(ExteriorPhotos.filter((element) => element.name !== id.name));
-    setInteriorPhotos(InteriorPhotos.filter((element) => element.name !== id.name));
-    setEnginePhotos(EnginePhotos.filter((element) => element.name !== id.name));
-    setTyresPhotos(TyresPhotos.filter((element) => element.name !== id.name));
-    setDentsPhotos(DentsPhotos.filter((element) => element.name !== id.name));
-  };
-
-  const handleInsuranceDate = (newDate) => {
-    setInsuranceValidity(newDate);
-    // console.log("current "+newDate);
-  };
-  const handleRoadTaxValidityDate = (newDate) => {
-    setRoadTaxValidity(newDate);
-  };
-  const handleAuctionStartTime = (newDate) => {
-    setAuctionStartTime(newDate);
-  };
-  const handleAuctionEndTime = (newDate) => {
-    setAuctionEndTime(newDate);
-  };
 
   
-const uploadAuctionImage= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage(formData);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    // setAllcarImage(response.data.data);
-    setAllcarImage([...allCarImage, response.data.data]);
-    setThumbImage([...thumbImage, response.data.data]);
-    setError();
-    // console.log(response.data.data);
-  }
-}
 
-const uploadAuctionImage2= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage2(formData);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setAllcarImage([...allCarImage, response.data.data]);
-    // console.log(response.data.data);
-  }
-}
-
-const uploadAuctionImage3= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage3(formData);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setAllcarImage([...allCarImage, response.data.data]);
-    // console.log(response.data.data);
-  }
-}
-
-const uploadAuctionImage4= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage4(formData);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setAllcarImage([...allCarImage, response.data.data]);
-    // console.log(response.data.data);
-  }
-}
-
-const uploadAuctionImage5= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage5(formData);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setAllcarImage([...allCarImage, response.data.data]);
-    // console.log(response.data.data);
-  }
-}
-
-const uploadAuctionImage6= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionImage6(formData);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setAllcarImage([...allCarImage, response.data.data]);
-    // console.log(response.data.data);
-  }
-}
-
-const uploadAuctionVideo1= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionVideo1(formData);
-  setLoader(false);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setEngineVideo(response.data.data.path);
-    setAllcarVideo([...allCarVideo, response.data.data]);
-    
-    // console.log(response.data.data);
-  }
-}
-
-const uploadAuctionVideo2= async (data)=>{
-  const formData = new FormData();
-    formData.append('file', data);
-  const response = await vehicleApi.uploadAuctionVideo2(formData);
-  setLoader2(false);
-  if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
-    // console.log(response);
-    setSilencerVideo(response.data.data.path);
-    setAllcarVideo([...allCarVideo, response.data.data]);
-    
-    // console.log(response.data.data);
-  }
-}
-
-
-const handleRemoveVideo = async ()=>{
-  setEngineVideo(null);
-  setAllcarVideo(prevArray => prevArray.filter(item => item.path !== engineVideo));
-}
-const handleRemoveVideo2 = async ()=>{
-  setSilencerVideo(null);
-  setAllcarVideo(prevArray => prevArray.filter(item => item.path !== silencerVideo));
-}
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); 
-
-    if(thumbImage.length==0)
-    {
-        setError("Thumbnail Photo is required!")
+  const handleRegistrationDate = (newDate) => {
+    setRegistrationDate(newDate);
+  };
+  const handleFitnessuptoDate = (newDate) => {
+    setFitnessuptoDate(newDate);
+  };
+  const handleRoadTaxValid = (newDate) => {
+    setRoadTaxValidUpto(newDate);
+  };
+  const handleInsuranceValidity = (newDate) => {
+    setInsuranceValidity(newDate);
+  };
+  const handleRtoNocIssueDate = (newDate) => {
+    setRtoNocIssueDate(newDate);
+  };
+  
+  
+  const uploadInspectionImage= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader(false);
+      setRcAvailabilityImages([...rcAvailabilityImages, response.data.data.path]);
     }
     else
     {
+      setLoader(false);
+    }
+  }
+  const uploadInspectionImage2= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader2(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader2(false);
+      setChassisImages([...chassisImages, response.data.data.path]);
+    }
+    else
+    {
+      setLoader2(false);
+    }
+  }
 
-      setError("");
+  const uploadInspectionImage3= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader3(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader3(false);
+      setHypoImages([...hypoImages, response.data.data.path]);
+    }
+    else
+    {
+      setLoader3(false);
+    }
+  }
 
-    const formData={allCarVideo,auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,oneClickBuyPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
-    
-    // console.log(formData);
-    
-    // console.log(ThumbnailPhotos);
-    // ThumbnailPhotos.map((element, index) => {
-    //   formData.append(`ThumbnailPhotos`, element);
-    // });
-    // ExteriorPhotos.map((element, index) => {
-    //   formData.append(`ExteriorPhotos`, element);
-    // });
+  const uploadInspectionImage4= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader4(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader4(false);
+      setRoadTaxValidityImages([...roadTaxValidityImages, response.data.data.path]);
+    }
+    else
+    {
+      setLoader4(false);
+    }
+  }
 
-    // console.log(ThumbnailPhotos , ExteriorPhotos);
+  const uploadInspectionImage5= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader5(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader5(false);
+      setInsuranceImages([...insuranceImages, response.data.data.path]);
+    }
+    else
+    {
+      setLoader5(false);
+    }
+  }
+
+  const uploadInspectionImage6= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader6(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader6(false);
+      setDuplicateKeyImages([...duplicateKeyImages, response.data.data.path]);
+    }
+    else
+    {
+      setLoader6(false);
+    }
+  }
+
+  const uploadInspectionImage7= async (data)=>{
+    const formData = new FormData();
+      formData.append('file', data);
+      setLoader7(true);
+    const response = await vehicleApi.uploadInspectionImage(formData);
+    if (response.status === 200 && response.data.status === 200 && response.data.success === true) {
+      // console.log(response.data.data);
+      setLoader7(false);
+      setRtoNocImages([...rtoNocImages, response.data.data.path]);
+    }
+    else
+    {
+      setLoader7(false);
+    }
+  }
+
+
+  
+
+  
+
+
+  const handleRemovercAvailabilityImages =async (ImageName)=>{
+    setRcAvailabilityImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  const handleRemoveChassisImages =async (ImageName)=>{
+    setChassisImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  const handleRemoveHypoImages =async (ImageName)=>{
+    setHypoImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  const handleRemoveRoadTaxValidityImages =async (ImageName)=>{
+    setRoadTaxValidityImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  const handleRemoveInsuranceImages =async (ImageName)=>{
+    setInsuranceImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  const handleRemoveDuplicateKeyImages =async (ImageName)=>{
+    setDuplicateKeyImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  const handleRemoveRtoNocImages =async (ImageName)=>{
+    setRtoNocImages(prevArray => prevArray.filter(item => item !== ImageName));
+  }
+  
+  
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+
+
+    // const formData={allCarVideo,auctionStartTime,auctionEndTime,thumbImage,allCarImage,brand,model,variant,regYear,bodyType,fuelType,transmission,ownerType,color,rto,city,kmsDriven,carPrice,oneClickBuyPrice,description,seat,mileage,engine,maxPower,maxTorque,noc,mfgYear,inspectionReport,insuranceValidity,roadTaxValidity,inspectionScore,comforts,safety,interior,exterior,entertainment};
+
     
     const response = await vehicleApi.addAuctionVehicle(formData);
     // console.log(response);
@@ -679,50 +785,11 @@ const handleRemoveVideo2 = async ()=>{
 
     }
 
-    }
+    
   };
     
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  }
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-   
-const handleCloseBtn = () => {
-  setPopupopen(false);
-};
-
+ 
   return (
     <>
       <Box className={dashboardStyles.tm_dashboard_main}>        
@@ -740,9 +807,50 @@ const handleCloseBtn = () => {
                     <Typography variant='h6'>Basic Document Details</Typography>
                   </Box>
                 <Grid container spacing={4}>
+                
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select Vehicle*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={vehicle}
+                          label="Select Vehicle*"
+                          onChange={handleInput}
+                          name='vehicle'
+                          required
+                        >
+                          {carList.length > 0 && carList.map((data,key) => (
+                            <MenuItem key={key} value={data.id}>{data.carDetails.brand} {data.carDetails.model} {data.carDetails.variant} {data.carDetails.registrationYear} {data.carDetails.color}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select Inspector*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={inspector}
+                          label="Select Inspector*"
+                          onChange={handleInput}
+                          name='inspector'
+                          required
+                        >
+                          {inspectorList.length > 0 && inspectorList.map((data,key) => (
+                            <MenuItem key={key} value={data.id}>{data.email} ({data.name ? data.name : 'NA'})</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Customer Contact No" onChange={handleInput} name='custContactNo' type="number" required variant="outlined" fullWidth/>
+                      <TextField id="outlined-basic" label="Customer Contact No" onChange={handleInput} name='custContactNo' value={custContactNo} type="text" required variant="outlined" fullWidth/>
                       </Box>
                   </Grid> 
                   <Grid item md={3}>
@@ -772,8 +880,8 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={regType}
-                          label="Select City*"
+                          value={regType}
+                          label="Select Registration Type*"
                           onChange={handleInput}
                           name='regType'
                           required
@@ -786,7 +894,7 @@ const handleCloseBtn = () => {
                   </Grid>
                   <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <TextField id="outlined-basic" label="Registration No" onChange={handleInput} name='regNo' type="number" variant="outlined" required fullWidth/>
+                      <TextField id="outlined-basic" label="Registration No" onChange={handleInput} name='regNo' value={regNo} type="text" variant="outlined" required fullWidth/>
                       </Box>
                   </Grid> 
                   <Grid item md={3}>
@@ -796,7 +904,7 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rcAvailability}
+                          value={rcAvailability}
                           label="RC Availability*"
                           onChange={handleInput}
                           name='rcAvailability'
@@ -818,7 +926,7 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rcCondition}
+                          value={rcCondition}
                           label="RC Condition*"
                           onChange={handleInput}
                           name='rcCondition'
@@ -836,7 +944,7 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Registration Date" name='regDate' onChange={handleInsuranceDate} sx={{width:'100%'}} required/>
+                              <DatePicker label="Registration Date" name='regDate' onChange={handleRegistrationDate} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
@@ -845,7 +953,7 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Fitness Upto" name='fitnessUpto' onChange={handleInsuranceDate} sx={{width:'100%'}} required/>
+                              <DatePicker label="Fitness Upto" name='fitnessUpto' onChange={handleFitnessuptoDate} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
@@ -857,8 +965,7 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={tobeScraped}
-                          label="RC Condition*"
+                          label="To be Scraped*"
                           onChange={handleInput}
                           name='tobeScraped'
                           required
@@ -876,7 +983,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={regState}
                           label="Registration State*"
                           onChange={handleInput}
                           name='regState'
@@ -894,10 +1000,9 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={regRto}
                           label="Select RTO*"
                           onChange={handleInput}
-                          name='regRto'
+                          name='rto'
                           required
                         >
                           {rtoList.length > 0 && rtoList.map((data,key) => (
@@ -996,7 +1101,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={mfgMonth}
                           label="MFG Month *"
                           onChange={handleInput}
                           name='mfgMonth'
@@ -1026,7 +1130,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={mfgYear}
                           label="MFG Year *"
                           onChange={handleInput}
                           name='mfgYear'
@@ -1046,7 +1149,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={fuelType}
                           label="Select Fuel Type *"
                           onChange={handleInput}
                           name='fuelType'
@@ -1072,8 +1174,7 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={hypoDetails}
-                          label="Select Fuel Type *"
+                          label="Select Hypothecation *"
                           onChange={handleInput}
                           name='hypoDetails'
                           required
@@ -1106,15 +1207,14 @@ const handleCloseBtn = () => {
                           </Select>
                         </FormControl>
                       </Box>
-                    </Grid>
-                    <Grid item md={3}>
+                  </Grid>
+                  <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">Missmatch in RC *</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={missmatchRC}
                             label="Missmatch in RC*"
                             onChange={handleInput}
                             name='missmatchRC'
@@ -1134,7 +1234,7 @@ const handleCloseBtn = () => {
                           </Select>
                         </FormControl>
                       </Box>
-                    </Grid> 
+                  </Grid> 
                     <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <FormControl fullWidth>
@@ -1142,7 +1242,6 @@ const handleCloseBtn = () => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={roadTaxValidity}
                             label="Missmatch in RC*"
                             onChange={handleInput}
                             name='roadTaxValidity'
@@ -1159,7 +1258,7 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Road Tax Valid Upto" name="roadTaxValidUpto" onChange={handleRoadTaxValidityDate} sx={{width:'100%'}} required/>
+                              <DatePicker label="Road Tax Valid Upto" name="roadTaxValidUpto" onChange={handleRoadTaxValid}  sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
@@ -1171,7 +1270,6 @@ const handleCloseBtn = () => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={insurance}
                             label="Insurance*"
                             onChange={handleInput}
                             name='insurance'
@@ -1189,7 +1287,7 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="Insurance Validity" onChange={handleInsuranceDate} value={insuranceValidity} sx={{width:'100%'}} required/>
+                              <DatePicker label="Insurance Validity"  name="insuranceValidity" onChange={handleInsuranceValidity} sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
@@ -1197,11 +1295,10 @@ const handleCloseBtn = () => {
                     <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Insurance *</InputLabel>
+                          <InputLabel id="demo-simple-select-label">No Claim Bonus *</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={noClaimBonus}
                             label="No Claim Bonus*"
                             onChange={handleInput}
                             name='noClaimBonus'
@@ -1223,7 +1320,6 @@ const handleCloseBtn = () => {
                         </FormControl>
                       </Box>
                     </Grid>  
-
                     <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <FormControl fullWidth>
@@ -1231,7 +1327,6 @@ const handleCloseBtn = () => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={missmatchInsurance}
                             label="Missmatch In Insurance*"
                             onChange={handleInput}
                             name='missmatchInsurance'
@@ -1248,7 +1343,6 @@ const handleCloseBtn = () => {
                         </FormControl>
                       </Box>
                     </Grid>  
-
                     <Grid item md={3}>
                       <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                         <FormControl fullWidth>
@@ -1256,7 +1350,6 @@ const handleCloseBtn = () => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={duplicateKey}
                             label="Duplicate Key*"
                             onChange={handleInput}
                             name='duplicateKey'
@@ -1277,7 +1370,6 @@ const handleCloseBtn = () => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={rtoNoc}
                             label="RTO Noc *"
                             onChange={handleInput}
                             name='rtoNoc'
@@ -1296,41 +1388,55 @@ const handleCloseBtn = () => {
                         <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_date} ${"tm_dashboard_rightbar_form_date_gb"} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DemoContainer components={['DatePicker']}>
-                              <DatePicker label="RTO Noc Issue Date" name="rtoNocIssueDate" onChange={handleInsuranceDate}  sx={{width:'100%'}} required/>
+                              <DatePicker label="RTO Noc Issue Date" name="rtoNocIssueDate" onChange={handleRtoNocIssueDate}  sx={{width:'100%'}} required/>
                             </DemoContainer>
                           </LocalizationProvider>
                         </Box>
                     </Grid>
-                  <Grid item md={3}>
-                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Comments On Basic*</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            // value={commentsOnBasic}
-                            label="Comments On Basic"
-                            onChange={handleInput}
-                            name='commentsOnBasic'
-                          >
-                            
-                            <MenuItem value='CNG/LPG Plate not Available'>CNG/LPG Plate not Available</MenuItem>
-                            <MenuItem value='CNG/LPG Removed'>CNG/LPG Removed</MenuItem>
-                            <MenuItem value='Vin Plate Missing'>Vin Plate Missing</MenuItem>
-                            <MenuItem value='CNG/LPG Cylinder test certificate not Available'>CNG/LPG Cylinder test certificate not Available</MenuItem>
-                            <MenuItem value='RC Fitness Expired'>RC Fitness Expired</MenuItem>
-                            <MenuItem value='Car Converted from Commercial to private'>Car Converted from Commercial to private</MenuItem>
-                            <MenuItem value='Migrated from Other State'>Migrated from Other State</MenuItem>
-                            <MenuItem value='Remote Key Damaged / Not Available'>Remote Key Damaged / Not Available</MenuItem>
-                            <MenuItem value='Chassis Number Rusted'>Chassis Number Rusted</MenuItem>
-                            <MenuItem value='Chassis Number Not Traceable'>Chassis Number Not Traceable</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
+                  <Grid item md={12}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Comments On Basic</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="CNG/LPG Plate not Available" name='commentsOnBasic' onChange={handleInput} />} label="CNG/LPG Plate not Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="CNG/LPG Removed" name='commentsOnBasic' onChange={handleInput} />} label="CNG/LPG Removed" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Vin Plate Missing" name='commentsOnBasic' onChange={handleInput} />} label="Vin Plate Missing" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="CNG/LPG Cylinder test certificate not Available" name='commentsOnBasic' onChange={handleInput} />} label="CNG/LPG Cylinder test certificate not Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="RC Fitness Expired" name='commentsOnBasic' onChange={handleInput} />} label="RC Fitness Expired" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Car Converted from Commercial to private" name='commentsOnBasic' onChange={handleInput} />} label="Car Converted from Commercial to private" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Migrated from Other State" name='commentsOnBasic' onChange={handleInput} />} label="Migrated from Other State" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Remote Key Damaged / Not Available" name='commentsOnBasic' onChange={handleInput} />} label="Remote Key Damaged / Not Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Chassis Number Rusted" name='commentsOnBasic' onChange={handleInput} />} label="Chassis Number Rusted" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Chassis Number Not Traceable" name='commentsOnBasic' onChange={handleInput} />} label="Chassis Number Not Traceable" />
+                                </Grid>
+                                
+                          </Grid>
+                        </Box>
+                    </Box>
                   </Grid>
-
-                
-                  
                 </Grid>
                 <Box className={`${dashboardStyles.tm_dashboard_img_upl} ${"tm_dashboard_img_upl_gb"}`}>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
@@ -1338,7 +1444,7 @@ const handleCloseBtn = () => {
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>RC Availablity Images <Box sx={{color:"red"}}>{error}</Box></Typography>
+                      <Typography variant='h6'>RC Availablity Images </Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
@@ -1350,24 +1456,25 @@ const handleCloseBtn = () => {
                           
                         </Box>                        
                       </Grid>
-                       {/* <Grid item md={9}>
-                         {ThumbnailPhotos.length > 0 &&
-                          ThumbnailPhotos.map((element, index) => {
+                       <Grid item md={9}>
+                         {rcAvailabilityImages.length > 0 &&
+                          rcAvailabilityImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={URL.createObjectURL(element)}
+                                    src={element}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  <Button onClick={() => handleRemovercAvailabilityImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
                             );
                           })}
-                        </Grid> */}
+                          {isLoader?(<CircularProgress />):(<></>)}
+                        </Grid>
                       </Grid>
                   </Box>
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
@@ -1383,27 +1490,27 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
-                      {/* <Grid item md={9}>
-                        {ExteriorPhotos.length > 0 &&
-                          ExteriorPhotos.map((element, index) => {
+                      <Grid item md={9}>
+                        {chassisImages.length > 0 &&
+                          chassisImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box>
                                   <Image
-                                    src={URL.createObjectURL(element)}
+                                    src={element}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  <Button onClick={() => handleRemoveChassisImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
                             );
                           })}
-                        </Grid> */}
+                          {isLoader2?(<CircularProgress />):(<></>)}
+                        </Grid>
                       </Grid>
                   </Box>
-
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Hypothecation Images</Typography>
@@ -1417,27 +1524,27 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
-                      {/* <Grid item md={9}>
-                        {InteriorPhotos.length > 0 &&
-                          InteriorPhotos.map((element, index) => {
+                      <Grid item md={9}>
+                        {hypoImages.length > 0 &&
+                          hypoImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={URL.createObjectURL(element)}
+                                    src={element}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  <Button onClick={() => handleRemoveHypoImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
                             );
                           })}
-                        </Grid> */}
+                          {isLoader3?(<CircularProgress />):(<></>)}
+                        </Grid>
                       </Grid>
                   </Box>
-
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Road Tax Validity Images</Typography>
@@ -1451,27 +1558,27 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
-                      {/* <Grid item md={9}>
-                        {EnginePhotos.length > 0 &&
-                          EnginePhotos.map((element, index) => {
+                      <Grid item md={9}>
+                        {roadTaxValidityImages.length > 0 &&
+                          roadTaxValidityImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={URL.createObjectURL(element)}
+                                    src={element}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  <Button onClick={() => handleRemoveRoadTaxValidityImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
                             );
                           })}
-                        </Grid> */}
+                          {isLoader4?(<CircularProgress />):(<></>)}
+                        </Grid>
                       </Grid>
                   </Box>
-
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Insurance Images</Typography>
@@ -1485,27 +1592,27 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
-                      {/* <Grid item md={9}>
-                        {TyresPhotos.length > 0 &&
-                          TyresPhotos.map((element, index) => {
+                      <Grid item md={9}>
+                        {insuranceImages.length > 0 &&
+                          insuranceImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={URL.createObjectURL(element)}
+                                    src={element}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  <Button onClick={() => handleRemoveInsuranceImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
                             );
                           })}
-                        </Grid> */}
+                          {isLoader5?(<CircularProgress />):(<></>)}
+                        </Grid>
                       </Grid>
                   </Box>
-
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>Duplicate Key Images</Typography>
@@ -1519,27 +1626,28 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
-                      {/* <Grid item md={9}>
-                        {DentsPhotos.length > 0 &&
-                          DentsPhotos.map((element, index) => {
+                      <Grid item md={9}>
+                        {duplicateKeyImages.length > 0 &&
+                          duplicateKeyImages.map((element, index) => {
                             return (
                               <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
                                 <Box >
                                   <Image
-                                    src={URL.createObjectURL(element)}
+                                    src={element}
                                     alt='Uploaded Image'
                                     height='300'
                                     width='300'
                                   />
-                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                  <Button onClick={() => handleRemoveDuplicateKeyImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
                             );
                           })}
-                        </Grid> */}
+                          {isLoader6?(<CircularProgress />):(<></>)}
+                        </Grid>
+                        
                       </Grid>
                   </Box>
-
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
                       <Typography variant='h6'>RTO Noc Images</Typography>
@@ -1553,19 +1661,25 @@ const handleCloseBtn = () => {
                           </Button>
                         </Box>                        
                       </Grid>
-                      {/* <Grid item md={9}>
-                              <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
-                                <Box>
-                                    {engineVideo ? (<>
-                                    <video width="200" height="100" controls >
-                                      <source src={engineVideo} type="video/mp4"/>
-                                    </video>
-                                    <Button onClick={() => handleRemoveVideo()}><CloseIcon/> </Button>
-                                    </>):(<> {isLoader?(<CircularProgress />):(<></>)}</>)}
-                                    
+                      <Grid item md={9}>
+                        {rtoNocImages.length > 0 &&
+                          rtoNocImages.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={element}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveRtoNocImages(element)}><CloseIcon/> </Button>
                                 </Box>
                               </Box>
-                        </Grid> */}
+                            );
+                          })}
+                          {isLoader7?(<CircularProgress />):(<></>)}
+                        </Grid>
                       </Grid>
                   </Box>
                 </Box>
@@ -1581,7 +1695,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={engine}
                           label="Engine*"
                           onChange={handleInput}
                           name='engine'
@@ -1611,7 +1724,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={battery}
                           label="Battery*"
                           onChange={handleInput}
                           name='battery'
@@ -1636,7 +1748,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={coolant}
                           label="Coolant*"
                           onChange={handleInput}
                           name='coolant'
@@ -1658,7 +1769,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={engineOilDipstick}
                           label="Engine Oil Dipstick*"
                           onChange={handleInput}
                           name='engineOilDipstick'
@@ -1679,7 +1789,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={engineOil}
                           label="Engine Oil*"
                           onChange={handleInput}
                           name='engineOil'
@@ -1707,7 +1816,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={engineMount}
                           label="Engine Mount*"
                           onChange={handleInput}
                           name='engineMount'
@@ -1730,7 +1838,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={engineBlowbyStatus}
                           label="Engine Blow By Status*"
                           onChange={handleInput}
                           name='engineBlowbyStatus'
@@ -1749,11 +1856,31 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Exhaust Smoke*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          label="Exhaust Smoke*"
+                          onChange={handleInput}
+                          name='exhaustSmoke'
+                          required
+                        >
+                            <MenuItem value="Okay">Okay</MenuItem>
+                            <MenuItem value="Black">Black</MenuItem>
+                            <MenuItem value="Blue">Blue</MenuItem>
+                            <MenuItem value="White">White</MenuItem>
+
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Radiator*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={radiator}
                           label="Radiator*"
                           onChange={handleInput}
                           name='radiator'
@@ -1772,42 +1899,10 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Comments On Engine*</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          // value={commentsOnEngine}
-                          label="Comments On Engine*"
-                          onChange={handleInput}
-                          name='commentsOnEngine'
-                          required
-                        >
-                            <MenuItem value="Not Converting to CNG / LPG">Not Converting to CNG / LPG</MenuItem>
-                            <MenuItem value="RPM Not increasing">RPM Not increasing</MenuItem>
-                            <MenuItem value="Car not working on Petrol">Car not working on Petrol</MenuItem>
-                            <MenuItem value="Turbo Charger Noise">Turbo Charger Noise</MenuItem>
-                            <MenuItem value="Turbo Charger Not Working">Turbo Charger Not Working</MenuItem>
-                            <MenuItem value="Fan Belt Noise">Fan Belt Noise</MenuItem>
-                            <MenuItem value="Alternator Bearing Noise">Alternator Bearing Noise</MenuItem>
-                            <MenuItem value="Minor Noise">Minor Noise</MenuItem>
-                            <MenuItem value="Major Noise">Major Noise</MenuItem>
-                            <MenuItem value="Critical Noise">Critical Noise</MenuItem>
-                            <MenuItem value="Oil Coming from Exhaust Tail Pipe">Oil Coming from Exhaust Tail Pipe</MenuItem>
-                            <MenuItem value="Leakege From Injector">Leakege From Injector</MenuItem>
-                            <MenuItem value="Car is in Working Condition but Towing Suggested to Avoid Damage to Engine">Car is in Working Condition but Towing Suggested to Avoid Damage to Engine</MenuItem>
-
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Clutch*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={clutch}
                           label="Clutch*"
                           onChange={handleInput}
                           name='clutch'
@@ -1830,7 +1925,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={gear}
                           label="Gear*"
                           onChange={handleInput}
                           name='gear'
@@ -1856,7 +1950,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={steering}
                           label="Steering*"
                           onChange={handleInput}
                           name='steering'
@@ -1882,7 +1975,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={brake}
                           label="Brake*"
                           onChange={handleInput}
                           name='brake'
@@ -1906,7 +1998,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={suspension}
                           label="Suspension*"
                           onChange={handleInput}
                           name='suspension'
@@ -1923,27 +2014,93 @@ const handleCloseBtn = () => {
                       </FormControl>
                     </Box>
                   </Grid>
-                  <Grid item md={3}>
+                  <Grid item md={12}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Comments On Transmission</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          // value={commentsOnTransmission}
-                          label="Comments On Transmission"
-                          onChange={handleInput}
-                          name='commentsOnTransmission'
-                        >
-                            <MenuItem value="Car is in Working Condition but Towing Suggested to Avoid Damage to Clutch">Car is in Working Condition but Towing Suggested to Avoid Damage to Clutch</MenuItem>
-                            <MenuItem value="Car is in Working Condition but Towing Suggested to Avoid Damage to Gear">Car is in Working Condition but Towing Suggested to Avoid Damage to Gear</MenuItem>
-                            <MenuItem value="Towing Required">Towing Required</MenuItem>
-                            <MenuItem value="Gear box Oil Leakage">Gear box Oil Leakage</MenuItem>
-                            <MenuItem value="Abnormal Noise coming from Gear Box">Abnormal Noise coming from Gear Box</MenuItem>
-                            <MenuItem value="All Weel Drive (AWD)">All Weel Drive (AWD)</MenuItem>
-                            <MenuItem value="Four Wheel Drive (4X4)">Four Wheel Drive (4X4)</MenuItem>
-                        </Select>
-                      </FormControl>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Comments On Engine</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Not Converting to CNG / LPG" name='commentsOnEngine' onChange={handleInput} />} label="Not Converting to CNG / LPG" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="RPM Not increasing" name='commentsOnEngine' onChange={handleInput} />} label="RPM Not increasing" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Car not working on Petrol" name='commentsOnEngine' onChange={handleInput} />} label="Car not working on Petrol" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Turbo Charger Noise" name='commentsOnEngine' onChange={handleInput} />} label="Turbo Charger Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Turbo Charger Not Working" name='commentsOnEngine' onChange={handleInput} />} label="Turbo Charger Not Working" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Fan Belt Noise" name='commentsOnEngine' onChange={handleInput} />} label="Fan Belt Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Alternator Bearing Noise" name='commentsOnEngine' onChange={handleInput} />} label="Alternator Bearing Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Minor Noise" name='commentsOnEngine' onChange={handleInput} />} label="Minor Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Major Noise" name='commentsOnEngine' onChange={handleInput} />} label="Major Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Critical Noise" name='commentsOnEngine' onChange={handleInput} />} label="Critical Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Oil Coming from Exhaust Tail Pipe" name='commentsOnEngine' onChange={handleInput} />} label="Oil Coming from Exhaust Tail Pipe" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Leakege From Injector" name='commentsOnEngine' onChange={handleInput} />} label="Leakege From Injector" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Car is in Working Condition but Towing Suggested to Avoid Damage to Engine" name='commentsOnEngine' onChange={handleInput} />} label="Car is in Working Condition but Towing Suggested to Avoid Damage to Engine" />
+                                </Grid>
+                                
+                          </Grid>
+                        </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item md={12}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Comments On Transmission</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Car is in Working Condition but Towing Suggested to Avoid Damage to Clutch" name='commentsOnTransmission' onChange={handleInput} />} label="Car is in Working Condition but Towing Suggested to Avoid Damage to Clutch" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Car is in Working Condition but Towing Suggested to Avoid Damage to Gear" name='commentsOnTransmission' onChange={handleInput} />} label="Car is in Working Condition but Towing Suggested to Avoid Damage to Gear" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Towing Required" name='commentsOnTransmission' onChange={handleInput} />} label="Towing Required" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Gear box Oil Leakage" name='commentsOnTransmission' onChange={handleInput} />} label="Gear box Oil Leakage" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Abnormal Noise coming from Gear Box" name='commentsOnTransmission' onChange={handleInput} />} label="Abnormal Noise coming from Gear Box" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="All Weel Drive (AWD)" name='commentsOnTransmission' onChange={handleInput} />} label="All Weel Drive (AWD)" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Four Wheel Drive (4X4)" name='commentsOnTransmission' onChange={handleInput} />} label="Four Wheel Drive (4X4)" />
+                                </Grid>
+                               
+                                
+                          </Grid>
+                        </Box>
                     </Box>
                   </Grid>
                   
@@ -1954,7 +2111,7 @@ const handleCloseBtn = () => {
                   </Box> */}
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Engine & Transmission Images <Box sx={{color:"red"}}>{error}</Box></Typography>
+                      <Typography variant='h6'>Engine & Transmission Images </Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
@@ -2000,10 +2157,9 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={electrical}
-                          label="Electrical*"
+                          label="Fuel Level*"
                           onChange={handleInput}
-                          name='electrical'
+                          name='fuelLevel'
                           required
                         >
                           <MenuItem value="Reserve">Reserve</MenuItem>
@@ -2022,10 +2178,9 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={fuelLevel}
-                          label="Fuel Level*"
+                          label="Electrical*"
                           onChange={handleInput}
-                          name='fuelLevel'
+                          name='electrical'
                           required
                         >
                             <MenuItem value="Okay">Okay</MenuItem>
@@ -2040,7 +2195,6 @@ const handleCloseBtn = () => {
                       </FormControl>
                     </Box>
                   </Grid>
-
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
@@ -2048,7 +2202,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rearWiper}
                           label="Rear Wiper*"
                           onChange={handleInput}
                           name='rearWiper'
@@ -2069,7 +2222,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rearDefogger}
                           label="Rear Defogger*"
                           onChange={handleInput}
                           name='rearDefogger'
@@ -2089,7 +2241,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={powerWindow}
                           label="Power Window*"
                           onChange={handleInput}
                           name='powerWindow'
@@ -2105,11 +2256,10 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">RHS Rear(Power Window)*</InputLabel>
+                        <InputLabel id="demo-simple-select-label">RHS Front(Power Window)*</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rhsFrontPW}
                           label="RHS Front(Power Window)*"
                           onChange={handleInput}
                           name='rhsFrontPW'
@@ -2132,7 +2282,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={lhsFrontPW}
                           label="LHS Front(Power Window)*"
                           onChange={handleInput}
                           name='lhsFrontPW'
@@ -2155,30 +2304,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={lhsRearPW}
-                          label="LHS Rear(Power Window)*"
-                          onChange={handleInput}
-                          name='lhsRearPW'
-                          required
-                        >
-                            <MenuItem value="Not Applicable">Not Applicable</MenuItem>
-                            <MenuItem value="Working">Working</MenuItem>
-                            <MenuItem value="Not Working">Not Working</MenuItem>
-                            <MenuItem value="Missing">Missing</MenuItem>
-                            <MenuItem value="Broken / Damaged">Broken / Damaged</MenuItem>
-                            <MenuItem value="Noisy">Noisy</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">LHS Rear(Power Window)*</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          // value={lhsRearPW}
                           label="LHS Rear(Power Window)*"
                           onChange={handleInput}
                           name='lhsRearPW'
@@ -2220,42 +2345,10 @@ const handleCloseBtn = () => {
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Comments On Interior</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          // value={commentsOnInterior}
-                          label="Comments On Interior"
-                          onChange={handleInput}
-                          name='commentsOnInterior'
-                          
-                        >
-                            <MenuItem value="Door Trim Torn">Door Trim Torn</MenuItem>
-                            <MenuItem value="AC Vent Damaged">AC Vent Damaged</MenuItem>
-                            <MenuItem value="AC Knob Damaged / Not Working">AC Knob Damaged / Not Working</MenuItem>
-                            <MenuItem value="Cabin Floor Rusted">Cabin Floor Rusted</MenuItem>
-                            <MenuItem value="Roof Lining Loose / Replaced">Roof Lining Loose / Replaced</MenuItem>
-                            <MenuItem value="Roof lining Damaged">Roof lining Damaged</MenuItem>
-                            <MenuItem value="Gear Box Cover Damaged">Gear Box Cover Damaged</MenuItem>
-                            <MenuItem value="Dashboard Broken">Dashboard Broken</MenuItem>
-                            <MenuItem value="Dashboard Scratched">Dashboard Scratched</MenuItem>
-                            <MenuItem value="Electrical Seat Adjusment Not Working">Electrical Seat Adjusment Not Working</MenuItem>
-                            <MenuItem value="Driver Seat Broken or Sliding Not Working">Driver Seat Broken or Sliding Not Working</MenuItem>
-                            <MenuItem value="Push Button Start Stop Available">Push Button Start Stop Available</MenuItem>
-                            <MenuItem value="Knee Airbags Available">Knee Airbags Available</MenuItem>
-                            <MenuItem value="Seat Airbags Available">Seat Airbags Available</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                  <Grid item md={3}>
-                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Leather Seats</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={leatherSeats}
                           label="Leather Seats"
                           onChange={handleInput}
                           name='leatherSeats'
@@ -2279,7 +2372,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={fabricSeats}
                           label="Fabric Seats"
                           onChange={handleInput}
                           name='fabricSeats'
@@ -2296,28 +2388,96 @@ const handleCloseBtn = () => {
                       </FormControl>
                     </Box>
                   </Grid>
-                  <Grid item md={3}>
+                  <Grid item md={12}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Comments On Electricals</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          // value={commentsOnElectrical}
-                          label="Comments On Electricals"
-                          onChange={handleInput}
-                          name='commentsOnElectrical'
-                          required
-                        >
-                            <MenuItem value="Odometer Tampered">Odometer Tampered</MenuItem>
-                            <MenuItem value="Navigation Chip Not Available">Navigation Chip Not Available</MenuItem>
-                            <MenuItem value="Base Tube / Woofer Retained By the Customer">Base Tube / Woofer Retained By the Customer</MenuItem>
-                            <MenuItem value="Music system Retained By the Customer">Music system Retained By the Customer</MenuItem>
-                            <MenuItem value="Amplifier Retained By the Customer">Amplifier Retained By the Customer</MenuItem>
-                            <MenuItem value="Horn Not Working">Horn Not Working</MenuItem>
-                            <MenuItem value="Power Window Master Switch Not Working">Power Window Master Switch Not Working</MenuItem>
-                        </Select>
-                      </FormControl>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Comments On Interior</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Door Trim Torn" name='commentsOnInterior' onChange={handleInput} />} label="Door Trim Torn" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="AC Vent Damaged" name='commentsOnInterior' onChange={handleInput} />} label="AC Vent Damaged" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="AC Knob Damaged / Not Working" name='commentsOnInterior' onChange={handleInput} />} label="AC Knob Damaged / Not Working" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Cabin Floor Rusted" name='commentsOnInterior' onChange={handleInput} />} label="Cabin Floor Rusted" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Roof Lining Loose / Replaced" name='commentsOnInterior' onChange={handleInput} />} label="Roof Lining Loose / Replaced" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Roof lining Damaged" name='commentsOnInterior' onChange={handleInput} />} label="Roof lining Damaged" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Gear Box Cover Damaged" name='commentsOnInterior' onChange={handleInput} />} label="Gear Box Cover Damaged" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Dashboard Broken" name='commentsOnInterior' onChange={handleInput} />} label="Dashboard Broken" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Dashboard Scratched" name='commentsOnInterior' onChange={handleInput} />} label="Dashboard Scratched" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Electrical Seat Adjusment Not Working" name='commentsOnInterior' onChange={handleInput} />} label="Electrical Seat Adjusment Not Working" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Driver Seat Broken or Sliding Not Working" name='commentsOnInterior' onChange={handleInput} />} label="Driver Seat Broken or Sliding Not Working" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Push Button Start Stop Available" name='commentsOnInterior' onChange={handleInput} />} label="Push Button Start Stop Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Knee Airbags Available" name='commentsOnInterior' onChange={handleInput} />} label="Knee Airbags Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Seat Airbags Available" name='commentsOnInterior' onChange={handleInput} />} label="Seat Airbags Available" />
+                                </Grid>
+                                
+                          </Grid>
+                        </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item md={12}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Comments On Electricals</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Odometer Tampered" name='commentsOnElectrical' onChange={handleInput} />} label="Odometer Tampered" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Navigation Chip Not Available" name='commentsOnElectrical' onChange={handleInput} />} label="Navigation Chip Not Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Base Tube / Woofer Retained By the Customer" name='commentsOnElectrical' onChange={handleInput} />} label="Base Tube / Woofer Retained By the Customer" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Music system Retained By the Customer" name='commentsOnElectrical' onChange={handleInput} />} label="Music system Retained By the Customer" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Amplifier Retained By the Customer" name='commentsOnElectrical' onChange={handleInput} />} label="Amplifier Retained By the Customer" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Horn Not Working" name='commentsOnElectrical' onChange={handleInput} />} label="Horn Not Working" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Power Window Master Switch Not Working" name='commentsOnElectrical' onChange={handleInput} />} label="Power Window Master Switch Not Working" />
+                                </Grid>
+                                
+                                
+                          </Grid>
+                        </Box>
                     </Box>
                   </Grid>
                   
@@ -2326,7 +2486,7 @@ const handleCloseBtn = () => {
                   
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Electrical & Interior Images <Box sx={{color:"red"}}>{error}</Box></Typography>
+                      <Typography variant='h6'>Electrical & Interior Images </Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
@@ -2372,7 +2532,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={bonnet}
                           label="Bonnet*"
                           onChange={handleInput}
                           name='bonnet'
@@ -2398,7 +2557,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={upperCrossMember}
                           label="Upper Cross Member*"
                           onChange={handleInput}
                           name='upperCrossMember'
@@ -2421,7 +2579,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={lowerCrossMember}
                           label="Lower Cross Member*"
                           onChange={handleInput}
                           name='lowerCrossMember'
@@ -2444,7 +2601,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={radiatorSupport}
                           label="Radiator Support*"
                           onChange={handleInput}
                           name='radiatorSupport'
@@ -2467,7 +2623,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={headlightSupport}
                           label="Headlight Support*"
                           onChange={handleInput}
                           name='headlightSupport'
@@ -2490,7 +2645,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={lhsApron}
                           label="Lhs Apron*"
                           onChange={handleInput}
                           name='lhsApron'
@@ -2514,7 +2668,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rhsApron}
                           label="Rhs Apron*"
                           onChange={handleInput}
                           name='rhsApron'
@@ -2531,7 +2684,6 @@ const handleCloseBtn = () => {
                       </FormControl>
                     </Box>
                   </Grid>
-                  
                   <Grid item md={3}>
                     <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
                       <FormControl fullWidth>
@@ -2539,7 +2691,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={frontWindshield}
                           label="Front Windshield*"
                           onChange={handleInput}
                           name='frontWindshield'
@@ -2561,7 +2712,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={firewall}
                           label="Firewall*"
                           onChange={handleInput}
                           name='firewall'
@@ -2585,7 +2735,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={cowlTop}
                           label="Cowl Top*"
                           onChange={handleInput}
                           name='cowlTop'
@@ -2609,7 +2758,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={roof}
                           label="Roof*"
                           onChange={handleInput}
                           name='roof'
@@ -2635,7 +2783,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={frontBumper}
                           label="Front Bumper*"
                           onChange={handleInput}
                           name='frontBumper'
@@ -2663,7 +2810,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={lhsHeadlamp}
                           label="Lhs Headlamp*"
                           onChange={handleInput}
                           name='lhsHeadlamp'
@@ -2686,7 +2832,6 @@ const handleCloseBtn = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          // value={rhsHeadlamp}
                           label="Rhs Headlamp*"
                           onChange={handleInput}
                           name='rhsHeadlamp'
@@ -3262,20 +3407,395 @@ const handleCloseBtn = () => {
                       </FormControl>
                     </Box>
                   </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">RHS Quarter Panel*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsQuarterPanel}
+                          label="RHS Quarter Panel*"
+                          onChange={handleInput}
+                          name='rhsQuarterPanel'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Faded">Faded</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Inner Wheel Housing Rusted">Inner Wheel Housing Rusted</MenuItem>
+                           <MenuItem value="Inner Lining Missing/Broken">Inner Lining Missing/Broken</MenuItem>
+                           <MenuItem value="Cracked">Cracked</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">RHS Rear Alloy*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsRearAlloy}
+                          label="RHS Rear Alloy*"
+                          onChange={handleInput}
+                          name='rhsRearAlloy'
+                          required
+                        >
+                           <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Okay">Okay</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">RHS Rear Tyre*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsRearTyre}
+                          label="RHS Rear Tyre*"
+                          onChange={handleInput}
+                          name='rhsRearTyre'
+                          required
+                        >
+                           <MenuItem value="Chinese Tyre">Chinese Tyre</MenuItem>
+                           <MenuItem value="Resoaled">Resoaled</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Tyre Life (10%-29%)">Tyre Life (10%-29%)</MenuItem>
+                           <MenuItem value="Tyre Life (30%-49%)">Tyre Life (30%-49%)</MenuItem>
+                           <MenuItem value="Tyre Life (50%-79%)">Tyre Life (50%-79%)</MenuItem>
+                           <MenuItem value="Tyre Life (80%-100%)">Tyre Life (80%-100%)</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs C Pillar*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsCPillar}
+                          label="Rhs C Pillar*"
+                          onChange={handleInput}
+                          name='rhsCPillar'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Faded">Faded</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Rubber Beading Torn or Missing">Rubber Beading Torn or Missing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs Rear Door*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsRearDoor}
+                          label="Rhs Rear Door*"
+                          onChange={handleInput}
+                          name='rhsRearDoor'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Faded">Faded</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Not Opening">Not Opening</MenuItem>
+                           <MenuItem value="Hinges Rusted">Hinges Rusted</MenuItem>
+                           <MenuItem value="Handel Broken or not Working">Handel Broken or not Working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs B Pillar*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsBPillar}
+                          label="Rhs B Pillar*"
+                          onChange={handleInput}
+                          name='rhsBPillar'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Faded">Faded</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Rubber Beading Torn or Missing">Rubber Beading Torn or Missing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs Front Door*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsFrontDoor}
+                          label="Rhs Front Door*"
+                          onChange={handleInput}
+                          name='rhsFrontDoor'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Faded">Faded</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Not Opening">Not Opening</MenuItem>
+                           <MenuItem value="Hinges Rusted">Hinges Rusted</MenuItem>
+                           <MenuItem value="Handel Broken or not Working">Handel Broken or not Working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs A Pillar*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsAPillar}
+                          label="Rhs A Pillar*"
+                          onChange={handleInput}
+                          name='rhsAPillar'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Faded">Faded</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Rubber Beading Torn or Missing">Rubber Beading Torn or Missing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs Running Board*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsRunningBoard}
+                          label="Rhs Running Board"
+                          onChange={handleInput}
+                          name='rhsRunningBoard'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Repainted">Repainted</MenuItem>
+                           <MenuItem value="Replaced">Replaced</MenuItem>
+                           <MenuItem value="Dented">Dented</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Rusted">Rusted</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">RHS Front Alloy*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsFrontAlloy}
+                          label="RHS Front Alloy*"
+                          onChange={handleInput}
+                          name='rhsFrontAlloy'
+                          required
+                        >
+                           <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Okay">Okay</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">RHS Front Tyre*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsFrontTyre}
+                          label="RHS Front Tyre*"
+                          onChange={handleInput}
+                          name='rhsFrontTyre'
+                          required
+                        >
+                           <MenuItem value="Chinese Tyre">Chinese Tyre</MenuItem>
+                           <MenuItem value="Resoaled">Resoaled</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Tyre Life (10%-29%)">Tyre Life (10%-29%)</MenuItem>
+                           <MenuItem value="Tyre Life (30%-49%)">Tyre Life (30%-49%)</MenuItem>
+                           <MenuItem value="Tyre Life (50%-79%)">Tyre Life (50%-79%)</MenuItem>
+                           <MenuItem value="Tyre Life (80%-100%)">Tyre Life (80%-100%)</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs Orvm*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsOrvm}
+                          label="Rhs Orvm*"
+                          onChange={handleInput}
+                          name='rhsOrvm'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                           <MenuItem value="Repaired">Repaired</MenuItem>
+                           <MenuItem value="Not Working">Not Working</MenuItem>
+                           <MenuItem value="Missing">Missing</MenuItem>
+                           <MenuItem value="Damaged">Damaged</MenuItem>
+                           <MenuItem value="Scratched">Scratched</MenuItem>
+                           <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                           <MenuItem value="Indicator Broken / Not Working">Indicator Broken / Not Working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs Fender*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsFender}
+                          label="Rhs Fender*"
+                          onChange={handleInput}
+                          name='rhsFender'
+                          required
+                        >
+                           <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Repaired">Repaired</MenuItem>
+                          <MenuItem value="Repainted">Repainted</MenuItem>
+                          <MenuItem value="Replaced">Replaced</MenuItem>
+                          <MenuItem value="Dented">Dented</MenuItem>
+                          <MenuItem value="Damaged">Damaged</MenuItem>
+                          <MenuItem value="Rusted">Rusted</MenuItem>
+                          <MenuItem value="Faded">Faded</MenuItem>
+                          <MenuItem value="Scratched">Scratched</MenuItem>
+                          <MenuItem value="Inner Wheel Housing Rusted">Inner Wheel Housing Rusted</MenuItem>
+                          <MenuItem value="Inner Lining Missing/Broken">Inner Lining Missing/Broken</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  
+                  <Grid item md={12}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Comments On Exterior</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Customized Vehicle or Body Modified" name='commentsOnExterior' onChange={handleInput} />} label="Customized Vehicle or Body Modified" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Body Shell Replaced" name='commentsOnExterior' onChange={handleInput} />} label="Body Shell Replaced" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Roof Top Canvas" name='commentsOnExterior' onChange={handleInput} />} label="Roof Top Canvas" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Water Logged Vehicle" name='commentsOnExterior' onChange={handleInput} />} label="Water Logged Vehicle" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Chassis Extension Repaired" name='commentsOnExterior' onChange={handleInput} />} label="Chassis Extension Repaired" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Strut Mounting Area Damaged" name='commentsOnExterior' onChange={handleInput} />} label="Strut Mounting Area Damaged" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Roof Colour Changed / Vinyl wrapped" name='commentsOnExterior' onChange={handleInput} />} label="Roof Colour Changed / Vinyl wrapped" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Vehicle Color Changed" name='commentsOnExterior' onChange={handleInput} />} label="Vehicle Color Changed" />
+                                </Grid>
+                                
+                          </Grid>
+                        </Box>
+                    </Box>
+                  </Grid>
 
                 </Grid>
                 <Box className={`${dashboardStyles.tm_dashboard_img_upl} ${"tm_dashboard_img_upl_gb"}`}>
                   
                   <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
                     <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
-                      <Typography variant='h6'>Exterior Images <Box sx={{color:"red"}}>{error}</Box></Typography>
+                      <Typography variant='h6'>Exterior Images </Typography>
                     </Box>
                     <Grid container spacing={4}>
                       <Grid item md={3}> 
                         <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
                           <Button variant="contained" component="label">
                             Upload File
-                            <input type="file" onChange={handleInput} name='electricalImages' hidden />
+                            <input type="file" onChange={handleInput} name='exteriorImages' hidden />
                           </Button>
                           
                         </Box>                        
@@ -3302,6 +3822,532 @@ const handleCloseBtn = () => {
                   </Box>
                   
                 </Box>
+
+                <Box>
+                    <Typography variant='h6'>Safety Details</Typography>
+                </Box>
+                <Grid container spacing={4}>
+                  <Grid item md={3}>
+                      <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <TextField id="outlined-basic" label="Number of Airbags" onChange={handleInput} name='noOfAirbags' type="number" required variant="outlined" fullWidth/>
+                      </Box>
+                  </Grid> 
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">ABS*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={abs}
+                          label="ABS*"
+                          onChange={handleInput}
+                          name='abs'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Warning Light Glowing">Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Driver Side Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={driverSideAB}
+                          label="Driver Side Airbags*"
+                          onChange={handleInput}
+                          name='driverSideAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Co-Driver Side Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={codriverSideAB}
+                          label="Co-Driver Side Airbags*"
+                          onChange={handleInput}
+                          name='codriverSideAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Lhs A Pillar Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={lhsAPillarAB}
+                          label="Lhs A Pillar Airbags*"
+                          onChange={handleInput}
+                          name='lhsAPillarAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Lhs B Pillar Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={lhsBPillarAB}
+                          label="Lhs B Pillar Airbags*"
+                          onChange={handleInput}
+                          name='lhsBPillarAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Lhs C Pillar Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={lhsCPillarAB}
+                          label="Lhs C Pillar Airbags*"
+                          onChange={handleInput}
+                          name='lhsCPillarAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs A Pillar Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsAPillarAB}
+                          label="Rhs A Pillar Airbags*"
+                          onChange={handleInput}
+                          name='rhsAPillarAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs B Pillar Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsBPillarAB}
+                          label="Rhs B Pillar Airbags*"
+                          onChange={handleInput}
+                          name='rhsBPillarAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Rhs C Pillar Airbags*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={rhsCPillarAB}
+                          label="Rhs C Pillar Airbags*"
+                          onChange={handleInput}
+                          name='rhsCPillarAB'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Deployed">Deployed</MenuItem>
+                          <MenuItem value="Removed">Removed</MenuItem>
+                          <MenuItem value="Airbag Warning Light Glowing">Airbag Warning Light Glowing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Reverse Parking Camera*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={reverseParkingCamera}
+                          label="Reverse Parking Camera*"
+                          onChange={handleInput}
+                          name='reverseParkingCamera'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Hazy">Hazy</MenuItem>
+                          <MenuItem value="Damaged / Not working">Damaged / Not working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+
+                </Grid>
+                <Box className={`${dashboardStyles.tm_dashboard_img_upl} ${"tm_dashboard_img_upl_gb"}`}>
+                  
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Safety Images </Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='safetyImages' hidden />
+                          </Button>
+                          
+                        </Box>                        
+                      </Grid>
+                       {/* <Grid item md={9}>
+                         {ThumbnailPhotos.length > 0 &&
+                          ThumbnailPhotos.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Grid> */}
+                      </Grid>
+                  </Box>
+                  
+                </Box>
+
+                <Box>
+                    <Typography variant='h6'>Comfort & Conveniance</Typography>
+                </Box>
+                <Grid container spacing={4}>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Manual AC*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={manualAC}
+                          label="Manual AC*"
+                          onChange={handleInput}
+                          name='manualAC'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Ineffective">Ineffective</MenuItem>
+                          <MenuItem value="Not Working">Not Working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Climate Control AC*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={climateAC}
+                          label="Climate Control AC*"
+                          onChange={handleInput}
+                          name='climateAC'
+                          required
+                        >
+                          <MenuItem value="Okay">Okay</MenuItem>
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Ineffective">Ineffective</MenuItem>
+                          <MenuItem value="Not Working">Not Working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Music System*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={musicSystem}
+                          label="Music System*"
+                          onChange={handleInput}
+                          name='musicSystem'
+                          required
+                        >
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Available">Available</MenuItem>
+                          <MenuItem value="Not working">Not working</MenuItem>
+                          <MenuItem value="Speaker Not Working">Speaker Not Working</MenuItem>
+                          <MenuItem value="Front Fascia missing">Front Fascia missing</MenuItem>
+                          <MenuItem value="Touchpad Not Working">Touchpad Not Working</MenuItem>
+                          <MenuItem value="Data Cable Panel Missing">Data Cable Panel Missing</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Stereo*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={stereo}
+                          label="Stereo*"
+                          onChange={handleInput}
+                          name='stereo'
+                          required
+                        >
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Normal Stereo">Normal Stereo</MenuItem>
+                          <MenuItem value="Touch Stereo">Touch Stereo</MenuItem>
+                          <MenuItem value="Display Damaged / Broken">Display Damaged / Broken</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Inbuilt Speaker*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={inbuiltSpeaker}
+                          label="Inbuilt Speaker*"
+                          onChange={handleInput}
+                          name='inbuiltSpeaker'
+                          required
+                        >
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Available">Available</MenuItem>
+                          <MenuItem value="Not Working">Not Working</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">External Speaker*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={externalSpeaker}
+                          label="External Speaker*"
+                          onChange={handleInput}
+                          name='externalSpeaker'
+                          required
+                        >
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Available">Available</MenuItem>
+                          <MenuItem value="Not Working">Not Working</MenuItem>
+                          <MenuItem value="Damaged">Damaged</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Stearing Mounted Audio Control*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={stearingMountedAudio}
+                          label="Stearing Mounted Audio Control*"
+                          onChange={handleInput}
+                          name='stearingMountedAudio'
+                          required
+                        >
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Available">Available</MenuItem>
+                          <MenuItem value="Not Working">Not Working</MenuItem>
+                          <MenuItem value="Damaged">Damaged</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={3}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Sunroof*</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={sunroof}
+                          label="Sunroof*"
+                          onChange={handleInput}
+                          name='sunroof'
+                          required
+                        >
+                          <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+                          <MenuItem value="Available">Available</MenuItem>
+                          <MenuItem value="Not Working">Not Working</MenuItem>
+                          <MenuItem value="Damaged">Damaged</MenuItem>
+                          <MenuItem value="Noisy">Noisy</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item md={12}>
+                    <Box className={`${dashboardStyles.tm_dashboard_rightbar_form_panel} ${"tm_dashboard_rightbar_form_panel_gb"}`}>
+                      
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox}>
+                          <Box className={dashboardStyles.tm_dashboard_img_upl_title}>
+                            <Typography variant='h4'>Additional Comments</Typography>
+                          </Box>
+                        <Box className={dashboardStyles.tm_dashboard_rightbar_form_checkbox_all}></Box>
+                          <Grid container spacing={0}>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Electrical Wiring Damaged" name='additionalComments' onChange={handleInput} />} label="Electrical Wiring Damaged" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Starter Motor / Solanoid Malfunction" name='additionalComments' onChange={handleInput} />} label="Starter Motor / Solanoid Malfunction" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Battery Not Available" name='additionalComments' onChange={handleInput} />} label="Battery Not Available" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Front Drive Axle Noise" name='additionalComments' onChange={handleInput} />} label="Front Drive Axle Noise" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Car Pulling on One Side" name='additionalComments' onChange={handleInput} />} label="Car Pulling on One Side" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Silencer Assembly Damaged" name='additionalComments' onChange={handleInput} />} label="Silencer Assembly Damaged" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Noise from Silencer Assembly" name='additionalComments' onChange={handleInput} />} label="Noise from Silencer Assembly" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Hand Brake not Working" name='additionalComments' onChange={handleInput} />} label="Hand Brake not Working" />
+                                </Grid>
+                                <Grid item md={6}>
+                                  <FormControlLabel control={<Checkbox value="Jack & Toolkit not available" name='additionalComments' onChange={handleInput} />} label="Jack & Toolkit not available" />
+                                </Grid>
+                          </Grid>
+                        </Box>
+                    </Box>
+                  </Grid>
+
+
+                </Grid>
+                <Box className={`${dashboardStyles.tm_dashboard_img_upl} ${"tm_dashboard_img_upl_gb"}`}>
+                  
+                  <Box className={dashboardStyles.tm_dashboard_img_upl_panel}>
+                    <Box className={dashboardStyles.tm_dashboard_img_upl_panel_title}>
+                      <Typography variant='h6'>Comfort & Conveniance Images </Typography>
+                    </Box>
+                    <Grid container spacing={4}>
+                      <Grid item md={3}> 
+                        <Box className={`${dashboardStyles.tm_dashboard_img_upl_panel_title} ${"tm_dashboard_img_upl_panel_title_gb"}`}>
+                          <Button variant="contained" component="label">
+                            Upload File
+                            <input type="file" onChange={handleInput} name='comfortImages' hidden />
+                          </Button>
+                          
+                        </Box>                        
+                      </Grid>
+                       {/* <Grid item md={9}>
+                         {ThumbnailPhotos.length > 0 &&
+                          ThumbnailPhotos.map((element, index) => {
+                            return (
+                              <Box key={index} className={`${dashboardStyles.tm_dashboard_img_upl_panel_img} ${"tm_dashboard_img_upl_panel_img_gb"}`}>
+                                <Box >
+                                  <Image
+                                    src={URL.createObjectURL(element)}
+                                    alt='Uploaded Image'
+                                    height='300'
+                                    width='300'
+                                  />
+                                  <Button onClick={() => handleRemoveImage(element)}><CloseIcon/> </Button>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Grid> */}
+                      </Grid>
+                  </Box>
+                  
+                </Box>
+
+                
                 
                 <Box sx={{margin:'50px 0 0'}}>
                   <Box className={dashboardStyles.tm_dashboard_rightbar_form_submit_btn}>
@@ -3313,25 +4359,7 @@ const handleCloseBtn = () => {
             </Box>
           </Grid>
         </Grid>      
-        <Dialog
-        open={popupOpen}
-        onClose={handleCloseBtn}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Success Message"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            You have added successfully!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          {/* <Button onClick={handleCloseBtn}>Ok</Button> */}
-          <Button onClick={handleCloseBtn} autoFocus>Ok</Button>
-        </DialogActions>
-      </Dialog>  
+       
       </Box>
     </>
   )

@@ -116,7 +116,10 @@ function Auctionvehicle() {
                                       <TableCell align="center">{data.carDetails.kmsDriven}</TableCell>
                                       <TableCell align="center">{data.carDetails.registrationYear}</TableCell>
                                       <TableCell align="center"><Link as={`bid/${data.id}`} href={`bid?id=${data.id}`}><RemoveRedEyeIcon /></Link> </TableCell>
-                                      <TableCell align="center"><Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link> <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} /></TableCell>
+                                      <TableCell align="center">
+                                        <Link as={`update/${data.id}`} href={`update?id=${data.id}`}><EditIcon /></Link>
+                                         <DeleteIcon onClick={(e) => handleDelete(`${data.id}`)} />
+                                      </TableCell>
                                     </TableRow>
                                   ))}
                       </TableBody>

@@ -8,8 +8,8 @@ const nextConfig = {
       unoptimized: true,
     },
     env: {
-      // apiUrl:'http://localhost:8001/api',
-      apiUrl:'https://firebase.flikcar.com/api',
+      apiUrl:'http://localhost:8001/api',
+      // apiUrl:'https://firebase.flikcar.com/api',
     },
   
   }

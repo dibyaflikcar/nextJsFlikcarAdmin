@@ -32,6 +32,21 @@ const API = axios.create({
     }
   };
 
+  vehicleApi.getInspectorList = async () => {
+    try {
+      const tokenStr = localStorage.getItem('token');
+      const headers = {
+        'Authorization': 'Bearer '+tokenStr
+      }
+      const res = API.get('/vehicle/getInspectorList',{headers});
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  
+
   vehicleApi.getMakeModel = async () => {
     try {
       const res = API.get('/vehicle/makeAndModel');
@@ -171,7 +186,14 @@ const API = axios.create({
   };
 
   
-  
+  vehicleApi.uploadInspectionImage = async (data) => {
+    try {
+      const res = API.post('/vehicle/uploadInspectionImage',data);
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  };
 
   vehicleApi.uploadAuctionImage = async (data) => {
     try {
